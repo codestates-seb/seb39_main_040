@@ -7,3 +7,4 @@ spring:
   profiles:
     include:
       - db
+      - s3

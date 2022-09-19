@@ -36,5 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
-application-db.yml
+### yml 파일 ###
+*.yml
+!application.yml
+
 
