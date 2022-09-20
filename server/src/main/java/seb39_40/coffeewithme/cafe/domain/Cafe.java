@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
+import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity @Getter
 @NoArgsConstructor
@@ -46,6 +48,9 @@ public class Cafe {
     private Long likeCount = 0L;
     private Long reviewCount = 0L;
 
+    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
     
     @Builder
     public Cafe(String name, String address, String description, String openTime, String closeTime,
@@ -59,5 +64,17 @@ public class Cafe {
         this.menuImg = menuImg;
         this.homepage = homepage;
         this.phone = phone;
+    }
+
+    public void addReviews(Review review) {
+        this.reviews.add(review);
+
+        if (review.getCafe() != this){
+            review.setCafe(this);
+        }
+    }
+
+    public void updateReviewCount(Integer num){
+        this.reviewCount += num;
     }
 }
