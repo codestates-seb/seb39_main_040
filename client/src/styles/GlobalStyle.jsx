@@ -25,10 +25,8 @@ ${reset}
 
   button {
     background: none;
-    cursor: pointer;
+    border: none;
   }
-
- 
 `;
 
 export default GlobalStyle;
