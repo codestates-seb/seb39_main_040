@@ -21,7 +21,6 @@ const Header = styled.div`
 const CafePage = () => {
   return (
     <MainWrapper>
-      <Header> header </Header>
       <CafeInfo />
       <CafeTab />
     </MainWrapper>

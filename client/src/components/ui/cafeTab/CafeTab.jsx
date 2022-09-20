@@ -7,6 +7,7 @@ const TabWrapper = styled.div`
    display: block;
    align-items: center;
    justify-content: center;
+   
 
    .tab {
     display: flex;
@@ -14,6 +15,7 @@ const TabWrapper = styled.div`
     justify-content: center;
     width: 100vw;
     background-color: #F0ECE3;
+    box-shadow: 0 5px 4px -3px rgba(0, 0, 0, 0.2);
     
     button {
         border: none;
