@@ -26,7 +26,9 @@ ${reset}
   button {
     background: none;
     border: none;
+    cursor: pointer;
   }
+
 `;
 
 export default GlobalStyle;

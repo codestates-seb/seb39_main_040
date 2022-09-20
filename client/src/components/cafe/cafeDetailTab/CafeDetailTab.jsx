@@ -105,7 +105,7 @@ const MainWrapper = styled.div`
             height: 600px;
             img {
                 width: 450px;
-            height: 600px;
+                height: 600px;
             }
         }
     }
