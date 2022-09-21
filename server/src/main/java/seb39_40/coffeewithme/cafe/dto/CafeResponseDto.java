@@ -11,12 +11,8 @@ public class CafeResponseDto {
     public static class SimpleCafeInfo{
         Long id;
         String name;
-//        List<TagDto> tagDtoList;
-        String description;
-        Long likeCount;
-        Long reviewCount;
-        Boolean badge;
-        String mainImg;
+//      List<TagDto> tagDtoList;
+        String mainImg; //추후 이미지 url로 변경
     }
 
     @Data @NoArgsConstructor
@@ -24,13 +20,13 @@ public class CafeResponseDto {
     public static class DetailCafeInfo{
         Long id;
         String name;
-        //        List<TagDto> tagDtoList;
+//        List<TagDto> tagDtoList;
         String description;
         String address;
         Long likeCount;
         Long reviewCount;
-        String mainImg;
-        String menuImg;
+        String mainImg; //추후 이미지 url로 변경
+        String menuImg; //추후 이미지 url로 변경
         Boolean badge;
         String runningTime;
     }
