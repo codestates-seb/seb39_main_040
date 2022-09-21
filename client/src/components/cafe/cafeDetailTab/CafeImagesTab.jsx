@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import CafeReviewImage from "../CafeReviewImage";
+import CafeReviewImage from "./CafeReviewImage";
 
 const MainWrapper = styled.div`
     /* height: 100vh; */
     margin-top: 0px;
     display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 1020px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1020px;
 
     .images {
       width: 300px;

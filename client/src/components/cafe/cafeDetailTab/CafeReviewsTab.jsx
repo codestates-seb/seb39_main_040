@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import CafeReviewItem from "../CafeReviewItem";
+import CafeReviewItem from "./CafeReviewItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
