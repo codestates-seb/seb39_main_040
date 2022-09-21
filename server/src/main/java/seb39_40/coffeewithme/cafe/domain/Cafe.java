@@ -3,14 +3,14 @@ package seb39_40.coffeewithme.cafe.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
+import lombok.Setter;
 import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity @Getter
+@Entity @Getter @Setter
 @NoArgsConstructor
 public class Cafe {
     @Id @Column(name = "CAFE_ID")
@@ -49,28 +49,24 @@ public class Cafe {
     private Long reviewCount = 0L;
 
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
-    
-    @Builder
-    public Cafe(String name, String address, String description, String openTime, String closeTime,
-                Long mainImg, Long menuImg, String homepage, String phone) {
-        this.name = name;
-        this.address = address;
-        this.description = description;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-        this.mainImg = mainImg;
-        this.menuImg = menuImg;
-        this.homepage = homepage;
-        this.phone = phone;
-    }
+    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
+    private List<CafeTag> cafeTags = new ArrayList<>();
 
     public void addReviews(Review review) {
         this.reviews.add(review);
 
         if (review.getCafe() != this){
             review.setCafe(this);
+        }
+    }
+
+    public void addCafeTags(CafeTag cafeTag) {
+        this.cafeTags.add(cafeTag);
+
+        if (cafeTag.getCafe() != this){
+            cafeTag.setCafe(this);
         }
     }
 

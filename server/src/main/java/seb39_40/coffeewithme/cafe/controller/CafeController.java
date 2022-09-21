@@ -9,7 +9,6 @@ import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.common.dto.MultiResponseDto;
-import seb39_40.coffeewithme.review.domain.Review;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +25,10 @@ public class CafeController {
 
     @GetMapping("/cafe")
     public ResponseEntity getCafeAll(@RequestParam(required = false, defaultValue = "1") Integer page,
-                                     @RequestParam(required = false, defaultValue = "recently") String sort,
+                                     @RequestParam(required = false, defaultValue = "newest") String sort,
                                      @RequestParam(required = false, defaultValue = "all") String category){
         Page<Cafe> cafe = cafeService.findAll(category, page - 1, sort);
-        return new ResponseEntity(new MultiResponseDto<>(cafeMapper.cafListToCafeSimpleDto(cafe.getContent()), cafe),
+        return new ResponseEntity(new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(cafe.getContent()), cafe),
                 HttpStatus.OK);
     }
 

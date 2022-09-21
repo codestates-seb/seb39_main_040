@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import seb39_40.coffeewithme.cafe.domain.CafeTag;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CafeResponseDto {
     @Data @NoArgsConstructor
@@ -11,8 +15,12 @@ public class CafeResponseDto {
     public static class SimpleCafeInfo{
         Long id;
         String name;
-//      List<TagDto> tagDtoList;
+        List<String> tags;
         String mainImg; //추후 이미지 url로 변경
+
+        public void setCafeTags(List<CafeTag> cafeTags){
+            this.tags = cafeTags.stream().map(cafeTag -> cafeTag.getTag().getName()).collect(Collectors.toList());
+        }
     }
 
     @Data @NoArgsConstructor
@@ -20,7 +28,7 @@ public class CafeResponseDto {
     public static class DetailCafeInfo{
         Long id;
         String name;
-//        List<TagDto> tagDtoList;
+        List<String> tags;
         String description;
         String address;
         Long likeCount;
@@ -29,5 +37,9 @@ public class CafeResponseDto {
         String menuImg; //추후 이미지 url로 변경
         Boolean badge;
         String runningTime;
+
+        public void setCafeTags(List<CafeTag> cafeTags){
+            this.tags = cafeTags.stream().map(cafeTag -> cafeTag.getTag().getName()).collect(Collectors.toList());
+        }
     }
 }

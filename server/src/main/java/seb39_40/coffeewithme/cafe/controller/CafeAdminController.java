@@ -18,7 +18,8 @@ public class CafeAdminController {
 
     @PostMapping("/cafe")
     public ResponseEntity postCafe(@RequestBody CafeRequestDto.Post postDto){
-        Long id = cafeService.save(cafeMapper.cafeDtoToCafe(postDto));
+        Cafe cafe = cafeMapper.cafeDtoToCafe(postDto);
+        Long id = cafeService.save(cafe);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 

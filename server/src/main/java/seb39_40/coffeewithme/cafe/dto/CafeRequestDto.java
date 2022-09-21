@@ -4,13 +4,16 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import seb39_40.coffeewithme.cafe.domain.CafeTag;
+
+import java.util.List;
 
 public class CafeRequestDto {
     @Data @NoArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Post{
         String name;
-        //        List<Tag> tags;
+        List<Long> tags;
         String address;
         String description;
         Long mainImg;
@@ -20,5 +23,4 @@ public class CafeRequestDto {
         String phone;
         String homepage;
     }
-
 }
