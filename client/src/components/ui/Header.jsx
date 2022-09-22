@@ -88,13 +88,21 @@ const Header = () => {
         </LogoTitle>
         {isLogin === false ? (
           <LoginBox>
-            <button onClick={() => setIsLogin(true)}>Login</button>
-            <button>Sign up</button>
+            <Link to="/login">
+              <button onClick={() => setIsLogin(true)}>Login</button>
+            </Link>
+            <Link to="/signup">
+              <button>Sign up</button>
+            </Link>
           </LoginBox>
         ) : (
           <UserBox>
-            <button onClick={() => setIsLogin(false)}>Logout</button>
-            <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MTVfOSAg/MDAxNTg5NDcxOTQ5NzA1.tj3oVTxxksmb7qcx9B1ICCWuJws6-RpyahOvpVyvhscg.aX0bh7Q4uQXj2HPJ8W_qY6qf1X1dK-fDq5yo2UKuFBog.JPEG.sdon1222/IMG_9874.JPG?type=w800" />
+            <Link to="/">
+              <button onClick={() => setIsLogin(false)}>Logout</button>
+            </Link>
+            <Link to="/mypage">
+              <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MTVfOSAg/MDAxNTg5NDcxOTQ5NzA1.tj3oVTxxksmb7qcx9B1ICCWuJws6-RpyahOvpVyvhscg.aX0bh7Q4uQXj2HPJ8W_qY6qf1X1dK-fDq5yo2UKuFBog.JPEG.sdon1222/IMG_9874.JPG?type=w800" />
+            </Link>
           </UserBox>
         )}
       </HeaderBox>
