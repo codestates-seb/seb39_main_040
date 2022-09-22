@@ -15,6 +15,7 @@ const TitleWrapper = styled.div`
 `
 ;
 
+
 const MainTitle = ({ children }) => {
   return <TitleWrapper>{children}</TitleWrapper>;
 };

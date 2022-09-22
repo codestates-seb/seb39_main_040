@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -60,9 +61,11 @@ const ReviewItem = () => {
         <button className="button-delete">
           <FontAwesomeIcon icon={faTrashCan} />
         </button>
-        <button className="button-edit">
-          <FontAwesomeIcon icon={faPenSquare} />
-        </button>
+        <Link to="/editreview">
+          <button className="button-edit">
+            <FontAwesomeIcon icon={faPenSquare} />
+          </button>
+        </Link>
       </ReviewImg>
 
       <ReviewText>
