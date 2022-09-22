@@ -3,6 +3,7 @@ package seb39_40.coffeewithme.user.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,9 +31,11 @@ public class User {
     @JoinColumn(name = "user_id")
     private Image profileImg; //외부에서 오는 키임둥, 객체를 받아와야할까용
 
-    private List<Review> reviews=new ArrayList<>(); 리뷰
-    */
-    private List<Like> likes=new ArrayList<>();
+     */
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews=new ArrayList<>();
+
+//    private List<Like> likes=new ArrayList<>();
 
     public enum UserStatus {
         USER_SIGNUP("signup"),
@@ -46,19 +49,18 @@ public class User {
         }
     }
 
-    /*
+
     public void addReview(Review review) {
-        //리뷰 추가
         this.reviews.add(review);
         if (review.getUser() != this){
             review.setUser(this);
         }
     }
- */
-    public void addLike(Like like) {
-        this.likes.add(like);
-        if (like.getUser() != this){
-            like.setUser(this);
-        }
-    }
+
+//    public void addLike(Like like) {
+//        this.likes.add(like);
+//        if (like.getUser() != this){
+//            like.setUser(this);
+//        }
+//    }
 }

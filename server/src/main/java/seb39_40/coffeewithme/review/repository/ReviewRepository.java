@@ -8,4 +8,6 @@ import seb39_40.coffeewithme.review.domain.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByCafeId(Long id, PageRequest pageRequest);
+
+    Page<Review> findByUserId(Long id, PageRequest pageRequest);
 }

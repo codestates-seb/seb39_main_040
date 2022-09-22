@@ -6,10 +6,11 @@ import seb39_40.coffeewithme.cafe.dto.CafeResponseDto;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.dto.ReviewResponseDto;
+import seb39_40.coffeewithme.user.mapper.UserMapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface ReviewMapper {
     Review reviewDtoToReview(ReviewRequestDto.Post postDto);
     ReviewResponseDto reviewToReviewDto(Review review);
