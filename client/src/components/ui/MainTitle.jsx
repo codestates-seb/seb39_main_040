@@ -12,7 +12,9 @@ const TitleWrapper = styled.div`
   font-weight: bold;
   text-align: center;
   color: #fff;
-`;
+`
+;
+
 
 const MainTitle = ({ children }) => {
   return <TitleWrapper>{children}</TitleWrapper>;
