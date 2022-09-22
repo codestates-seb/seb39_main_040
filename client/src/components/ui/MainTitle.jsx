@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const TitleWrapper = styled.div
+const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +12,7 @@ const TitleWrapper = styled.div
   font-weight: bold;
   text-align: center;
   color: #fff;
-;
+`;
 
 const MainTitle = ({ children }) => {
   return <TitleWrapper>{children}</TitleWrapper>;
