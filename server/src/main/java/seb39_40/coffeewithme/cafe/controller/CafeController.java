@@ -19,7 +19,7 @@ public class CafeController {
 
     @GetMapping("/cafe/{cafeId}")
     public ResponseEntity getCafe(@PathVariable Long cafeId){
-        Cafe cafe = cafeService.findOne(cafeId);
+        Cafe cafe = cafeService.findById(cafeId);
         return new ResponseEntity<>(cafeMapper.cafeToCafeDto(cafe), HttpStatus.CREATED);
     }
 

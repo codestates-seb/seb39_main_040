@@ -2,14 +2,11 @@ package seb39_40.coffeewithme.cafe.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.repository.CafeRepository;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,10 +39,10 @@ public class CafeService {
     }
 
     public void delete(Long cafeId){
-        cafeRepository.delete(findOne(cafeId));
+        cafeRepository.delete(findById(cafeId));
     }
 
-    public Cafe findOne(Long cafeId){
+    public Cafe findById(Long cafeId){
         return cafeRepository.findById(cafeId).orElseThrow(() -> new RuntimeException("카페를 찾지 못했습니다."));
     }
 }

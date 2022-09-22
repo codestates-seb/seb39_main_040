@@ -19,11 +19,11 @@ public class ReviewService {
     }
 
     public void delete(Long id){
-        Review review = findOne(id);
+        Review review = findById(id);
         reviewRepository.delete(review);
     }
 
-    public Review findOne(Long id){
+    public Review findById(Long id){
         return reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
     }
 
