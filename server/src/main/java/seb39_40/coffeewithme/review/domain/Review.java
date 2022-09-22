@@ -3,11 +3,15 @@ package seb39_40.coffeewithme.review.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
+import seb39_40.coffeewithme.cafe.domain.CafeTag;
 import seb39_40.coffeewithme.common.domain.BasicEntity;
 import seb39_40.coffeewithme.user.domain.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Getter
 @Setter
@@ -24,6 +28,9 @@ public class Review extends BasicEntity {
     @ManyToOne
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @Column(nullable = false)
     private Long reviewImg;
@@ -45,6 +52,13 @@ public class Review extends BasicEntity {
         this.user = user;
         if (!user.getReviews().contains(this)){
             user.addReview(this);
+        }
+    }
+
+    public void addReviewTags(ReviewTag reviewTag) {
+        this.reviewTags.add(reviewTag);
+        if (reviewTag.getReview() != this){
+            reviewTag.setReview(this);
         }
     }
 

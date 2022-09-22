@@ -7,8 +7,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.review.domain.Review;
-import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
+import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -1,9 +1,6 @@
 package seb39_40.coffeewithme.cafe.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;

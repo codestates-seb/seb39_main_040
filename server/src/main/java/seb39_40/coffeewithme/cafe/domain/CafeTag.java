@@ -2,8 +2,7 @@ package seb39_40.coffeewithme.cafe.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import seb39_40.coffeewithme.cafe.domain.Cafe;
-import seb39_40.coffeewithme.cafe.domain.Tag;
+import seb39_40.coffeewithme.tag.domain.Tag;
 
 import javax.persistence.*;
 

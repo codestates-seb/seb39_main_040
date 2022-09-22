@@ -12,6 +12,7 @@ import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.mapper.ReviewMapper;
 import seb39_40.coffeewithme.review.service.ReviewService;
+import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.service.UserService;
 import seb39_40.coffeewithme.user.domain.User;
 
@@ -21,6 +22,7 @@ import seb39_40.coffeewithme.user.domain.User;
 public class ReviewController {
     private final ReviewService reviewService;
     private final CafeService cafeService;
+    private final TagService tagService;
     private final ReviewMapper reviewMapper;
 
     private final UserService userService;
@@ -36,8 +38,9 @@ public class ReviewController {
         Review review = reviewMapper.reviewDtoToReview(postDto);
         review.setCafe(cafe);
         review.setUser(user);
-
-        return new ResponseEntity(reviewService.save(review), HttpStatus.CREATED);
+        review.setReviewTags(tagService.createReviewTag(review, postDto.getTags()));
+        Long id = reviewService.save(review);
+        return new ResponseEntity(id, HttpStatus.CREATED);
     }
 
     @GetMapping("/{cafe_id}/reviews")

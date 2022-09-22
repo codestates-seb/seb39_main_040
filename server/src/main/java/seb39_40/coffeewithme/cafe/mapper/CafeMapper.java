@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.domain.CafeTag;
-import seb39_40.coffeewithme.cafe.domain.Tag;
+import seb39_40.coffeewithme.tag.domain.Tag;
 import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public interface CafeMapper {
 
     default Cafe cafeDtoToCafe(CafeRequestDto.Post post) {
         Cafe cafe = cafeDtoToCafeInfo(post);
+        System.out.println(cafe.toString());
         List<CafeTag> cafeTags = post.getTags().stream().distinct().map(cafeTagDto -> {
                     CafeTag cafeTag = new CafeTag();
                     Tag tag = new Tag();

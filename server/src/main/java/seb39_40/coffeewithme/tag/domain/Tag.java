@@ -1,8 +1,10 @@
-package seb39_40.coffeewithme.cafe.domain;
+package seb39_40.coffeewithme.tag.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import seb39_40.coffeewithme.cafe.domain.CafeTag;
+import seb39_40.coffeewithme.review.domain.ReviewTag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,29 +22,40 @@ public class Tag {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private TagCategory category;
+    private Category category;
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private List<CafeTag> cafeTags = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    private enum TagCategory {
-        MOOD("분위기"),
-        TASTY("맛집"),
-        STUDY("스터디"),
-        ETC("기타");
-
-        String category;
-
-        TagCategory(String category) {
-            this.category = category;
-        }
-    }
 
     public void addCafeTag(CafeTag cafeTag){
         this.cafeTags.add(cafeTag);
         if (cafeTag.getTag() != this){
             cafeTag.setTag(this);
+        }
+    }
+
+    public void addReviewTag(ReviewTag reviewTag){
+        this.reviewTags.add(reviewTag);
+        if (reviewTag.getTag() != this){
+            reviewTag.setTag(this);
+        }
+    }
+
+    public enum Category {
+        MOOD("분위기"),
+        TASTY("맛집"),
+        STUDY("스터디"),
+        NONE("없음"),
+        ETC("기타");
+
+        String category;
+
+        Category(String category) {
+            this.category = category;
         }
     }
 }
