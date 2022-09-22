@@ -9,6 +9,8 @@ const Wrapper = styled.div`
     background-color: #F0ECE3;
     height: 460px;
     width: 100%;
+    margin-top: 70px;
+    
     
     div {
         background-color: #F0ECE3;
@@ -19,7 +21,7 @@ const Wrapper = styled.div`
         height: 300px;
         img {
             width: 700px;
-        height: 300px; 
+            height: 300px; 
         }
     }
 

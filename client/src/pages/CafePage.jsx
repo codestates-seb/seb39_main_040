@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import CafeInfo from "../components/cafe/CafeInfo";
+import CafeInfo from "../components/cafe/cafeDetailTab/CafeInfo";
 import CafeTab from "../components/ui/cafeTab/CafeTab";
 
 const MainWrapper = styled.div`
@@ -21,7 +21,6 @@ const Header = styled.div`
 const CafePage = () => {
   return (
     <MainWrapper>
-      <Header> header </Header>
       <CafeInfo />
       <CafeTab />
     </MainWrapper>

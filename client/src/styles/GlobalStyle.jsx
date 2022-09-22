@@ -28,6 +28,7 @@ ${reset}
     background: none;
     border: none;
   }
-`;
+`
+;
 
 export default GlobalStyle;
