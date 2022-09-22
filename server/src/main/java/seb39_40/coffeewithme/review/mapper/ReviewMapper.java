@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface ReviewMapper {
-    Review reviewDtoToReview(ReviewRequestDto.Post postDto);
+    Review reviewDtoToReview(ReviewRequestDto postDto);
     ReviewResponseDto reviewToReviewDto(Review review);
     List<ReviewResponseDto> reviewsToReviewDtos(List<Review> reviews);
 }

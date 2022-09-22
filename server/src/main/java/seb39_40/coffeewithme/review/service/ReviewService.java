@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.review.domain.Review;
+import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
 
 @Service
@@ -16,6 +18,13 @@ public class ReviewService {
 
     public Long save(Review review){
         return reviewRepository.save(review).getId();
+    }
+
+    @Transactional
+    public Long update(Long id, Review updateReview){
+        Review review = findById(id);
+        review.update(updateReview);
+        return save(review);
     }
 
     public void delete(Long id){

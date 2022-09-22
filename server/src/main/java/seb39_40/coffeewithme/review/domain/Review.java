@@ -47,4 +47,10 @@ public class Review extends BasicEntity {
             user.addReview(this);
         }
     }
+
+    public void update(Review review){
+        this.reviewImg = review.getReviewImg();
+        this.description = review.getDescription();
+        this.score = review.getScore();
+    }
 }

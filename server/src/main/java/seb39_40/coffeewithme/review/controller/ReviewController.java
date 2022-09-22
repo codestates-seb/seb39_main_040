@@ -26,7 +26,7 @@ public class ReviewController {
     private final UserService userService;
 
     @PostMapping("/{cafe_id}/reviews")
-    public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto.Post postDto){
+    public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto postDto){
         // 유저 정보는 현재 로그인한 유저로 받아와야 함 (미완)
         User user = userService.findById(1L);
 
@@ -62,5 +62,11 @@ public class ReviewController {
         cafe.updateReviewCount(-1);
         cafeService.save(cafe);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{cafe_id}/reviews/{review_id}")
+    public ResponseEntity patchReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto patchDto){
+        reviewService.update(cafe_id, reviewMapper.reviewDtoToReview(patchDto));
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

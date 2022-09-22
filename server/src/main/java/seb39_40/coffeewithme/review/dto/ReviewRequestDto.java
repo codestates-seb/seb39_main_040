@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ReviewRequestDto {
-    @Data @NoArgsConstructor
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class Post{
-//        List<Tag> tags;
-        Long reviewImg;
-        Integer score;
-        String description;
-    }
+//    List<Tag> tags;
+    Long reviewImg;
+    Integer score;
+    String description;
+
 }
