@@ -53,7 +53,7 @@ const LoginBox = styled.div`
 const UserBox = styled.div`
   align-items: center;
   display: flex;
-  padding: 20px;
+  padding: 10px;
   z-index: 999;
   margin-right: 30px;
   button {
