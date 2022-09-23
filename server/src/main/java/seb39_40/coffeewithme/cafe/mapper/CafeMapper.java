@@ -2,8 +2,10 @@ package seb39_40.coffeewithme.cafe.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.domain.CafeTag;
+import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.tag.domain.Tag;
 import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
 
@@ -13,16 +15,22 @@ import java.util.stream.Collectors;
 import static seb39_40.coffeewithme.cafe.dto.CafeResponseDto.*;
 
 @Mapper(componentModel = "spring")
-public interface CafeMapper {
-    @Mapping(target = "runningTime", expression = "java(cafe.getOpenTime() + '-' + cafe.getCloseTime())")
-    DetailCafeInfo cafeToCafeDto(Cafe cafe);
-    SimpleCafeInfo cafeToCafeSimpleDto(Cafe cafe);
-    List<SimpleCafeInfo> cafeListToCafeSimpleDto(List<Cafe> cafe);
-    Cafe cafeDtoToCafeInfo(CafeRequestDto.Post post);
+public abstract class CafeMapper {
+    @Autowired
+    protected ImageService imageService;
 
-    default Cafe cafeDtoToCafe(CafeRequestDto.Post post) {
+    @Mapping(target = "runningTime", expression = "java(cafe.getOpenTime() + '-' + cafe.getCloseTime())")
+    @Mapping(target = "mainImg", expression = "java(imageService.find(cafe.getMainImg()).getPath())")
+    @Mapping(target = "menuImg", expression = "java(imageService.find(cafe.getMenuImg()).getPath())")
+    public abstract DetailCafeInfo cafeToCafeDto(Cafe cafe);
+    @Mapping(target = "mainImg", expression = "java(imageService.find(cafe.getMainImg()).getPath())")
+    public abstract SimpleCafeInfo cafeToCafeSimpleDto(Cafe cafe);
+    public abstract List<SimpleCafeInfo> cafeListToCafeSimpleDto(List<Cafe> cafe);
+
+    public abstract Cafe cafeDtoToCafeInfo(CafeRequestDto.Post post);
+
+    public Cafe cafeDtoToCafe(CafeRequestDto.Post post) {
         Cafe cafe = cafeDtoToCafeInfo(post);
-        System.out.println(cafe.toString());
         List<CafeTag> cafeTags = post.getTags().stream().distinct().map(cafeTagDto -> {
                     CafeTag cafeTag = new CafeTag();
                     Tag tag = new Tag();

@@ -16,7 +16,7 @@ public class CafeResponseDto {
         Long id;
         String name;
         List<String> tags;
-        String mainImg; //추후 이미지 url로 변경
+        String mainImg;
 
         public void setCafeTags(List<CafeTag> cafeTags){
             this.tags = cafeTags.stream().map(cafeTag -> cafeTag.getTag().getName()).collect(Collectors.toList());
@@ -33,8 +33,8 @@ public class CafeResponseDto {
         String address;
         Long likeCount;
         Long reviewCount;
-        String mainImg; //추후 이미지 url로 변경
-        String menuImg; //추후 이미지 url로 변경
+        String mainImg;
+        String menuImg;
         Boolean badge;
         String runningTime;
 

@@ -18,7 +18,7 @@ public class ReviewResponseDto {
     Long id;
     String description;
     Integer score;
-    Long reviewImg;
+    String reviewImg;
 
     public void setReviewTags(List<ReviewTag> reviewTags){
         this.tags = reviewTags.stream().map(reviewTag -> reviewTag.getTag().getName()).collect(Collectors.toList());
