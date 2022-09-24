@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
-import seb39_40.coffeewithme.cafe.domain.CafeTag;
 import seb39_40.coffeewithme.common.domain.BasicEntity;
 import seb39_40.coffeewithme.user.domain.User;
 

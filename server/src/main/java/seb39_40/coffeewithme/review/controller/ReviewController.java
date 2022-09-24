@@ -14,32 +14,18 @@ import seb39_40.coffeewithme.review.mapper.ReviewMapper;
 import seb39_40.coffeewithme.review.service.ReviewService;
 import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.service.UserService;
-import seb39_40.coffeewithme.user.domain.User;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cafe")
 public class ReviewController {
     private final ReviewService reviewService;
-    private final CafeService cafeService;
-    private final TagService tagService;
     private final ReviewMapper reviewMapper;
-
-    private final UserService userService;
 
     @PostMapping("/{cafe_id}/reviews")
     public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto postDto){
         // 유저 정보는 현재 로그인한 유저로 받아와야 함 (미완)
-        User user = userService.findById(1L);
-
-        Cafe cafe = cafeService.findById(cafe_id);
-        cafe.updateReviewCount(1);
-
-        Review review = reviewMapper.reviewDtoToReview(postDto);
-        review.setCafe(cafe);
-        review.setUser(user);
-        review.setReviewTags(tagService.createReviewTag(review, postDto.getTags()));
-        Long id = reviewService.save(review);
+        Long id = reviewService.save(1L, cafe_id, reviewMapper.reviewDtoToReview(postDto), postDto.getTags());
         return new ResponseEntity(id, HttpStatus.CREATED);
     }
 
@@ -59,11 +45,7 @@ public class ReviewController {
 
     @DeleteMapping("/{cafe_id}/reviews/{review_id}")
     public ResponseEntity deleteReview(@PathVariable Long cafe_id, @PathVariable Long review_id){
-        Cafe cafe = cafeService.findById(cafe_id);
-        reviewService.delete(review_id);
-
-        cafe.updateReviewCount(-1);
-        cafeService.save(cafe);
+        reviewService.delete(cafe_id, review_id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

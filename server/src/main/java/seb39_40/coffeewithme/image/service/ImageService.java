@@ -15,7 +15,7 @@ public class ImageService {
         return image.getId();
     }
 
-    public Image find(Long id){
+    public Image findById(Long id){
         return imageRepository.findById(id).orElseThrow(() -> new RuntimeException("이미지를 찾을 수 없습니다."));
     }
 }

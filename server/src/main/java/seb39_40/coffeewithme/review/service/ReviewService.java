@@ -6,9 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import seb39_40.coffeewithme.cafe.domain.Cafe;
+import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
+import seb39_40.coffeewithme.tag.service.TagService;
+import seb39_40.coffeewithme.user.service.UserService;
 
 import java.util.List;
 
@@ -17,8 +21,17 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final CafeService cafeService;
+    private final UserService userService;
+    private final TagService tagService;
 
-    public Long save(Review review){
+    public Long save(Long userId, Long cafeId, Review review, List<String> tags){
+        Cafe cafe = cafeService.findById(cafeId);
+        cafe.updateReviewCount(1);
+
+        review.setCafe(cafe);
+        review.setUser(userService.findById(userId));
+        review.setReviewTags(tagService.createReviewTag(review, tags));
         return reviewRepository.save(review).getId();
     }
 
@@ -26,11 +39,15 @@ public class ReviewService {
     public Long update(Long id, Review updateReview){
         Review review = findById(id);
         review.update(updateReview);
-        return save(review);
+        return reviewRepository.save(review).getId();
     }
 
-    public void delete(Long id){
-        Review review = findById(id);
+    public void delete(Long cafeId, Long reviewId){
+        Review review = findById(reviewId);
+
+        Cafe cafe = cafeService.findById(cafeId);
+        cafe.updateReviewCount(-1);
+        cafeService.save(cafe);
         reviewRepository.delete(review);
     }
 
