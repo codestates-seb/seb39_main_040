@@ -1,8 +1,5 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-// 카페아이템이 들어가는 데이터 -> 카페 대표 사진, 카페 이름, 카페 대표 태그 2개 = 총 3가지 데이터
-// 아직 상세데이터가 나오지 않았으니 더미데이터로 간주해서 표현
-// 그렇다면 상태관리 라이브러리를 이용해 상태를 관리 및 axios를 활용해 데이터 불러오기가 필요
 
 const CafeItemWrapper = styled.div`
   display: flex;
@@ -18,7 +15,7 @@ const CafeItemWrapper = styled.div`
 // 이미지 (img)
 const CafeImg = styled.img`
   position: relative;
-  border-radius: 10px 10px 0 0 ;
+  border-radius: 10px 10px 0 0;
   width: 100%;
   height: 200px;
 `;
@@ -42,16 +39,19 @@ const CafeTag = styled.div`
   background: none;
 `;
 
-const CafeItem = () => {
+const CafeItem = ({ id, title, tags, image }) => {
   return (
-      <CafeItemWrapper>
+    <CafeItemWrapper>
+      <Link to={`/cafe/${id}`}>
         <div>
-          <CafeImg src="https://www.jeongdong.or.kr/static/portal/img/HKPU_04_04_pic3.jpg" />
+          <CafeImg src={`${image}`} />
         </div>
-        <CafeTitle>MODE</CafeTitle>
-        <CafeTag># 분위기가 좋은</CafeTag>
-        <CafeTag># 커피가 맛있는</CafeTag>
-      </CafeItemWrapper>
+
+        <CafeTitle>{title}</CafeTitle>
+        <CafeTag>#{tags[0]}</CafeTag>
+        <CafeTag>#{tags[1]}</CafeTag>
+      </Link>
+    </CafeItemWrapper>
   );
 };
 

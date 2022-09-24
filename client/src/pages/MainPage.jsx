@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Search from "../components/cafe/cafeMain/Search";
 import TagCategory from "../components/cafe/cafeMain/TagCategory";
@@ -36,7 +35,7 @@ const MainWrapper = styled.div`
   }
 `;
 
-const MainPage = () => {
+const MainPage = ({ cafeInfo }) => {
   return (
     <MainWrapper>
       <MainTitle>CAFELIST</MainTitle>
@@ -47,33 +46,18 @@ const MainPage = () => {
       </div>
       <div className="cafelist">
         {/* map 사용해서 데이터 뿌리기 */}
-        <Link to="/cafe">
-          <div className="cafeitem">
-            <CafeListItem />
-          </div>
-        </Link>
-
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
-        <div className="cafeitem">
-          <CafeListItem />
-        </div>
+        {cafeInfo &&
+          cafeInfo.map((el) => (
+            <div className="cafeitem">
+              <CafeListItem
+                key={el.id}
+                id={el.id}
+                title={el.name}
+                tags={el.tags}
+                image={el.main_img}
+              />
+            </div>
+          ))}
       </div>
     </MainWrapper>
   );

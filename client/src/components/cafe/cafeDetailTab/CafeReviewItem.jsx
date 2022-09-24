@@ -1,70 +1,107 @@
+import Box from "@mui/material/Box";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 
+// 전체리뷰 컨테이너 + 사진컨테이너
 const MainWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 850px;
+  height: 170px;
+  background-color: #f0ece3;
+  border-radius: 10px;
+  margin: 20px 0;
+  position: relative;
+
+  .image {
+    position: absolute;
+    left: 0;
+    width: 190px;
+    height: 170px;
+    img {
+      border-radius: 10px 0 0 10px;
+      width: 190px;
+      height: 170px;
+    }
+  }
+`;
+
+// 텍스트, 별점, 유저이름
+const Content = styled.div`
+  position: relative;
+  background-color: #f0ece3;
+  padding: 0 18px;
+  width: 620px;
+  margin-left: 170px;
+  .tag {
+    background-color: #f0ece3;
+    margin: 10px 0 15px 0;
+    font-size: 17px;
+    span {
+      background-color: #f0ece3;
+      margin-right: 10px;
+    }
+  }
+  p {
+    background-color: #f0ece3;
+    line-height: 30px;
+  }
+  .info {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 850px;
-    height: 170px;
-    background-color: #F0ECE3;
-    border-radius: 10px;
-    margin: 20px 0;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 640px;
 
-    .image {
-        width: 190px;
-        height: 170px;
-        img {
-            border-radius: 10px 0 0 10px;
-            width: 190px;
-            height: 170px;
-        }
+    .star {
+      position: absolute;
+      left: 0;
+      /* width: 540px; */
+      align-items: center;
+      justify-content: center;
+      margin-left: 15px;
+      background-color: #f0ece3;
     }
-    .content {
-        position: relative;
-        background-color: #F0ECE3;
-        padding: 0 18px;
-        .tag {
-            background-color: #F0ECE3;
-            margin: 10px 0 15px 0;
-            font-size: 17px;
-                span {
-                    background-color: #F0ECE3;
-                    margin-right: 10px;
-                }
-            }
-        p {
-            background-color: #F0ECE3;
-            line-height: 30px;
-            margin-bottom: 10px;
-        }
-        .username {
-            position: absolute;
-            right: 0;
-            margin-right: 20px;
-            background-color: #F0ECE3;
-            font-size: 16px;
-        }
+    .name {
+      position: absolute;
+      right: 0;
+      width: 50px;
+      /* margin-left: 100px; */
+      background-color: #f0ece3;
     }
+  }
+`;
 
-`
-
-const CafeReviewItem = () => {
-    return (
-        <MainWrapper>
-            <div className="image">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0xIV1xjaD-bnh0XVrOGhe7hyHejLw9xDTYQ&usqp=CAU" />
-            </div>
-            <div className="content">
-                <div className="tag">
-                    <span>#뷰맛집</span>
-                    <span>#디저트맛집</span>
-                    <span>#조용함</span>
-                </div>
-                <p>뷰 맛집! 사장님도 친절하시고 분위기도 좋아서 자주 올 것 같아요! 조용한 분위기에 디저트도 맛있어요!</p>
-                <span className="username">한소희</span>
-            </div>
-        </MainWrapper>
-    )
-}
+const CafeReviewItem = ({ text, tag, user, image, star }) => {
+  return (
+    <MainWrapper>
+      <div className="image">
+        <img src={`${image}`} alt="리뷰이미지" />
+      </div>
+      <Content>
+        <div className="tag">
+          <span>#{tag[0]}</span>
+          <span>#{tag[1]}</span>
+          <span>#조용함</span>
+        </div>
+        <p>{text}</p>
+        <div className="info">
+          <div className="star">
+            <Box sx={{ "& > legend": { mt: 2 } }}>
+              <Typography component="legend"></Typography>
+              <Rating name="read-only" value={star} readOnly />
+            </Box>
+          </div>
+          <div className="username">
+            <span className="name">{user.name}</span>
+          </div>
+        </div>
+      </Content>
+    </MainWrapper>
+  );
+};
 
 export default CafeReviewItem;

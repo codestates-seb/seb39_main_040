@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import ImageUpload from "../components/review/ImageUpload";
-import ReviewForm from "../components/review/ReviewForm";
+import EdiitImageUpload from "../components/review/EditImageUpload";
+import EditReviewForm from "../components/review/EditReviewForm";
 
 const MainWrapper = styled.div`
   margin-top: 70px;
@@ -44,8 +44,8 @@ const EditReviewPage = () => {
         <div className="title">카페 리뷰 수정</div>
       </div>
       <div className="content">
-        <ImageUpload />
-        <ReviewForm />
+        <EdiitImageUpload />
+        <EditReviewForm />
       </div>
     </MainWrapper>
   );
