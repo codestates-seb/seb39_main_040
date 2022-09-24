@@ -1,7 +1,7 @@
 /*global kakao */
 import React, { useEffect } from "react";
 
-const {kakao} = window;
+const { kakao } = window;
 
 export default function CafeDetailMap() {
   useEffect(() => {
@@ -19,8 +19,8 @@ export default function CafeDetailMap() {
 
     //마커가 표시 될 위치
     let markerPosition = new kakao.maps.LatLng(
-      37.62197524055062,
-      127.16017523675508
+      37.624915253753194,
+      127.15122688059974
     );
 
     // 마커를 생성
@@ -30,8 +30,11 @@ export default function CafeDetailMap() {
 
     // 마커를 지도 위에 표시
     marker.setMap(map);
+
+    // 지도 확대축소 드래그 막기
+    map.setDraggable(false);
+    map.setZoomable(false);
   };
 
   return <div id="map" style={{ width: "500px", height: "380px" }}></div>;
 }
-
