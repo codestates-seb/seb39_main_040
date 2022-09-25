@@ -20,10 +20,10 @@ public abstract class CafeMapper {
     protected ImageService imageService;
 
     @Mapping(target = "runningTime", expression = "java(cafe.getOpenTime() + '-' + cafe.getCloseTime())")
-    @Mapping(target = "mainImg", expression = "java(imageService.find(cafe.getMainImg()).getPath())")
-    @Mapping(target = "menuImg", expression = "java(imageService.find(cafe.getMenuImg()).getPath())")
+    @Mapping(target = "mainImg", expression = "java(imageService.findById(cafe.getMainImg()).getPath())")
+    @Mapping(target = "menuImg", expression = "java(imageService.findById(cafe.getMenuImg()).getPath())")
     public abstract DetailCafeInfo cafeToCafeDto(Cafe cafe);
-    @Mapping(target = "mainImg", expression = "java(imageService.find(cafe.getMainImg()).getPath())")
+    @Mapping(target = "mainImg", expression = "java(imageService.findById(cafe.getMainImg()).getPath())")
     public abstract SimpleCafeInfo cafeToCafeSimpleDto(Cafe cafe);
     public abstract List<SimpleCafeInfo> cafeListToCafeSimpleDto(List<Cafe> cafe);
 

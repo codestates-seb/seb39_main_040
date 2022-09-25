@@ -12,22 +12,32 @@ import seb39_40.coffeewithme.common.dto.MultiResponseDto;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/cafe")
 public class CafeController {
     private final CafeService cafeService;
     private final CafeMapper cafeMapper;
 
-    @GetMapping("/cafe/{cafeId}")
+    @GetMapping("/{cafeId}")
     public ResponseEntity getCafe(@PathVariable Long cafeId){
         Cafe cafe = cafeService.findById(cafeId);
         return new ResponseEntity<>(cafeMapper.cafeToCafeDto(cafe), HttpStatus.CREATED);
     }
 
-    @GetMapping("/cafe")
-    public ResponseEntity getCafeAll(@RequestParam(required = false, defaultValue = "1") Integer page,
+    @GetMapping("/")
+    public ResponseEntity getCafes(@RequestParam(required = false, defaultValue = "1") Integer page,
                                      @RequestParam(required = false, defaultValue = "newest") String sort,
                                      @RequestParam(required = false, defaultValue = "all") String category){
         Page<Cafe> cafe = cafeService.findAll(category, page - 1, sort);
+        return new ResponseEntity(new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(cafe.getContent()), cafe),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity searchCafe(@RequestParam(required = false, defaultValue = "name") String type,
+                                     @RequestParam(required = false) String keyword,
+                                     @RequestParam(required = false, defaultValue = "1") Integer page,
+                                     @RequestParam(required = false, defaultValue = "newest") String sort){
+        Page<Cafe> cafe = cafeService.search(type, keyword, page - 1, sort);
         return new ResponseEntity(new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(cafe.getContent()), cafe),
                 HttpStatus.OK);
     }

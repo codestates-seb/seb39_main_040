@@ -13,4 +13,8 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             "IN (SELECT distinct cafe_id FROM cafe_tag a LEFT JOIN tag b ON a.tag_id = b.tag_id WHERE category=:c)",
             nativeQuery = true)
     Page<Cafe> findByCategory(@Param("c") String c, PageRequest pageRequest);
+
+    @Query(value = "SELECT * FROM cafe WHERE name LIKE concat('%',:keyword,'%')",
+            nativeQuery = true)
+    Page<Cafe> searchByName(@Param("keyword") String keyword, PageRequest pageRequest);
 }
