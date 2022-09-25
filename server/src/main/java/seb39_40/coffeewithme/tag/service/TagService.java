@@ -3,6 +3,8 @@ package seb39_40.coffeewithme.tag.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.cafe.domain.CafeTag;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.tag.domain.Tag;
@@ -23,7 +25,7 @@ public class TagService {
     }
 
     public Tag findByName(String name){
-        return tagRepository.findByName(name).orElseThrow(() -> new RuntimeException("태그를 찾을 수 없습니다."));
+        return tagRepository.findByName(name).orElseThrow(() -> new BusinessLogicException(ExceptionCode.TAG_NOT_FOUND));
     }
 
     public List<ReviewTag> createReviewTag(Review review, List<String> tags) {

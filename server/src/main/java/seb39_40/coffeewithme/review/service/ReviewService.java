@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
@@ -52,7 +54,7 @@ public class ReviewService {
     }
 
     public Review findById(Long id){
-        return reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
+        return reviewRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
     }
 
     public Page<Review> findByCafeId(Long cafe_id, Integer page) {
