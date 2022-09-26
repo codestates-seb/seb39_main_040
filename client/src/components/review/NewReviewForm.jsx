@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import Button from "../ui/Button";
+import Button from "../common/Button";
 import NewTagForm from "./NewTagForm";
 import StarRating from "./StarRating";
 

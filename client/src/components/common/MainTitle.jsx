@@ -5,17 +5,14 @@ const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ae9e8f;
+  //background-color: #ae9e8f;
   width: 100%;
-  height: 220px;
+  height: 400px;
   font-size: 30px;
   font-weight: bold;
   text-align: center;
-  color: #fff;
-`
-;
-
-
+  color: black;
+`;
 const MainTitle = ({ children }) => {
   return <TitleWrapper>{children}</TitleWrapper>;
 };

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import NewImageUpload from "../components/review/NewImageUpload";
-import NewReviewForm from "../components/review/NewReviewForm";
+import EdiitImageUpload from "../../components/review/EditImageUpload";
+import EditReviewForm from "../../components/review/EditReviewForm";
 
 const MainWrapper = styled.div`
   margin-top: 70px;
@@ -36,18 +36,18 @@ const MainWrapper = styled.div`
   }
 `;
 
-const NewReviewPage = () => {
+const EditReviewPage = () => {
   return (
     <MainWrapper>
       <div className="title-container">
-        <div className="title">카페 리뷰 작성</div>
+        <div className="title">카페 리뷰 수정</div>
       </div>
       <div className="content">
-        <NewImageUpload />
-        <NewReviewForm />
+        <EdiitImageUpload />
+        <EditReviewForm />
       </div>
     </MainWrapper>
   );
 };
 
-export default NewReviewPage;
+export default EditReviewPage;

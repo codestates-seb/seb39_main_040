@@ -85,7 +85,7 @@ const UpdateButton = styled.button`
   }
 `;
 
-const UserUpdate = () => {
+const UserInfoEditPage = () => {
   const [imgSrc, setImgSrc] = useState("");
   const imgInput = useRef();
 
@@ -146,4 +146,4 @@ const UserUpdate = () => {
   );
 };
 
-export default UserUpdate;
+export default UserInfoEditPage;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import CafeItem from "../../cafe/CafeItem";
+import CafeItem from "../../Cafe/CafeItem";
 
 const WishWrapper = styled.div`
   display: flex;

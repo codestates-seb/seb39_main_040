@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 const { kakao } = window;
 
-export default function CafeDetailMap() {
+export default function CafeDetailInfoMap() {
   useEffect(() => {
     mapscript();
   }, []);
