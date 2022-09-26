@@ -27,25 +27,27 @@ public class ReviewService {
     private final UserService userService;
     private final TagService tagService;
 
-    public Long save(Long userId, Long cafeId, Review review, List<String> tags){
+    public Long save(String username, Long cafeId, Review review, List<String> tags){
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(1);
 
         review.setCafe(cafe);
-        review.setUser(userService.findById(userId));
+        review.setUser(userService.findByEmail(username));
         review.setReviewTags(tagService.createReviewTag(review, tags));
         return reviewRepository.save(review).getId();
     }
 
     @Transactional
-    public Long update(Long id, Review updateReview){
+    public Long update(String email, Long id, Review updateReview){
         Review review = findById(id);
+        assert email.equals(review.getUser().getEmail()) : ExceptionCode.BAD_REQUEST; //작성자가 아니면 삭제 불가
         review.update(updateReview);
         return reviewRepository.save(review).getId();
     }
 
-    public void delete(Long cafeId, Long reviewId){
+    public void delete(String email, Long cafeId, Long reviewId){
         Review review = findById(reviewId);
+        assert email.equals(review.getUser().getEmail()) : ExceptionCode.BAD_REQUEST; //작성자가 아니면 삭제 불가
 
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(-1);

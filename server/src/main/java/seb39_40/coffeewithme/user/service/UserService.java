@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 
@@ -76,7 +78,7 @@ public class UserService {
     }
     
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     //이메일 중복 검증 - 예외 처리 되면 반환 값 없애기! boolean -> void 로
@@ -86,5 +88,9 @@ public class UserService {
             return false;
             //throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
         return true;
+    }
+
+    public User findByEmail(String username) {
+        return userRepository.findByEmail(username).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 }

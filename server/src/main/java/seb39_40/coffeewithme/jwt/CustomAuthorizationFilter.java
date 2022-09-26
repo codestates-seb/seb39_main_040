@@ -10,7 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import seb39_40.coffeewithme.common.exeption.ErrorResponse;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 
@@ -36,16 +37,15 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         String at = request.getHeader("AccessToken");
 
         //인가 필요 없는 요청은 넘어가도록
-        if(path.equals("/users/login")||path.equals("/users/signup")) {
+        if(path.equals("/users/login")||path.equals("/users/signup")||request.getMethod().equals("GET")) {
             filterChain.doFilter(request, response);
         //토큰 헤더가 비었거나 잘못된 토큰이 전송된 경우
-        }else if(at==null || !at.startsWith("Bearer ")) {
+        } else if(at==null || !at.startsWith("Bearer ")) {
             System.out.println("** Not a jwt token");
             response.setStatus(SC_BAD_REQUEST);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
-            ErrorResponse errorResponse = new ErrorResponse(400, "JWT Token이 존재하지 않습니다.");
-            new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+            new ObjectMapper().writeValue(response.getWriter(), new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND));
        //정상적으로 인가 요청이 들어온 경우
         }else{
             String jwt = jwtProvider.substringToken(at);
@@ -58,8 +58,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 response.setStatus(SC_UNAUTHORIZED);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
-                ErrorResponse errorResponse = new ErrorResponse(401, "JWT 토큰이 만료되었습니다.");
-                new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+                new ObjectMapper().writeValue(response.getWriter(), new BusinessLogicException(ExceptionCode.EXPIRED_TOKEN));
             }else {
                 User userEntity = userRepository.findByEmail(email).get();
 

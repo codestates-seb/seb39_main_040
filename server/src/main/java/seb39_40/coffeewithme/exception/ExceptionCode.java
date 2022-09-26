@@ -22,8 +22,19 @@ public enum ExceptionCode {
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
     TAG_NOT_FOUND(404, "태그를 찾을 수 없습니다."),
 
+    // 유저 관련 Exception
+
     USER_NOT_FOUND(404, "회원을 찾을 수 없습니다."),
-    EMAIL_ALREADY_EXISTS(409, "이미 사용중인 이메일 입니다.");
+    INVALID_ID_PW(401, "ID, PW가 일치하지 않습니다."),
+    USER_NOT_ACTIVE(400, "탈퇴한 회원 입니다."),
+    EMAIL_ALREADY_EXISTS(409, "이미 사용중인 이메일 입니다."),
+
+    // jwt 토큰 관련 Exception
+    TOKEN_NOT_FOUND(400, "JWT Token이 존재하지 않습니다."),
+    EXPIRED_TOKEN(400, "만료된 토큰입니다.");
+
+
+
 
     @Getter
     private int status;

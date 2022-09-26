@@ -18,9 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    @Id
+    @Id @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
     @Column(nullable = false, length = 20, name="user_nm")
     private String userName;
     @Column(nullable = false, name="user_pw")
