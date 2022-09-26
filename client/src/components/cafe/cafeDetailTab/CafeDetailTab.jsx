@@ -1,4 +1,4 @@
-import CafeDetailInfoMap from "../CafePageBottomSection/CafeDetailInfo/CafeDetailInfoMap";
+//import CafeDetailInfoMap from "../CafePageBottomSection/CafeDetailInfo/CafeDetailInfoMap";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -128,9 +128,7 @@ const CafeDetailTab = ({ cafeIdInfo }) => {
 
         <div className="right">
           <p>Location</p>
-          <div>
-            <CafeDetailInfoMap />
-          </div>
+          <div>{/* <CafeDetailInfoMap /> */}</div>
         </div>
       </div>
 

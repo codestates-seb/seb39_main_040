@@ -106,7 +106,7 @@ const LoginButton = styled.button`
   text-align: center;
   letter-spacing: 1px;
   border: 0;
-  background: #ae9e8f;
+  background: var(--green-010);
   border-radius: 5px;
 `;
 

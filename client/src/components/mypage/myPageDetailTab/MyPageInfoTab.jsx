@@ -114,7 +114,7 @@ const MyPageInfoTab = () => {
           <div>010-XXXX-XXXX</div>
         </InfoDetail>
         <ButtonBox>
-          <Link to="/userupdate">
+          <Link to="/userinfoedit">
             <button>수정하기</button>
           </Link>
           <button>회원탈퇴</button>
