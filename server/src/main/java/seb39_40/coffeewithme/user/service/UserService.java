@@ -77,6 +77,7 @@ public class UserService {
     
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+    }
 
     //이메일 중복 검증 - 예외 처리 되면 반환 값 없애기! boolean -> void 로
     private boolean verifyEmail(String email){
