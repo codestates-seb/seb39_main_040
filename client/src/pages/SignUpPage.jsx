@@ -91,7 +91,7 @@ const SignUpButton = styled.button`
   border-radius: 5px;
 `;
 
-const SignUp = () => {
+const SignUpPage = () => {
   const {
     register,
     watch,
@@ -255,4 +255,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpPage;

@@ -39,7 +39,7 @@ const CafeTag = styled.div`
   background: none;
 `;
 
-const CafeItem = ({ id, title, tags, image }) => {
+const CafeCard = ({ id, title, tags, image }) => {
   return (
     <CafeItemWrapper>
       <Link to={`/cafe/${id}`}>
@@ -55,4 +55,4 @@ const CafeItem = ({ id, title, tags, image }) => {
   );
 };
 
-export default CafeItem;
+export default CafeCard;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import MyPageTab from "../components/ui/myPageTab/MyPageTab";
-import MainTitle from "../components/ui/MainTitle";
+import MyPageTab from "../../components/ui/myPageTab/MyPageTab";
+import MainTitle from "../../components/common/MainTitle";
 
 const MyPageWrapper = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ const MyPageWrapper = styled.div`
   height: 100vh;
 `;
 
-const MyPage = () => {
+const UserInfoPage = () => {
   return (
     <MyPageWrapper>
       <MainTitle>MY PAGE</MainTitle>
@@ -22,4 +22,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default UserInfoPage;

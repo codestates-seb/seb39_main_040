@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import Search from "../components/cafe/cafeMain/Search";
-import TagCategory from "../components/cafe/cafeMain/TagCategory";
-import MainTitle from "../components/ui/MainTitle";
-import Filter from "../components/cafe/cafeMain/Filter";
-import CafeListItem from "../components/cafe/CafeListItem";
+import Search from "../components/Cafe/cafeMain/Search";
+import TagCategory from "../components/Cafe/cafeMain/TagCategory";
+import MainTitle from "../components/common/MainTitle";
+import Filter from "../components/Cafe/cafeMain/Filter";
+import CafeCard from "../components/Cafe/CafeCard";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ const MainPage = ({ cafeInfo }) => {
         {cafeInfo &&
           cafeInfo.map((el) => (
             <div className="cafeitem">
-              <CafeListItem
+              <CafeCard
                 key={el.id}
                 id={el.id}
                 title={el.name}

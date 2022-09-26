@@ -1,6 +1,7 @@
-import CafeDetailTab from "../../cafe/cafeDetailTab/CafeDetailTab";
-import CafeReviewsTab from "../../cafe/cafeDetailTab/CafeReviewsTab";
-import CafeImagesTab from "../../cafe/cafeDetailTab/CafeImagesTab";
+import CafeDetailTab from "../../Cafe/cafeDetailTab/CafeDetailTab";
+import CafeReviewsTab from "../../Cafe/cafeDetailTab/CafeReviewsTab";
+import CafeImagesTab from "../../Cafe/cafeDetailTab/CafeImagesTab";
+
 const CafeTabContent = ({ clickedTab, cafeIdInfo }) => {
   if (clickedTab === 0) {
     return <CafeDetailTab cafeIdInfo={cafeIdInfo} />;
