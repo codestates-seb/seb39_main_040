@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import styled from "styled-components";
-import CafeInfo from "../../components/Cafe/CafeInfo";
+import CafeInfo from "../../components/cafe/CafeInfo";
 import CafeTab from "../../components/ui/cafeTab/CafeTab";
 
 const MainWrapper = styled.div`

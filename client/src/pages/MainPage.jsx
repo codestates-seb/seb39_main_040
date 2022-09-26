@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import Search from "../components/Cafe/cafeMain/Search";
-import TagCategory from "../components/Cafe/cafeMain/TagCategory";
+import Search from "../components/cafe/cafeMain/Search";
+import TagCategory from "../components/cafe/cafeMain/TagCategory";
 import MainTitle from "../components/common/MainTitle";
-import Filter from "../components/Cafe/cafeMain/Filter";
-import CafeCard from "../components/Cafe/CafeCard";
+import Filter from "../components/cafe/cafeMain/Filter";
+import CafeCard from "../components/cafe/CafeCard";
 
 const MainWrapper = styled.div`
   display: flex;
