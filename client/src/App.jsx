@@ -37,7 +37,7 @@ function App() {
           <Route path="/cafe/:id" element={<CafePage cafeInfo={cafeInfo} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/newreview" element={<NewReviewPage />} />
+          <Route path="/cafe/:id/reviews" element={<NewReviewPage />} />
           <Route path="/editreview" element={<EditReviewPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/userupdate" element={<UserUpdate />} />
