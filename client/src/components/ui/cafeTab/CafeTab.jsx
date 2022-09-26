@@ -17,7 +17,6 @@ const TabWrapper = styled.div`
 
     button {
       border: none;
-      /* display: flex; */
       width: 105px;
       height: 45px;
       align-items: center;
@@ -61,7 +60,6 @@ const TabWrapper = styled.div`
 `;
 
 const CafeTab = ({ cafeIdInfo }) => {
-  // 탭 클릭 상태
   const [clickedTab, setClickedTab] = useState(0);
 
   return (

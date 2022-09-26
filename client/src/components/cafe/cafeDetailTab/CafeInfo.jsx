@@ -41,13 +41,13 @@ const Wrapper = styled.div`
     }
   }
 
-  ul {
+  .tag-box {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 30px;
     background-color: #f0ece3;
-    li {
+    span {
       background-color: #f0ece3;
       margin: 0 10px;
       font-size: 15px;
@@ -56,7 +56,6 @@ const Wrapper = styled.div`
 `;
 
 const CafeInfo = ({ cafeIdInfo }) => {
-  // console.log(cafeIdInfo.main_img);
   return (
     <Wrapper>
       <div className="img-box">
@@ -66,12 +65,9 @@ const CafeInfo = ({ cafeIdInfo }) => {
         <p>{cafeIdInfo.name}</p>
         <button>♥︎</button>
       </div>
-      <ul>
-        {/* 태그데이터 조회하는 방법 알아보기 */}
-        <li>#{cafeIdInfo.tags}</li>
-        {/* <li>#{cafeIdInfo.tags[1]}</li> */}
-        <li>#태그</li>
-      </ul>
+      <div className="tag-box">
+        <span>#{cafeIdInfo.tags}</span>
+      </div>
     </Wrapper>
   );
 };

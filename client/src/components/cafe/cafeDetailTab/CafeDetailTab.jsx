@@ -28,7 +28,6 @@ const MainWrapper = styled.div`
       position: relative;
       width: 500px;
       height: 400px;
-      /* border: 1px solid black; */
 
       p {
         position: absolute;
@@ -65,15 +64,6 @@ const MainWrapper = styled.div`
         }
       }
     }
-    // 구분선 만들기
-    /* .left::after {
-            display: inline-block;
-            content: "";
-            width: 1px;
-            height: 10px;
-            background-color: #e1e1e1;
-            margin-right: 10px;
-        } */
 
     .right {
       width: 500px;
@@ -90,7 +80,6 @@ const MainWrapper = styled.div`
     justify-content: center;
     position: relative;
     margin-top: 40px;
-    /* border: 1px solid black; */
     width: 500px;
     height: 700px;
 
@@ -101,7 +90,6 @@ const MainWrapper = styled.div`
     }
 
     .cafe-image {
-      /* border: 1px black dotted; */
       width: 450px;
       height: 600px;
       img {
@@ -113,7 +101,6 @@ const MainWrapper = styled.div`
 `;
 
 const CafeDetailTab = ({ cafeIdInfo }) => {
-  console.log(cafeIdInfo);
   return (
     <MainWrapper>
       <div className="first-box">

@@ -3,7 +3,6 @@ import Button from "../ui/Button";
 import NewTagForm from "./NewTagForm";
 import StarRating from "./StarRating";
 
-// 메인컨테이너
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
@@ -14,7 +13,6 @@ const MainContainer = styled.div`
   margin-left: 20px;
 `;
 
-// 카페명컨테이너
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -33,7 +31,7 @@ const TitleContainer = styled.div`
     font-weight: 500;
   }
 `;
-// 작성자컨테이너
+
 const NameContainer = styled.div`
   display: flex;
   align-items: center;
@@ -52,7 +50,7 @@ const NameContainer = styled.div`
     font-weight: 500;
   }
 `;
-// 태그컨테이너
+
 const TagContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,10 +77,9 @@ const TagContainer = styled.div`
     width: 600px;
     height: 110px;
     margin-left: 60px;
-    /* border: 1px solid black; */
   }
 `;
-// 별점컨테이너
+
 const StarContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -110,10 +107,9 @@ const StarContainer = styled.div`
     width: 600px;
     height: 70px;
     margin-left: 60px;
-    /* border: 1px solid black; */
   }
 `;
-// 한줄평컨테이너
+
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -152,7 +148,6 @@ const TextContainer = styled.div`
   }
 `;
 
-//버튼컨테이너
 const BtnContainer = styled.div`
   display: flex;
   align-items: center;

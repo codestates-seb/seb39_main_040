@@ -3,7 +3,6 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 
-// 전체리뷰 컨테이너 + 사진컨테이너
 const MainWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -28,7 +27,6 @@ const MainWrapper = styled.div`
   }
 `;
 
-// 텍스트, 별점, 유저이름
 const Content = styled.div`
   position: relative;
   background-color: #f0ece3;
@@ -59,7 +57,6 @@ const Content = styled.div`
     .star {
       position: absolute;
       left: 0;
-      /* width: 540px; */
       align-items: center;
       justify-content: center;
       margin-left: 15px;
@@ -69,7 +66,6 @@ const Content = styled.div`
       position: absolute;
       right: 0;
       width: 50px;
-      /* margin-left: 100px; */
       background-color: #f0ece3;
     }
   }
@@ -85,7 +81,6 @@ const CafeReviewItem = ({ text, tag, user, image, star }) => {
         <div className="tag">
           <span>#{tag[0]}</span>
           <span>#{tag[1]}</span>
-          <span>#조용함</span>
         </div>
         <p>{text}</p>
         <div className="info">

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 
-export default function BasicRating() {
+export default function StarRating({ onChange }) {
   const [value, setValue] = React.useState(3);
 
   return (
@@ -14,11 +14,9 @@ export default function BasicRating() {
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
-          console.log(newValue);
+          onChange(newValue);
         }}
       />
-      {/* <Typography component="legend">Read only</Typography>
-      <Rating name="read-only" value={value} readOnly /> */}
     </Box>
   );
 }
