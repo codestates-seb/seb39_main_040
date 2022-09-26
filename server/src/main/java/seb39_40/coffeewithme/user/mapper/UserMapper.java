@@ -7,6 +7,7 @@ import seb39_40.coffeewithme.user.dto.UserResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
     User userJoinToUser(UserRequestDto.UserJoin userJoin);
-    UserResponseDto.UserInformation userToUserInformation(User user);
+    UserResponseDto.UserInfo userToUserInfo(User user);
 }

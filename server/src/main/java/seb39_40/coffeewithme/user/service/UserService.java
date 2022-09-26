@@ -1,5 +1,6 @@
 package seb39_40.coffeewithme.user.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,9 @@ public class UserService {
         //throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
         return true;
     }
+    
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
     //이메일 중복 검증 - 예외 처리 되면 반환 값 없애기! boolean -> void 로
     private boolean verifyEmail(String email){
