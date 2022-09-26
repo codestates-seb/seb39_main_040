@@ -1,4 +1,8 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 
 const InfoBox = styled.div`
   display: flex;
@@ -45,7 +49,7 @@ const InfoTitle = styled.div`
   width: 180px;
   height: 400px;
   div {
-    padding: 20px 0 20px 40px;
+    padding: 20px 0 20px 60px;
   }
 `;
 
@@ -82,11 +86,21 @@ const ButtonBox = styled.button`
 `;
 
 const MyPageInfoTab = () => {
+  const [userInfo, setUserInfo] = useState(true);
+
   return (
     <InfoBox>
       <InfoImgBox>
-        <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAzMjlfMzkg/MDAxNTg1NDA4ODEzMzI2.TgYHw1rfLOzhNud2l1TQnYpBWO2C5s9gaILeSU07HLIg.jni1H76nFFFoYqBEzRZDccNAV8uLzzcxhtsvxqN7QCIg.PNG.tarkyami/%ED%95%9C%EC%86%8C%ED%9D%AC28.png?type=w800" />
-        <button>이미지 수정</button>
+        {userInfo ? (
+          <img
+            src="https://mblogthumb-phinf.pstatic.net/MjAyMDAzMjlfMzkg/MDAxNTg1NDA4ODEzMzI2.TgYHw1rfLOzhNud2l1TQnYpBWO2C5s9gaILeSU07HLIg.jni1H76nFFFoYqBEzRZDccNAV8uLzzcxhtsvxqN7QCIg.PNG.tarkyami/%ED%95%9C%EC%86%8C%ED%9D%AC28.png?type=w800"
+            alt="유저이미지"
+          />
+        ) : (
+          <FontAwesomeIcon className="icon" icon={faImage} size="3x" />
+        )}
+
+        {/* <button>이미지 추가</button> */}
       </InfoImgBox>
       <InfoDetailBox>
         <InfoTitle>
@@ -100,7 +114,9 @@ const MyPageInfoTab = () => {
           <div>010-XXXX-XXXX</div>
         </InfoDetail>
         <ButtonBox>
-          <button>수정하기</button>
+          <Link to="/userupdate">
+            <button>수정하기</button>
+          </Link>
           <button>회원탈퇴</button>
         </ButtonBox>
       </InfoDetailBox>

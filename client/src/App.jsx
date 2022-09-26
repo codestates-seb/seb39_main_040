@@ -11,6 +11,7 @@ import SignUp from "./pages/SignUp";
 import NewReviewPage from "./pages/NewReviewPage";
 import EditReviewPage from "./pages/EditReviewPage";
 import MyPage from "./pages/MyPage";
+import UserUpdate from "./pages/UserUpdate";
 
 function App() {
   const [cafeInfo, setCafeInfo] = useState("");
@@ -39,6 +40,7 @@ function App() {
           <Route path="/newreview" element={<NewReviewPage />} />
           <Route path="/editreview" element={<EditReviewPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/userupdate" element={<UserUpdate />} />
         </Routes>
       </BrowserRouter>
     </>
