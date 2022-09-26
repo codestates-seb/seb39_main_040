@@ -57,7 +57,7 @@ public class UserController {
     public ResponseEntity getUserInformation(@AuthenticationPrincipal CustomUserDetails userDetails){
         System.out.println("** Get User Information : "+userDetails.getUsername());
         User user = userService.getInformation(userDetails.getUsername());
-        return new ResponseEntity<>(mapper.userToUserInformation(user),HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserInfo(user),HttpStatus.OK);
     }
 
 }
