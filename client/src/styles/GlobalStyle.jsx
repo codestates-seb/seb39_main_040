@@ -6,9 +6,7 @@ ${reset}
   *, *::before, *::after {
     box-sizing: border-box;
   }
-  /* * {
-    background-color: #F7F7F7;
-  } */
+
   body {
     height: 100%;
     width: 100%;
@@ -28,7 +26,5 @@ ${reset}
     background: none;
     border: none;
   }
-`
-;
-
+`;
 export default GlobalStyle;

@@ -56,11 +56,16 @@ const CafeTag = styled.div`
   color: #735757;
 `;
 
+//
+// props로
 const CafeItem = () => {
   return (
     <CafeItemWrapper>
       <CafeImg>
-        <img src="https://imgorg.catch.co.kr/job/catchapply/main/catchcafe/CAFE_P-1-1.jpg" />
+        <img
+          src="https://imgorg.catch.co.kr/job/catchapply/main/catchcafe/CAFE_P-1-1.jpg"
+          alt="카페사진"
+        />
         <button>
           <FontAwesomeIcon icon={faTrashCan} />
         </button>

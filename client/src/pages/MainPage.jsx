@@ -28,8 +28,6 @@ const MainWrapper = styled.div`
     justify-content: center;
     .cafeitem {
       width: 250px;
-      /* height: 340px; */
-      /* margin-bottom: 10px; */
       margin-right: 30px;
     }
   }
@@ -45,7 +43,6 @@ const MainPage = ({ cafeInfo }) => {
         <Filter />
       </div>
       <div className="cafelist">
-        {/* map 사용해서 데이터 뿌리기 */}
         {cafeInfo &&
           cafeInfo.map((el) => (
             <div className="cafeitem">

@@ -1,11 +1,11 @@
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import Button from "../ui/Button";
 import NewTagForm from "./NewTagForm";
 import StarRating from "./StarRating";
-// 값이 다 채워지면 버튼 활성화 기능 추가
-// post 성공하면 알림창 띄우기
 
-// 메인컨테이너
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
@@ -16,7 +16,6 @@ const MainContainer = styled.div`
   margin-left: 20px;
 `;
 
-// 카페명컨테이너
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -35,7 +34,7 @@ const TitleContainer = styled.div`
     font-weight: 500;
   }
 `;
-// 작성자컨테이너
+
 const NameContainer = styled.div`
   display: flex;
   align-items: center;
@@ -55,7 +54,7 @@ const NameContainer = styled.div`
     font-weight: 500;
   }
 `;
-// 태그컨테이너
+
 const TagContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -82,10 +81,9 @@ const TagContainer = styled.div`
     width: 600px;
     height: 110px;
     margin-left: 60px;
-    /* border: 1px solid black; */
   }
 `;
-// 별점컨테이너
+
 const StarContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -113,10 +111,9 @@ const StarContainer = styled.div`
     width: 600px;
     height: 70px;
     margin-left: 60px;
-    /* border: 1px solid black; */
   }
 `;
-// 한줄평컨테이너
+
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -155,7 +152,6 @@ const TextContainer = styled.div`
   }
 `;
 
-//버튼컨테이너
 const BtnContainer = styled.div`
   display: flex;
   align-items: center;
@@ -166,9 +162,47 @@ const BtnContainer = styled.div`
 `;
 
 const NewReviewForm = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [description, setDescription] = useState("");
+  const [score, setScore] = useState("");
+  const [tags, setTags] = useState();
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    let content = {
+      review_img: 3,
+      score: score,
+      description: description,
+      tags: tags,
+    };
+
+    console.log(content);
+
+    axios
+      .post(`http://175.125.6.189/cafe/${id}/reviews`, content)
+      .then((res) => console.log(res.data))
+      .then(() => {
+        navigate(`/cafe/${id}`);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const onChangeStarHandler = (newStar) => {
+    setScore(newStar);
+    console.log(newStar);
+  };
+
+  const onChangeTagHandler = (newTags) => {
+    setTags(newTags);
+    console.log(tags);
+  };
+
   return (
     <MainContainer>
-      <form>
+      <form onSubmit={onSubmitHandler}>
         <TitleContainer>
           <span className="title-name">카페명</span>
           <span className="title">Mood</span>
@@ -182,7 +216,7 @@ const NewReviewForm = () => {
             <span>태그</span>
           </div>
           <div className="tag-container">
-            <NewTagForm />
+            <NewTagForm onChange={onChangeTagHandler} />
           </div>
         </TagContainer>
         <StarContainer>
@@ -190,14 +224,17 @@ const NewReviewForm = () => {
             <span>별점</span>
           </div>
           <div className="star-container">
-            <StarRating />
+            <StarRating onChange={onChangeStarHandler} />
           </div>
         </StarContainer>
         <TextContainer>
           <div className="text-title">
             <span>한줄평</span>
           </div>
-          <textarea name="content" />
+          <textarea
+            name="content"
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </TextContainer>
         <BtnContainer>
           <Button>리뷰등록</Button>

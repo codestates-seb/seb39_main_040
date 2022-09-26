@@ -16,30 +16,16 @@ const MainWrapper = styled.div`
 
 const CafePage = () => {
   const { id } = useParams();
-  const [cafeIdInfo, setCafeIdInfo] = useState(""); //카페정보state
-  // const [cafeIdImage, setCafeIdImage] = useState(""); //사진정보state
+  const [cafeIdInfo, setCafeIdInfo] = useState("");
 
-  // 카페 정보 불러오기 (사진포함)
   useEffect(() => {
     axios
       .get(`http://175.125.6.189/cafe/${id}`)
       .then((res) => {
-        // console.log(res.data);
         setCafeIdInfo(res.data);
       })
-      .catch((err) => console.log("error:", err));
+      .catch((err) => console.err("error:", err));
   }, []);
-
-  // 사진 정보 불러오기
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://175.125.6.189/images/${id}`)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setCafeIdImage(res.data);
-  //     })
-  //     .catch((err) => console.log("err:", err));
-  // }, []);
 
   return (
     <MainWrapper>

@@ -25,41 +25,36 @@ const MainWrapper = styled.div`
 `;
 const CafeReviewsTab = () => {
   const { id } = useParams();
-  const [reviewIdInfo, setReviewIdInfo] = useState("");
+  const [reviewIdInfo, setReviewIdInfo] = useState([]);
 
-  // 리뷰정보요청
   useEffect(() => {
     axios
       .get(`http://175.125.6.189/cafe/${id}/reviews`)
       .then((res) => {
-        console.log(res.data.data);
         setReviewIdInfo(res.data.data);
       })
-      .catch((err) => console.log("err:", err));
+      .catch((err) => console.err("err:", err));
   }, []);
 
   return (
     <MainWrapper>
       <div className="button-box">
-        <Link to="/newreview">
+        <Link to={`/cafe/${id}/reviews`}>
           <button>
             <FontAwesomeIcon className="icon" icon={faPenToSquare} size="2x" />
           </button>
         </Link>
       </div>
-      {/* map메서드 사용예정 */}
-      {reviewIdInfo &&
-        reviewIdInfo.map((el) => (
-          <CafeReviewItem
-            text={el.description}
-            key={el.id}
-            tag={el.tags}
-            user={el.user}
-            image={el.review_img}
-            star={el.score}
-          />
-        ))}
-      {/* <CafeReviewItem /> */}
+      {reviewIdInfo.map((el) => (
+        <CafeReviewItem
+          text={el.description}
+          key={el.id}
+          tag={el.tags}
+          user={el.user}
+          image={el.review_img}
+          star={el.score}
+        />
+      ))}
     </MainWrapper>
   );
 };

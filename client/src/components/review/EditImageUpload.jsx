@@ -15,7 +15,6 @@ const MainWrapper = styled.div`
   }
 `;
 
-// 이미지미리보기 컨테이너
 const ImgContainer = styled.div`
   width: 600px;
   height: 560px;
@@ -34,7 +33,6 @@ const ImgContainer = styled.div`
   }
 `;
 
-// 버튼 컨테이너
 const BtnContainer = styled.div`
   width: 700px;
   position: relative;
@@ -58,14 +56,11 @@ const EditImageUpload = () => {
 
   const imgInput = useRef();
 
-  // 이미지업로드 버튼을 눌렀을 때
   const onSubmitImg = (e) => {
     e.preventDefault();
     imgInput.current.click();
   };
 
-  // 이미지 미리보기 구현 (FileReader사용)
-  // input에 입력한 파일 객체 -> base64로 인코딩.
   const onImgChange = (fileBlob) => {
     const reader = new FileReader();
     reader.readAsDataURL(fileBlob);
@@ -73,10 +68,8 @@ const EditImageUpload = () => {
       reader.onload = () => {
         setImgSrc(reader.result);
         resolve();
-        // 우리가 입력한 파일정보
+
         console.log(fileBlob);
-        // base64로 인코딩한 파일정보
-        // console.log(reader.result);
       };
     });
   };
@@ -102,7 +95,6 @@ const EditImageUpload = () => {
           사진 올리기
         </button>
       </BtnContainer>
-      {/* <img src=""/> */}
     </MainWrapper>
   );
 };
