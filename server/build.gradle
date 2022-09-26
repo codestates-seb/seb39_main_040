@@ -22,17 +22,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+  implementation 'com.amazonaws:aws-java-sdk-s3:1.12.281'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-	//mapstruct 설정 추가
-	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-
-	//aws 설정 추가
-	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.281'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
