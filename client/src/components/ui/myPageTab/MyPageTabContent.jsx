@@ -1,6 +1,6 @@
-import MypageInfoTab from "../../Mypage/myPageDetailTab/MyPageInfoTab";
-import MyPageWishTab from "../../Mypage/myPageDetailTab/MyPageWishTab";
-import MyPageReviewTab from "../../Mypage/myPageDetailTab/MyPageReviewTab";
+import MypageInfoTab from "../../mypage/myPageDetailTab/MyPageInfoTab";
+import MyPageWishTab from "../../mypage/myPageDetailTab/MyPageWishTab";
+import MyPageReviewTab from "../../mypage/myPageDetailTab/MyPageReviewTab";
 
 const MyPageTabContent = ({ clickedTab }) => {
   if (clickedTab === 0) {
