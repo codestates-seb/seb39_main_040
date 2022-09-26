@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
@@ -86,6 +87,14 @@ const SignUpBox = styled.div`
   }
 `;
 
+const StyledLink = styled(Link)`
+  // Link로 연결된 스타일링 제거
+  & > div {
+    color: #ae9e8f;
+    margin-bottom: 30px;
+  }
+`;
+
 const LoginButton = styled.button`
   padding: 12px 24px;
   margin: 2px 0 20px 0;
@@ -128,6 +137,7 @@ const Login = () => {
                 {...register("email", {
                   required: true,
                   pattern:
+                    // eslint-disable-next-line
                     /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 })}
               ></input>
@@ -170,7 +180,9 @@ const Login = () => {
           </div>
           <SignUpBox>
             {/*아래 div, span 태그에는 Link를 연결해 해당 페이지로 이동하게 연결해야함 */}
-            <div>회원이 아니십니까?</div>
+            <StyledLink to="/signup">
+              <div>회원이 아니십니까?</div>
+            </StyledLink>
             <span>아이디찾기</span>
             <span> | </span>
             <span>비밀번호찾기</span>
