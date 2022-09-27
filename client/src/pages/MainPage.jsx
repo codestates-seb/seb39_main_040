@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Title from "../components/common/Title";
 
 import CafeCard from "../components/cafe/CafeCard";
+import Header from "../components/common/Header";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -35,7 +36,8 @@ const MainWrapper = styled.div`
 const MainPage = ({ cafeInfo }) => {
   return (
     <MainWrapper>
-      <Title>CAFELIST</Title>
+      <Header />
+      <Title />
       <div className="cafelist">
         {cafeInfo &&
           cafeInfo.map((el) => (
