@@ -37,6 +37,7 @@ ${reset}
     --green-010: #809A6F;
     --black-010: #000000;
     --white-010: #ffffff;
+    --red-010: #e64848;
   }
 `;
 export default GlobalStyle;

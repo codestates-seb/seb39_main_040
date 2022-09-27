@@ -1,112 +1,157 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMugHot } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+import Logo from "../../assets/CoffeeWithMe.svg";
 
-const HeaderBox = styled.header`
-  position: fixed;
+const HeaderWrapper = styled.header`
+  position: sticky;
   top: 0;
-  height: 70px;
-  //min-width: 1200px;
-  width: 100%;
-
-  // 헤더 사이즈 확인용
-  /* border: 1px solid red; */
-
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  color: #735757;
+  height: 75px;
+  width: 100%;
+  border-bottom: 1px solid var(--gray-030);
+  padding: 10px 40px;
 `;
 
-const LogoTitle = styled.h1`
-  display: grid;
-  grid-template-columns: 600px;
-  font-size: 1.7rem;
-  margin-left: 50px;
-  span {
-    padding-left: 10px;
-  }
+const HeaderTitle = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
+const NavList = styled.ul`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  margin-right: 44px;
+`;
+
+const NavItem = styled.li`
+  padding-top: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--black-010);
+  opacity: 0.3;
+  margin-left: 60px;
+`;
+
+const DropBox = styled.div`
+  // ?? a 태그를 여기서 해주어야지만 Link가 스타일이 적용되지 않는다.
   a {
     text-decoration: none;
-    color: #735757;
+    color: var(--black--010);
+    opacity: 0.7;
+  }
+
+  .hidden {
+    position: absolute;
+    top: 100%;
+    right: 2%;
+    width: 110px;
+    text-align: center;
+    padding: 10px;
+    font-size: 15px;
+    transition: 0.3s;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    // 투명도조절로 보이지 않게
+    opacity: 0;
+  }
+
+  .activate {
+    position: absolute;
+    top: 100%;
+    right: 2%;
+    width: 110px;
+    text-align: center;
+    padding: 10px;
+    font-size: 15px;
+    transition: 0.3s;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    // 투명도조절로 보이게
+    opacity: 1;
   }
 `;
 
-const LoginBox = styled.div`
-  align-items: center;
-  display: flex;
-  padding: 20px;
-  z-index: 999;
-  margin-right: 30px;
-  button {
-    margin-right: 10px;
-    font-size: 1rem;
-    border: none;
-    color: #735757;
-    font-weight: bold;
+// 유저이미지
+const UserProfile = styled.img`
+  display: inline-block;
+  position: absolute;
+  top: 10%;
+  right: 2%;
+  margin-right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+`;
+
+// 드롭 메뉴
+const DropMenu = styled.ul`
+  .active &.menu > li {
+    text-decoration: none;
+    color: var(--black--010);
   }
 `;
 
-const UserBox = styled.div`
-  align-items: center;
-  display: flex;
-  padding: 10px;
-  z-index: 999;
-  margin-right: 30px;
-  button {
-    //margin-right: 5px;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    color: #735757;
-  }
-
-  img {
-    border-radius: 20px;
-    width: 40px;
-    height: 40px;
-    margin-left: 15px;
-    margin-right: 20px;
+//드롭 메뉴속 아이템
+const DropItem = styled.li`
+  padding: 5px;
+  &:hover {
+    color: var(--green-010);
   }
 `;
 
 const Header = () => {
-  // 로그인 상태에 따른 헤더 변경 (임시 state)
   const [isLogin, setIsLogin] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <HeaderBox>
-        <LogoTitle>
-          <a href="/">
-            <FontAwesomeIcon icon={faMugHot} />
-            <span>Coffee With Me</span>
-          </a>
-        </LogoTitle>
-        {isLogin === false ? (
-          <LoginBox>
-            <Link to="/login">
-              <button onClick={() => setIsLogin(true)}>Login</button>
+    <HeaderWrapper>
+      <Link to="/">
+        <HeaderTitle src={Logo} alt="logo" />
+      </Link>
+
+      {isLogin === true ? (
+        <DropBox>
+          <UserProfile
+            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
+            alt="profile"
+            onClick={() => setIsOpen(!isOpen)}
+          />
+          <DropMenu className={isOpen ? "hidden" : "activate"}>
+            <Link
+              to="/userinfo"
+              style={{ color: "inherit", textDecoration: "inherit" }}
+            >
+              <DropItem>나의정보</DropItem>
             </Link>
-            <Link to="/signup">
-              <button>Sign up</button>
+            <Link to="/userinfo">
+              <DropItem>찜한카페</DropItem>
             </Link>
-          </LoginBox>
-        ) : (
-          <UserBox>
-            <Link to="/">
-              <button onClick={() => setIsLogin(false)}>Logout</button>
+            <Link to="/userinfo">
+              <DropItem>나의리뷰</DropItem>
             </Link>
-            <Link to="/mypage">
-              <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MTVfOSAg/MDAxNTg5NDcxOTQ5NzA1.tj3oVTxxksmb7qcx9B1ICCWuJws6-RpyahOvpVyvhscg.aX0bh7Q4uQXj2HPJ8W_qY6qf1X1dK-fDq5yo2UKuFBog.JPEG.sdon1222/IMG_9874.JPG?type=w800" />
+            <Link to="/userinfo">
+              <DropItem>로그아웃</DropItem>
             </Link>
-          </UserBox>
-        )}
-      </HeaderBox>
-    </>
+          </DropMenu>
+        </DropBox>
+      ) : (
+        <NavList>
+          <Link to="/login">
+            <NavItem>로그인</NavItem>
+          </Link>
+          <Link to="/signup">
+            <NavItem>회원가입</NavItem>
+          </Link>
+        </NavList>
+      )}
+    </HeaderWrapper>
   );
 };
 

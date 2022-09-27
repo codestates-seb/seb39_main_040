@@ -5,15 +5,17 @@ import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
+import Header from "../components/common/Header";
+import axios from "axios";
 
 const LoginBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 450px;
-  min-height: 600px;
+  min-height: 620px;
   margin: 0 auto;
-  margin-top: 180px;
+  margin-top: 130px;
 `;
 
 const InputBox = styled.div`
@@ -23,12 +25,12 @@ const InputBox = styled.div`
   align-items: center;
   width: 450px;
   padding: 48px 32px 32px 32px;
-  background: #f7f5f2;
+  background: var(--white-010);
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.25);
 
   h1 {
     margin-bottom: 50px;
-    color: #ae9e8f;
+    color: var(--green-010);
     font-size: 1.7rem;
     font-weight: 700;
   }
@@ -36,7 +38,7 @@ const InputBox = styled.div`
   // 이름, 이메일, 비밀번호, 전화번호 각각의 input 칸
   .input {
     margin-bottom: 20px;
-    color: #ae9e8f;
+    color: var(--green-010);
   }
 
   input {
@@ -47,27 +49,28 @@ const InputBox = styled.div`
     -webkit-appearance: none;
 
     display: block;
-    background: #f7f5f2;
+    background: var(--white-010);
     width: 100%;
     border: none;
-    border-bottom: 1px solid #757575;
-    color: #ae9e8f;
+    border-bottom: 1px solid var(--gray-030);
+    color: var(--green-010);
   }
 
   // input 박스 클릭 시 강조되는 표현 제거
   input:focus {
     outline: none;
+    border-bottom: 1px solid var(--gray-020);
   }
 
   input::placeholder {
-    color: #636363;
+    color: var(--gray-020);
     font-size: 15px;
     opacity: 0.5;
   }
 
   // 유효성 검사 후 적절하지 않을 시 나오는 안내 문구
   & label > p {
-    color: #e64848;
+    color: var(--red-010);
     margin-top: 10px;
     font-size: 0.9rem;
   }
@@ -76,13 +79,12 @@ const InputBox = styled.div`
 const SignUpBox = styled.div`
   text-align: center;
   font-size: 0.9rem;
-  //border: 1px solid red;
   margin-top: 50px;
   margin-bottom: 20px;
 
   & > div,
   span {
-    color: #ae9e8f;
+    color: var(--gray-020);
     margin-bottom: 30px;
   }
 `;
@@ -90,24 +92,29 @@ const SignUpBox = styled.div`
 const StyledLink = styled(Link)`
   // Link로 연결된 스타일링 제거
   & > div {
-    color: #ae9e8f;
+    color: var(--gray-020);
     margin-bottom: 30px;
   }
 `;
 
 const LoginButton = styled.button`
-  padding: 12px 24px;
-  margin: 2px 0 20px 0;
+  background: var(--green-010);
+  text-align: center;
   width: 100%;
-  color: #fff;
   font-size: 18px;
   font-weight: 600;
-  //-webkit-font-smoothing: antialiased;
-  text-align: center;
+  color: var(--white-010);
+  padding: 12px 24px;
+  margin: 2px 0 20px 0;
   letter-spacing: 1px;
   border: 0;
-  background: var(--green-010);
   border-radius: 5px;
+
+  &:hover {
+    background: var(--white-010);
+    color: var(--green-010);
+    border: 1px solid var(--green-010);
+  }
 `;
 
 const LoginPage = () => {
@@ -117,80 +124,98 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    axios
+      .post("http://175.125.6.189/login", data)
+      .then((res) => {
+        console.log("로그인성공");
+        console.log(data);
+        console.log(res.headers);
+        //localStorage.setItem("AccessToken", res.headers.accessToken);
+        //localStorage.setItem("RefreshToken", res.headers.refreshToken);
+      })
+      .catch((error) => {
+        console.log("회원 정보가 일치하지 않습니다.");
+        console.log(error);
+      });
+  };
 
   return (
-    <LoginBox>
-      <InputBox>
-        <h1>LOGIN</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="input">
-            <label htmlFor="email">
-              <FontAwesomeIcon icon={faEnvelope} />
-              <input
-                id="email"
-                type="text"
-                placeholder="Email"
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
-                required
-                {...register("email", {
-                  required: true,
-                  pattern:
-                    // eslint-disable-next-line
-                    /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                })}
-              ></input>
-              {/* 유효성 검사를 실패할 경우 화면에 출력되는 값 */}
-              {errors.email && errors.email.type === "required" && (
-                <p>이메일을 입력해주세요.</p>
-              )}
-              {errors.email && errors.email.type === "pattern" && (
-                <p>올바른 이메일이 아닙니다.</p>
-              )}
-            </label>
-          </div>
-          <div className="input">
-            <label htmlFor="password">
-              <FontAwesomeIcon icon={faLock} />
-              <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                // value={password}
-                // onChange={(e) => setPassword(e.target.value)}
-                required
-                {...register("password", {
-                  required: true,
-                  pattern:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
-                  validate: (value) => value.length >= 8 && value.length <= 20,
-                })}
-              ></input>
-              {errors.password && errors.password.type === "required" && (
-                <p>비밀번호를 입력해주세요.</p>
-              )}
-              {errors.password && errors.password.type === "pattern" && (
-                <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
-              )}
-              {errors.password && errors.password.type === "validate" && (
-                <p>비밀번호는 최소 8글자 이상 20글자 이하입니다.</p>
-              )}
-            </label>
-          </div>
-          <SignUpBox>
-            {/*아래 div, span 태그에는 Link를 연결해 해당 페이지로 이동하게 연결해야함 */}
-            <StyledLink to="/signup">
-              <div>회원이 아니십니까?</div>
-            </StyledLink>
-            <span>아이디찾기</span>
-            <span> | </span>
-            <span>비밀번호찾기</span>
-          </SignUpBox>
-          <LoginButton>로그인</LoginButton>
-        </form>
-      </InputBox>
-    </LoginBox>
+    <>
+      <Header />
+      <LoginBox>
+        <InputBox>
+          <h1>로그인</h1>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="input">
+              <label htmlFor="email">
+                <FontAwesomeIcon icon={faEnvelope} />
+                <input
+                  id="email"
+                  type="text"
+                  placeholder="Email"
+                  // value={email}
+                  // onChange={(e) => setEmail(e.target.value)}
+                  required
+                  {...register("email", {
+                    required: true,
+                    pattern:
+                      // eslint-disable-next-line
+                      /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  })}
+                ></input>
+                {/* 유효성 검사를 실패할 경우 화면에 출력되는 값 */}
+                {errors.email && errors.email.type === "required" && (
+                  <p>이메일을 입력해주세요.</p>
+                )}
+                {errors.email && errors.email.type === "pattern" && (
+                  <p>올바른 이메일이 아닙니다.</p>
+                )}
+              </label>
+            </div>
+            <div className="input">
+              <label htmlFor="password">
+                <FontAwesomeIcon icon={faLock} />
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  // value={password}
+                  // onChange={(e) => setPassword(e.target.value)}
+                  required
+                  {...register("password", {
+                    required: true,
+                    pattern:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
+                    validate: (value) =>
+                      value.length >= 8 && value.length <= 20,
+                  })}
+                ></input>
+                {errors.password && errors.password.type === "required" && (
+                  <p>비밀번호를 입력해주세요.</p>
+                )}
+                {errors.password && errors.password.type === "pattern" && (
+                  <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
+                )}
+                {errors.password && errors.password.type === "validate" && (
+                  <p>비밀번호는 최소 8글자 이상 20글자 이하입니다.</p>
+                )}
+              </label>
+            </div>
+            <SignUpBox>
+              {/*아래 div, span 태그에는 Link를 연결해 해당 페이지로 이동하게 연결해야함 */}
+              <StyledLink to="/signup">
+                <div>회원이 아니십니까?</div>
+              </StyledLink>
+              <span>아이디찾기</span>
+              <span> | </span>
+              <span>비밀번호찾기</span>
+            </SignUpBox>
+            <LoginButton>로그인</LoginButton>
+          </form>
+        </InputBox>
+      </LoginBox>
+    </>
   );
 };
 
