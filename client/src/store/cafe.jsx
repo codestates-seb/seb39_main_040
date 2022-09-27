@@ -2,11 +2,12 @@ import create from "zustand";
 import axios from "axios";
 
 const useStore = create((set) => ({
-  cafeInfo: "", //state
+  cafeInfo: [], //state
   //state를 변경 시킴
-  setCafeInfo: async (url) => {
-    const res = await axios.get(url);
-    set({ cafe: await res.data });
+  setCafeInfo: async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API}/cafe`);
+    set({ cafeInfo: res.data });
+    console.log(res.data);
   },
 }));
 
