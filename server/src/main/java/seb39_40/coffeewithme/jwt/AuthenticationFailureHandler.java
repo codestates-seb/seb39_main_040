@@ -5,7 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-import seb39_40.coffeewithme.exception.BusinessLogicException;
+//import seb39_40.coffeewithme.common.exeption.ErrorResponse;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 
 import javax.servlet.ServletException;
@@ -24,13 +24,14 @@ public class AuthenticationFailureHandler implements org.springframework.securit
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
-            new ObjectMapper().writeValue(response.getWriter(), new BusinessLogicException(ExceptionCode.INVALID_ID_PW));
+
+            new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.USER_NOT_FOUND);
         }
         else if(exception instanceof DisabledException){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
-            new ObjectMapper().writeValue(response.getWriter(), new BusinessLogicException(ExceptionCode.USER_NOT_ACTIVE));
+            new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.USER_BAD_REQUEST);
         }
     }
 }

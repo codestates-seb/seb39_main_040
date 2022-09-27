@@ -68,4 +68,5 @@ public class ReviewService {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
         return reviewRepository.findByUserId(user_id, pageRequest);
     }
+
 }
