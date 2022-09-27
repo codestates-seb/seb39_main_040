@@ -19,7 +19,7 @@ public class AuthenticationSuccessHandler implements org.springframework.securit
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        String at = jwtProvider.createAccessToken(user.getUser().getUserId(), user.getUser().getEmail());
+        String at = jwtProvider.createAccessToken(user.getUser().getId(), user.getUser().getEmail());
         String rt = jwtProvider.createRefreshToken(user.getUser().getEmail());
 
         jwtProvider.saveRefreshToken(user.getUser().getEmail(),rt);

@@ -22,8 +22,15 @@ public enum ExceptionCode {
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
     TAG_NOT_FOUND(404, "태그를 찾을 수 없습니다."),
 
+    USER_BAD_REQUEST(400, "탈퇴한 회원입니다."),
     USER_NOT_FOUND(404, "회원을 찾을 수 없습니다."),
-    EMAIL_ALREADY_EXISTS(409, "이미 사용중인 이메일 입니다.");
+    EMAIL_ALREADY_EXISTS(409, "이미 사용중인 이메일 입니다."),
+
+    TOKEN_UNAUTHORIZED(401, "유효한 Refresh Token이 아닙니다."),
+    TOKEN_EXPIRATION(401, "만료된 Access Token 입니다."),
+    TOKEN_BAD_REQUEST(400, "JWT Token이 존재하지 않습니다."),
+    LIKE_ALREADY_EXISTS(409,"이미 찜한 카페입니다."),
+    LIKE_NOT_FOUND(404,"찜한 카페를 찾을 수 없습니다.");
 
     @Getter
     private int status;

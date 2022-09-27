@@ -18,9 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    @Id
+    @Id @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
     @Column(nullable = false, length = 20, name="user_nm")
     private String userName;
     @Column(nullable = false, name="user_pw")
@@ -39,11 +39,11 @@ public class User {
     private String refresh;
     /*
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name ="user_id")
     private Image profilePhoto; //외부에서 오는 키임둥, 객체를 받아와야할까용
     */
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL) //  @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<Review> reviews=new ArrayList<>();
 
     public List<String> getRoleList(){
@@ -54,7 +54,7 @@ public class User {
     }
 
     @Transient
-    private List<Like> likes=new ArrayList<>();
+    private List<Wishlist> likes=new ArrayList<>();
 
     public enum UserStatus {
         USER_SIGNUP("signup"),
@@ -76,10 +76,10 @@ public class User {
         }
     }
 
-//    public void addLike(Like like) {
-//        this.likes.add(like);
-//        if (like.getUser() != this){
-//            like.setUser(this);
-//        }
-//    }
+    public void addLike(Wishlist like) {
+        this.likes.add(like);
+        if (like.getUser() != this){
+            like.setUser(this);
+        }
+    }
 }
