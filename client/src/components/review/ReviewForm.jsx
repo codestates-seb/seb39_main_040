@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Button from "../common/Button";
-import NewTagForm from "./NewTagForm";
-import StarRating from "./StarRating";
+import NewTagForm from "./ReviewTag";
+import StarRating from "./ReviewStarRating";
 
 const MainContainer = styled.div`
   display: flex;
@@ -161,7 +161,7 @@ const BtnContainer = styled.div`
   margin: 30px 0 0 560px;
 `;
 
-const NewReviewForm = () => {
+const ReviewForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [description, setDescription] = useState("");
@@ -244,4 +244,4 @@ const NewReviewForm = () => {
   );
 };
 
-export default NewReviewForm;
+export default ReviewForm;

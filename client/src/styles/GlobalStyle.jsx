@@ -10,7 +10,7 @@ ${reset}
   body {
     height: 100%;
     width: 100%;
-    background-color: #F7F7F7;
+    background-color: #ffffff;
   }
 
   ul, li {

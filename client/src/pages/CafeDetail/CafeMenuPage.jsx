@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import styled from "styled-components";
-import CafeInfo from "../../components/cafe/CafeInfo";
-import CafeTab from "../../components/ui/cafeTab/CafeTab";
+import CafeInfo from "../../components/cafe/CafePageTopSection";
+import CafeTab from "../../components/ui/cafeTab/CafeTab.jsx";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -14,9 +14,9 @@ const MainWrapper = styled.div`
   font-size: 20px;
 `;
 
-const CafeInfoPage = () => {
+const CafeMenuPage = () => {
   const { id } = useParams();
-  const [cafeIdInfo, setCafeIdInfo] = useState("");
+  const [cafeIdInfo, setCafeIdInfo] = useState([]);
 
   useEffect(() => {
     axios
@@ -35,4 +35,4 @@ const CafeInfoPage = () => {
   );
 };
 
-export default CafeInfoPage;
+export default CafeMenuPage;

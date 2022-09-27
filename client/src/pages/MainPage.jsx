@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import Search from "../components/cafe/cafeMain/Search";
-import TagCategory from "../components/cafe/cafeMain/TagCategory";
-import MainTitle from "../components/common/MainTitle";
-import Filter from "../components/cafe/cafeMain/Filter";
+
+import Title from "../components/common/Title";
+
 import CafeCard from "../components/cafe/CafeCard";
 
 const MainWrapper = styled.div`
@@ -36,12 +35,7 @@ const MainWrapper = styled.div`
 const MainPage = ({ cafeInfo }) => {
   return (
     <MainWrapper>
-      <MainTitle>CAFELIST</MainTitle>
-      <div className="nav">
-        <Search />
-        <TagCategory />
-        <Filter />
-      </div>
+      <Title>CAFELIST</Title>
       <div className="cafelist">
         {cafeInfo &&
           cafeInfo.map((el) => (

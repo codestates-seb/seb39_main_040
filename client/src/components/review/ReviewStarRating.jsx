@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 
-export default function StarRating({ onChange }) {
+const ReviewStarRating = ({ onChange }) => {
   const [value, setValue] = React.useState(3);
 
   return (
@@ -19,4 +19,6 @@ export default function StarRating({ onChange }) {
       />
     </Box>
   );
-}
+};
+
+export default ReviewStarRating;
