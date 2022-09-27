@@ -129,7 +129,6 @@ const LoginPage = () => {
       .post(`${process.env.REACT_APP_API}/users/login`, data)
       .then((res) => {
         console.log("로그인성공");
-        console.log(data);
         console.log(res.headers);
         //localStorage.setItem("AccessToken", res.headers.accessToken);
         //localStorage.setItem("RefreshToken", res.headers.refreshToken);
@@ -185,21 +184,21 @@ const LoginPage = () => {
                   required
                   {...register("password", {
                     required: true,
-                    pattern:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
-                    validate: (value) =>
-                      value.length >= 8 && value.length <= 20,
+                    // pattern:
+                    //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
+                    // validate: (value) =>
+                    //   value.length >= 8 && value.length <= 20,
                   })}
                 ></input>
                 {errors.password && errors.password.type === "required" && (
                   <p>비밀번호를 입력해주세요.</p>
                 )}
-                {errors.password && errors.password.type === "pattern" && (
+                {/* {errors.password && errors.password.type === "pattern" && (
                   <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
                 )}
                 {errors.password && errors.password.type === "validate" && (
                   <p>비밀번호는 최소 8글자 이상 20글자 이하입니다.</p>
-                )}
+                )} */}
               </label>
             </div>
             <SignUpBox>
