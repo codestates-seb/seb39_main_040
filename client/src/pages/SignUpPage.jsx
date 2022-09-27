@@ -107,21 +107,6 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
-  // json-server에서 테스트한 코드
-  // const onSubmit = (data) => {
-  //   axios
-  //     .post("http://localhost:3002/data", data)
-  //     .then(() => console.log(data));
-  // -> 유저에 대한 데이터가 {}의 형태로 나온다.
-  // {
-  //   "userName": "조은영",
-  //   "email": "cho@naver.com",
-  //   "password": "cjsdnjf00!",
-  //   "passwordcheck": "cjsdnjf00!",
-  //   "mobile": "010-1234-1234",
-  //   "id": 17
-  // }
-  // };
   // 유저데이터 확인용
   const onSubmit = (data) => {
     axios
@@ -129,14 +114,6 @@ const SignUpPage = () => {
       .then((res) => console.log(data))
       .catch((err) => console.log(err.message));
   };
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  // };
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [checkPassword, setCheckPassword] = useState("");
-  // const [phone, setPhone] = useState("");
 
   return (
     <>
@@ -146,25 +123,25 @@ const SignUpPage = () => {
           <h1>회원가입</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="input">
-              <label htmlFor="name">
+              <label htmlFor="userName">
                 <FontAwesomeIcon icon={faUser} />
                 <input
-                  id="name"
+                  id="userName"
                   type="text"
                   placeholder="Name"
                   // value={name}
                   // onChange={(e) => setName(e.target.value)}
                   required
-                  {...register("name", {
+                  {...register("userName", {
                     required: true,
                     pattern: /^[가-힣]+$/,
                   })}
                 ></input>
                 {/* 유효성 검사를 실패할 경우 화면에 출력되는 값 */}
-                {errors.name && errors.name.type === "required" && (
+                {errors.userName && errors.userName.type === "required" && (
                   <p>이름을 입력해주세요</p>
                 )}
-                {errors.name && errors.name.type === "pattern" && (
+                {errors.userName && errors.userName.type === "pattern" && (
                   <p>올바른 이름이 아닙니다.</p>
                 )}
               </label>
@@ -206,21 +183,21 @@ const SignUpPage = () => {
                   required
                   {...register("password", {
                     required: true,
-                    pattern:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
-                    validate: (value) =>
-                      value.length >= 8 && value.length <= 20,
+                    // pattern:
+                    //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
+                    // validate: (value) =>
+                    //   value.length >= 8 && value.length <= 20,
                   })}
                 ></input>
                 {errors.password && errors.password.type === "required" && (
                   <p>비밀번호를 입력해주세요.</p>
                 )}
-                {errors.password && errors.password.type === "pattern" && (
+                {/* {errors.password && errors.password.type === "pattern" && (
                   <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
                 )}
                 {errors.password && errors.password.type === "validate" && (
                   <p>비밀번호는 최소 8글자 이상 20글자 이하입니다.</p>
-                )}
+                )} */}
               </label>
             </div>
             {/* <div className="input">
