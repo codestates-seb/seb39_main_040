@@ -9,16 +9,18 @@ import seb39_40.coffeewithme.cafe.domain.Cafe;
 import javax.persistence.*;
 
 //@Entity
+@Entity
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Like {
-    @Id
+public class Wishlist{
+    @Id @Column(name = "like_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cafe_id")
+    @JoinColumn(name = "user_id")
     private User user; //외래
 
     @ManyToOne(fetch = FetchType.LAZY)

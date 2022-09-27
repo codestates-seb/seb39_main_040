@@ -1,9 +1,14 @@
 package seb39_40.coffeewithme.user.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.jwt.JwtProvider;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 
@@ -16,17 +21,16 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    public boolean createUser(User user) {
-        boolean verify=verifyEmail(user.getEmail());
-        if(!verify){
-            return false;
-        }
+   // private final JwtProvider jwtProvider;
+
+    public void createUser(User user) {
+        verifyEmail(user.getEmail());
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles("ROLE_USER");
         user.setStatus(User.UserStatus.USER_SIGNUP);
         user.setRegisterDate(LocalDate.now());
         userRepository.save(user);
-        return true;
     }
 
     public void withdrawUser(String email){
@@ -49,15 +53,19 @@ public class UserService {
         return user;
     }
 
-    public User updateInformation(User temp){
-        User result = findVerifiedUserWithEmail(temp.getEmail());
-        return null;
+    public User updateInformation(String email,User temp){
+        User result = findVerifiedUserWithEmail(email);
+        if(!temp.getUserName().isEmpty())
+            result.setUserName(temp.getUserName());
+        if(!temp.getMobile().isEmpty())
+            result.setMobile(temp.getMobile());
+        return userRepository.save(result);
     }
 
     public User findVerifiedUserWithEmail(String email){
         Optional<User> user = userRepository.findByEmail(email);
-      //  user.orElseThrow(() ->
-      //          new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        user.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return user.get();
     }
 
@@ -67,23 +75,29 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean verifyUser(String email){
+    /*
+    public String reissuanceTokens(String rt,String email){
+        String token = jwtProvider.substringToken(rt);
+        Jws<Claims> claims = jwtProvider.parseToken(token);
+        if(!jwtProvider.validationTheSameToken(email,token))
+            return "false";
+    }
+    */
+
+    public void verifyUser(String email){
         User user=userRepository.findByEmail(email).get();
         if(user.getStatus().equals(User.UserStatus.USER_WITHDRAW))
-            return false;
-        //throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
-        return true;
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
     }
     
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+    }
 
     //이메일 중복 검증 - 예외 처리 되면 반환 값 없애기! boolean -> void 로
-    private boolean verifyEmail(String email){
+    private void verifyEmail(String email){
         Optional<User> user=userRepository.findByEmail(email);
         if(user.isPresent())
-            return false;
-            //throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
-        return true;
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
     }
 }
