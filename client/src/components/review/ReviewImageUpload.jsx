@@ -8,40 +8,40 @@ const MainWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 600px;
-  height: 580px;
+  width: 400px;
+  height: 600px;
   .imgUpload {
     display: none;
   }
 `;
 
 const ImgContainer = styled.div`
-  width: 600px;
-  height: 560px;
+  width: 400px;
+  height: 400px;
+  background-color: var(--gray-030);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #bcbdbd;
   .icon {
-    color: #c9cdd2;
+    color: var(--gray-020);
   }
   img {
     margin-right: 65px;
-    width: 600px;
-    height: 550px;
+    width: 400px;
+    height: 400px;
     border-radius: 10px;
   }
 `;
 
 const BtnContainer = styled.div`
-  width: 700px;
-  position: relative;
-  margin: 10px 165px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  margin-top: 20px;
   button {
-    position: absolute;
-    right: 0;
-    width: 80px;
-    height: 25px;
+    width: 400px;
+    height: 40px;
     border-radius: 5px;
     background-color: #bcbdbd;
     color: #fff;

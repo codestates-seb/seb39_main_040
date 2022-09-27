@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 import Title from "../components/common/Title";
-
 import CafeCard from "../components/cafe/CafeCard";
 import Header from "../components/common/Header";
 
@@ -39,18 +38,17 @@ const MainPage = ({ cafeInfo }) => {
       <Header />
       <Title />
       <div className="cafelist">
-        {cafeInfo &&
-          cafeInfo.map((el) => (
-            <div className="cafeitem">
-              <CafeCard
-                key={el.id}
-                id={el.id}
-                title={el.name}
-                tags={el.tags}
-                image={el.main_img}
-              />
-            </div>
-          ))}
+        {cafeInfo.map((el) => (
+          <div className="cafeitem">
+            <CafeCard
+              key={el.id}
+              id={el.id}
+              title={el.name}
+              tags={el.tags}
+              image={el.main_img}
+            />
+          </div>
+        ))}
       </div>
     </MainWrapper>
   );

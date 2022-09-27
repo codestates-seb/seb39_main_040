@@ -5,15 +5,17 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import NewTagForm from "./ReviewTag";
 import StarRating from "./ReviewStarRating";
+import ReviewImageUpload from "./ReviewImageUpload";
 
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 600px;
-  height: 600px;
-  margin-left: 20px;
+  width: 1320px;
+  height: 1200px;
+  margin-top: 150px;
+  border: 1px solid black;
 `;
 
 const TitleContainer = styled.div`
@@ -22,13 +24,13 @@ const TitleContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 60px;
-  .title-name {
+  span:first-child {
     width: 90px;
     font-size: 18px;
     font-weight: 500;
     margin-left: 30px;
   }
-  .title {
+  span:nth-child(2) {
     width: 490px;
     font-size: 17px;
     font-weight: 500;
@@ -53,6 +55,11 @@ const NameContainer = styled.div`
     font-size: 17px;
     font-weight: 500;
   }
+`;
+
+const ImgContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const TagContainer = styled.div`
@@ -204,13 +211,16 @@ const ReviewForm = () => {
     <MainContainer>
       <form onSubmit={onSubmitHandler}>
         <TitleContainer>
-          <span className="title-name">카페명</span>
-          <span className="title">Mood</span>
+          <span>카페명</span>
+          <span>Mood</span>
         </TitleContainer>
         <NameContainer>
           <span className="user-name">작성자</span>
           <span className="user">한소희</span>
         </NameContainer>
+        <ImgContainer>
+          <ReviewImageUpload />
+        </ImgContainer>
         <TagContainer>
           <div className="tag-title">
             <span>태그</span>

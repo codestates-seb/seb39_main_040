@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 // 메인페이지, 마이페이지, 상세페이지, 리뷰 작성페이지, 리뷰 수정페이지, 지역페이지, 로그인페이지, 회원가입페이지, 아이디찾기페이지, 비밀번호찾기페이지
-import CafeReviewPage from "./pages/CafeDetail/CafeReviewPage";
+import CafeDetailPage from "./pages/CafeDetail/CafeDetailPage";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -12,9 +12,9 @@ import UserInfoPage from "./pages/User/UserInfoPage";
 import UserInfoEditPage from "./pages/User/UserInfoEditPage";
 
 function App() {
-  const [cafeInfo, setCafeInfo] = useState("");
+  const [cafeInfo, setCafeInfo] = useState([]);
 
-  // 카페 정보 불러오기
+  // 카페 전체 리스트 불러오기
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe`)
@@ -30,9 +30,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage cafeInfo={cafeInfo} />} />
+
           <Route
             path="/cafe/:id"
-            element={<CafeReviewPage cafeInfo={cafeInfo} />}
+            element={<CafeDetailPage cafeInfo={cafeInfo} />}
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />

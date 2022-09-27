@@ -18,6 +18,7 @@ const CafeMenuPage = () => {
   const { id } = useParams();
   const [cafeIdInfo, setCafeIdInfo] = useState([]);
 
+  // 카페 개별 데이터 불러오기
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}`)

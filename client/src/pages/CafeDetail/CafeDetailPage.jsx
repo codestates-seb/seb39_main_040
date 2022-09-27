@@ -2,7 +2,7 @@ import CafePageTopSection from "../../components/cafe/CafePageTopSection";
 import TabBar from "../../components/common/TabBar";
 import Header from "../../components/common/Header";
 
-const CafeReviewPage = () => {
+const CafeDetailPage = () => {
   return (
     <>
       <Header />
@@ -12,4 +12,4 @@ const CafeReviewPage = () => {
   );
 };
 
-export default CafeReviewPage;
+export default CafeDetailPage;

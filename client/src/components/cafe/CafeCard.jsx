@@ -49,7 +49,7 @@ const CafeCard = ({ id, title, tags, image }) => {
 
         <CafeTitle>{title}</CafeTitle>
         <CafeTag>#{tags[0]}</CafeTag>
-        <CafeTag>#{tags[1]}</CafeTag>
+        <CafeTag>#tag</CafeTag>
       </Link>
     </CafeItemWrapper>
   );
