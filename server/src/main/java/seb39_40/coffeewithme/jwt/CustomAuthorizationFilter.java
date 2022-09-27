@@ -36,8 +36,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         String at = request.getHeader("AccessToken");
 
-        //인가 필요 없는 요청은 넘어가도록
-        if (path.equals("/users/login") || path.equals("/users/signup")) {
+        if (path.equals("/users/login") || path.equals("/users/signup") || request.getMethod().equals("GET")) {
             filterChain.doFilter(request, response);
         }else if(path.equals("/users/token")){
             String jwt = jwtProvider.substringToken(at);
@@ -65,8 +64,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             response.setStatus(SC_BAD_REQUEST);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
-            //ErrorResponse errorResponse = new ErrorResponse(400, "JWT Token이 존재하지 않습니다.");
-            //new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_BAD_REQUEST);
        //정상적으로 인가 요청이 들어온 경우
         }else{
@@ -80,8 +77,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 response.setStatus(SC_UNAUTHORIZED);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
-                //ErrorResponse errorResponse = new ErrorResponse(401, "JWT 토큰이 만료되었습니다.");
-                //new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+
                 new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_EXPIRATION);
             }else {
                 User userEntity = userRepository.findByEmail(email).get();

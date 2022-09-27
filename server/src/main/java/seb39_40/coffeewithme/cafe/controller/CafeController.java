@@ -23,7 +23,7 @@ public class CafeController {
         return new ResponseEntity<>(cafeMapper.cafeToCafeDto(cafe), HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity getCafes(@RequestParam(required = false, defaultValue = "1") Integer page,
                                      @RequestParam(required = false, defaultValue = "newest") String sort,
                                      @RequestParam(required = false, defaultValue = "all") String category){

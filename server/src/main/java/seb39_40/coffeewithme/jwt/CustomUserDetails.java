@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetails {
 
     //Authentication 타입의 객체가 넘어오고 그 안에 Member 정보가 있습니다.
 
-    @Override //User의 권한을 반환합니다다
+    @Override //User의 권한을 반환합니다
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         user.getRoleList().forEach(n -> {

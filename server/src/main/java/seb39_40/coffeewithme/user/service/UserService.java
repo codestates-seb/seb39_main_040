@@ -91,7 +91,7 @@ public class UserService {
     }
     
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     //이메일 중복 검증 - 예외 처리 되면 반환 값 없애기! boolean -> void 로
@@ -99,5 +99,9 @@ public class UserService {
         Optional<User> user=userRepository.findByEmail(email);
         if(user.isPresent())
             throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
+    }
+
+    public User findByEmail(String username) {
+        return userRepository.findByEmail(username).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 }
