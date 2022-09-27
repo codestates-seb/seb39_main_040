@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 const { kakao } = window;
 
-export default function CafeDetailInfoMap() {
+export default function CafeInfoMap() {
   useEffect(() => {
     mapscript();
   }, []);
@@ -36,5 +36,5 @@ export default function CafeDetailInfoMap() {
     map.setZoomable(false);
   };
 
-  return <div id="map" style={{ width: "500px", height: "380px" }}></div>;
+  return <div id="map" style={{ width: "440px", height: "250px" }}></div>;
 }

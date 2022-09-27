@@ -51,7 +51,7 @@ const BtnContainer = styled.div`
   }
 `;
 
-const NewImageUpload = () => {
+const ReviewImageUpload = () => {
   const [imgSrc, setImgSrc] = useState("");
 
   const imgInput = useRef();
@@ -98,4 +98,4 @@ const NewImageUpload = () => {
   );
 };
 
-export default NewImageUpload;
+export default ReviewImageUpload;

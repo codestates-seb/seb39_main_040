@@ -18,7 +18,7 @@ const defaultTags = [
   { tag: "힙한" },
 ];
 
-const NewTagForm = ({ onChange }) => {
+const ReviewTag = ({ onChange }) => {
   const [selectedTag, setSelectedTag] = useState();
   const onChangeHandler = (tag) => {
     let newArr = [];
@@ -50,4 +50,4 @@ const NewTagForm = ({ onChange }) => {
   );
 };
 
-export default NewTagForm;
+export default ReviewTag;
