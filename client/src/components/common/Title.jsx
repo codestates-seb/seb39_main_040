@@ -3,6 +3,9 @@ import TitleImg1 from "../../assets/title1.svg";
 
 const TitleWrapper = styled.div`
   // margin-top: 20px;
+  img {
+    height: 650px;
+  }
 `;
 
 const Title = () => {

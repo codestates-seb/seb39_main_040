@@ -20,7 +20,7 @@ const CafeMenuPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://175.125.6.189/cafe/${id}`)
+      .get(`${process.env.REACT_APP_API}/cafe/${id}`)
       .then((res) => {
         setCafeIdInfo(res.data);
       })

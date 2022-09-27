@@ -16,7 +16,7 @@ const CafeTopSection = styled.div`
   align-items: center;
   height: 600px;
   width: 100%;
-  margin-top: 75px;
+  margin-top: 10px;
 `;
 
 const CafeTopInfo = styled.div`
