@@ -17,7 +17,7 @@ function App() {
   // 카페 정보 불러오기
   useEffect(() => {
     axios
-      .get("http://175.125.6.189/cafe")
+      .get(`${process.env.REACT_APP_API}/cafe`)
       .then((res) => {
         // console.log(res.data.data);
         setCafeInfo(res.data.data);

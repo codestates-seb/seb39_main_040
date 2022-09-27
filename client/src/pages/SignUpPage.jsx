@@ -125,7 +125,7 @@ const SignUpPage = () => {
   // 유저데이터 확인용
   const onSubmit = (data) => {
     axios
-      .post("http://175.125.6.189/users/signup", data)
+      .post(`${process.env.REACT_APP_API}/users/signup`, data)
       .then((res) => console.log(data))
       .catch((err) => console.log(err.message));
   };

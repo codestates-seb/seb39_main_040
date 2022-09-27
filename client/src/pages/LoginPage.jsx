@@ -126,7 +126,7 @@ const LoginPage = () => {
 
   const onSubmit = (data) => {
     axios
-      .post("http://175.125.6.189/login", data)
+      .post(`${process.env.REACT_APP_API}/users/login`, data)
       .then((res) => {
         console.log("로그인성공");
         console.log(data);
