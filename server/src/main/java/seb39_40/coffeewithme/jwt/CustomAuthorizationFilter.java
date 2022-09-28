@@ -35,8 +35,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         String at = request.getHeader("AccessToken");
-
-        if (path.equals("/users/login") || path.equals("/users/signup") || request.getMethod().equals("GET")) {
+        if (path.equals("/users/login") || path.equals("/users/signup")
+                || (request.getRequestURI().startsWith("/cafe") && request.getMethod().equals("GET"))) {
             filterChain.doFilter(request, response);
         }else if(path.equals("/users/token")){
             String jwt = jwtProvider.substringToken(at);
