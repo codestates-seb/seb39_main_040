@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Tag from "../common/Tag";
+import React from "react";
 
 const CafeItemWrapper = styled.div`
   display: flex;

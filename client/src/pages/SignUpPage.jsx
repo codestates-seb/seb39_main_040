@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
@@ -7,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+// import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import Header from "../components/common/Header";
 import axios from "axios";
@@ -107,11 +108,16 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
+  const navigate = useNavigate();
+
   // 유저데이터 확인용
   const onSubmit = (data) => {
     axios
       .post(`${process.env.REACT_APP_API}/users/signup`, data)
-      .then((res) => console.log(data))
+      .then((res) => {
+        console.log(data);
+        navigate("/login");
+      })
       .catch((err) => console.log(err.message));
   };
 

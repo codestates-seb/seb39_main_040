@@ -4,6 +4,7 @@ import {
   faLocationDot,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 const SearchWrapper = styled.div`
   width: 880px;

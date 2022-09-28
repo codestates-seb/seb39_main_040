@@ -1,9 +1,13 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../assets/CoffeeWithMe.svg";
+import useAuthStore from "../../store/useAuth";
+import React from "react";
 
 const HeaderWrapper = styled.header`
+  z-index: 999;
   position: sticky;
   top: 0;
   display: flex;
@@ -13,6 +17,7 @@ const HeaderWrapper = styled.header`
   width: 100%;
   border-bottom: 1px solid var(--gray-030);
   padding: 10px 40px;
+  background-color: var(--white-010);
 `;
 
 const HeaderTitle = styled.img`
@@ -71,7 +76,7 @@ const DropBox = styled.div`
     font-size: 15px;
     transition: 0.3s;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
+    background-color: var(--white-010);
     // 투명도조절로 보이게
     opacity: 1;
   }
@@ -96,6 +101,11 @@ const DropMenu = styled.ul`
     text-decoration: none;
     color: var(--black--010);
   }
+  button {
+    font-size: 14px;
+    color: var(--black--010);
+    opacity: 0.7;
+  }
 `;
 
 //드롭 메뉴속 아이템
@@ -107,8 +117,24 @@ const DropItem = styled.li`
 `;
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const { isLogin, setIsLogin } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(true);
+
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    axios
+      .post(`${process.env.REACT_APP_API}/users/logout`, {
+        headers: { AccessToken: sessionStorage.getItem("access_token") },
+      })
+      .then((res) => {
+        console.log("로그아웃완료");
+        window.localStorage.removeItem("access_token");
+        setIsLogin(!isLogin);
+        navigate("/");
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <HeaderWrapper>
@@ -130,15 +156,15 @@ const Header = () => {
             >
               <DropItem>나의정보</DropItem>
             </Link>
-            <Link to="/userinfo">
+            <Link to="/user/wish">
               <DropItem>찜한카페</DropItem>
             </Link>
-            <Link to="/userinfo">
+            <Link to="/user/review">
               <DropItem>나의리뷰</DropItem>
             </Link>
-            <Link to="/userinfo">
+            <button onClick={logoutHandler}>
               <DropItem>로그아웃</DropItem>
-            </Link>
+            </button>
           </DropMenu>
         </DropBox>
       ) : (

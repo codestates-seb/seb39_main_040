@@ -9,6 +9,7 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
+import React from "react";
 
 const CafeTopSection = styled.div`
   display: flex;

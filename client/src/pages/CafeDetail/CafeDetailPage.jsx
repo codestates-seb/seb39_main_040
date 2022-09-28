@@ -4,6 +4,7 @@ import Header from "../../components/common/Header";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import React from "react";
 
 const CafeDetailPage = () => {
   const [cafeIdInfo, setCafeIdInfo] = useState([]);
