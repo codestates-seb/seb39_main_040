@@ -17,10 +17,10 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "tag_nm")
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "tag_ctg")
     @Enumerated(value = EnumType.STRING)
     private Category category;
 

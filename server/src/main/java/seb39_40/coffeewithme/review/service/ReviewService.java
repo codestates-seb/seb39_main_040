@@ -27,12 +27,12 @@ public class ReviewService {
     private final UserService userService;
     private final TagService tagService;
 
-    public Long save(String username, Long cafeId, Review review, List<String> tags){
+    public Long save(String email, Long cafeId, Review review, List<String> tags){
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(1);
 
         review.setCafe(cafe);
-        review.setUser(userService.findByEmail(username));
+        review.setUser(userService.findByEmail(email));
         review.setReviewTags(tagService.createReviewTag(review, tags));
         return reviewRepository.save(review).getId();
     }
@@ -40,14 +40,14 @@ public class ReviewService {
     @Transactional
     public Long update(String email, Long id, Review updateReview){
         Review review = findById(id);
-        assert email.equals(review.getUser().getEmail()) : ExceptionCode.BAD_REQUEST; //작성자가 아니면 삭제 불가
+        checkUser(email, review.getUser().getEmail());
         review.update(updateReview);
         return reviewRepository.save(review).getId();
     }
 
     public void delete(String email, Long cafeId, Long reviewId){
         Review review = findById(reviewId);
-        assert email.equals(review.getUser().getEmail()) : ExceptionCode.BAD_REQUEST; //작성자가 아니면 삭제 불가
+        checkUser(email, review.getUser().getEmail());
 
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(-1);
@@ -55,18 +55,22 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+    public void checkUser(String writer, String user){
+        assert writer.equals(user) : ExceptionCode.BAD_REQUEST;
+    }
+
     public Review findById(Long id){
         return reviewRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
     }
 
-    public Page<Review> findByCafeId(Long cafe_id, Integer page) {
+    public Page<Review> findByCafeId(Long cafeId, Integer page) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
-        return reviewRepository.findByCafeId(cafe_id, pageRequest);
+        return reviewRepository.findByCafeId(cafeId, pageRequest);
     }
 
-    public Page<Review> findByUserId(Long user_id, Integer page) {
+    public Page<Review> findByUserId(Long userId, Integer page) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
-        return reviewRepository.findByUserId(user_id, pageRequest);
+        return reviewRepository.findByUserId(userId, pageRequest);
     }
 
 }

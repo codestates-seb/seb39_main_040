@@ -25,16 +25,16 @@ public class Review extends BasicEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "CAFE_ID")
+    @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "rvw_img_id")
     private Long reviewImg;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT", name = "review_dsrp")
     private String description;
 
     @Column(nullable = false)
