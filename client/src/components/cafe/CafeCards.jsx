@@ -1,6 +1,7 @@
 import CafeCard from "./CafeCard";
 import styled from "styled-components";
-import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const CafeCardWrapper = styled.div`
   display: flex;
@@ -19,53 +20,17 @@ const CafeCardWrapper = styled.div`
 const CafeCards = ({ cafeInfo }) => {
   return (
     <CafeCardWrapper>
-      {/* {cafeInfo.map((el) => (
-          <div>
-            <CafeCard
-              key={el.id}
-              id={el.id}
-              title={el.name}
-              tags={el.tags}
-              image={el.main_img}
-            />
-          </div>
-        ))} */}
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
-      <div>
-        <CafeCard />
-      </div>
+      {cafeInfo.map((el) => (
+        <div>
+          <CafeCard
+            key={el.id}
+            id={el.id}
+            title={el.name}
+            tags={el.tags}
+            image={el.main_img}
+          />
+        </div>
+      ))}
     </CafeCardWrapper>
   );
 };

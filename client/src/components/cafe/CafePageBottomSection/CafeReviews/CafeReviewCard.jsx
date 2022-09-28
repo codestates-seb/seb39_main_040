@@ -42,9 +42,15 @@ const ContentBox = styled.div`
 `;
 
 const TagBox = styled.div`
-  margin: 8px 0 17px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
   font-size: 17px;
-  width: 60px;
+  width: 150px;
+  .tag-1 {
+    margin-right: 10px;
+  }
 `;
 
 const Infobox = styled.div`
@@ -77,43 +83,15 @@ const Username = styled.div`
 
 const CafeReviewCard = ({ text, tag, user, image, star }) => {
   return (
-    // <MainWrapper>
-    //   <div className="image">
-    //     <img src={`${image}`} alt="리뷰이미지" />
-    //   </div>
-    //   <Content>
-    //     <div className="tag">
-    //       <span>#{tag[0]}</span>
-    //       <span>#{tag[1]}</span>
-    //     </div>
-    //     <p>{text}</p>
-    //     <div className="info">
-    //       <div className="star">
-    //         <Box sx={{ "& > legend": { mt: 2 } }}>
-    //           <Typography component="legend"></Typography>
-    //           <Rating name="read-only" value={star} readOnly />
-    //         </Box>
-    //       </div>
-    //       <div className="username">
-    //         <span className="name">{user.name}</span>
-    //       </div>
-    //     </div>
-    //   </Content>
-    // </MainWrapper>
     <MainWrapper>
       <ImgBox>
-        <img
-          src="https://wishbeen-seoul.s3.ap-northeast-2.amazonaws.com/plan/1498208096160_17881746_1930702927147954_3202367211201101824_n.jpg"
-          alt="리뷰이미지"
-        />
+        <img src={`${image}`} alt="리뷰이미지" />
       </ImgBox>
       <ContentBox>
-        <p>
-          조용해서 공부하기 좋았어요! 커피랑 디저트도 맛있어요! 근처에 이런
-          카페가 생기니 너무 좋네요~
-        </p>
+        <p>{text}</p>
         <TagBox>
-          <Tag>#조용한</Tag>
+          <Tag className="tag-1">#{tag[0]}</Tag>
+          <Tag className="tag-2">#{tag[1]}</Tag>
         </TagBox>
         <Infobox>
           <Star>
@@ -128,7 +106,7 @@ const CafeReviewCard = ({ text, tag, user, image, star }) => {
             </Box>
           </Star>
           <Username>
-            <span>김유정</span>
+            <span>{user.name}</span>
           </Username>
         </Infobox>
       </ContentBox>

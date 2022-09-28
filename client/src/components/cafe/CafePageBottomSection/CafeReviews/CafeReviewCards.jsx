@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 import CafeReviewCard from "./CafeReviewCard";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -47,7 +49,20 @@ const IconBox = styled.div`
 `;
 
 const CafeReviewCards = () => {
+  const [reviewInfo, setReviewInfo] = useState([]);
   const { id } = useParams();
+
+  // 카페 상세 정보 불러오기
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API}/cafe/${id}/reviews`)
+      .then((res) => {
+        // console.log(res.data.data);
+        setReviewInfo(res.data.data);
+      })
+      .catch((e) => console.err("error:", e));
+  }, []);
+
   return (
     <ReviewCardsWrapper>
       <Link to={`/cafe/${id}/reviews`}>
@@ -58,9 +73,18 @@ const CafeReviewCards = () => {
           </span>
         </IconBox>
       </Link>
-      <CafeReviewCard />
-      <CafeReviewCard />
-      <CafeReviewCard />
+      {reviewInfo.map((el) => (
+        <CafeReviewCard
+          key={el.id}
+          text={el.description}
+          tag={el.tags}
+          user={el.user}
+          image={el.review_img}
+          star={el.score}
+        />
+      ))}
+      {/* <CafeReviewCard />
+      <CafeReviewCard /> */}
     </ReviewCardsWrapper>
   );
 };

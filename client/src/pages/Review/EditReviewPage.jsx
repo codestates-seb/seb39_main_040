@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ReviewForm from "../../components/review/ReviewForm";
+import EditReviewForm from "../../components/review/EditReviewForm";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
 import React from "react";
@@ -23,7 +23,7 @@ const EditReviewPage = () => {
       <Header />
       <MiddleTitle>리뷰 수정하기</MiddleTitle>
       <FormContent>
-        <ReviewForm />
+        <EditReviewForm />
       </FormContent>
     </EditReviewWrapper>
   );

@@ -1,10 +1,10 @@
 import CafePhotoCard from "./CafePhotoCard";
 import React from "react";
 
-const CafePhotoCards = () => {
+const CafePhotoCards = ({ cafeIdInfo }) => {
   return (
     <>
-      <CafePhotoCard />
+      <CafePhotoCard cafeIdInfo={cafeIdInfo} />
     </>
   );
 };
