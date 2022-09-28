@@ -8,7 +8,8 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import Header from "../components/common/Header";
 import axios from "axios";
-import useAuthStore from "../store/useAuth";
+// import useAuthStore from "../store/useAuth";
+import useLoginStore from "../store/useLoginStore";
 
 const LoginBox = styled.div`
   display: flex;
@@ -128,7 +129,8 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const { isLogin, setIsLogin } = useAuthStore();
+  // const { isLogin, setIsLogin } = useAuthStore();
+  const { isLogin, setIsLogin } = useLoginStore();
 
   const onSubmit = (data) => {
     axios
@@ -138,7 +140,7 @@ const LoginPage = () => {
         console.log(res.headers);
         sessionStorage.setItem("access_token", res.headers.accesstoken);
         localStorage.setItem("refresh_token", res.headers.refreshtoken);
-        setIsLogin(!isLogin);
+        setIsLogin();
         navigate("/userinfo");
       })
       .catch((error) => {
