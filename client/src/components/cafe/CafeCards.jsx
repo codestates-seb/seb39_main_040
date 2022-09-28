@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
 import CafeCard from "./CafeCard";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import axios from "axios";
 
 const CafeCardWrapper = styled.div`
