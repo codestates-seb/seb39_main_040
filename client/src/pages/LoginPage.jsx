@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
@@ -7,6 +7,7 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import Header from "../components/common/Header";
 import axios from "axios";
+import useAuthStore from "../store/useAuth";
 
 const LoginBox = styled.div`
   display: flex;
@@ -124,21 +125,26 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
+  const navigate = useNavigate();
+
+  const { isLogin, setIsLogin } = useAuthStore();
+
   const onSubmit = (data) => {
     axios
       .post(`${process.env.REACT_APP_API}/users/login`, data)
       .then((res) => {
         console.log("로그인성공");
         console.log(res.headers);
-        //localStorage.setItem("AccessToken", res.headers.accessToken);
-        //localStorage.setItem("RefreshToken", res.headers.refreshToken);
+        sessionStorage.setItem("access_token", res.headers.accesstoken);
+        localStorage.setItem("refresh_token", res.headers.refreshtoken);
+        setIsLogin(!isLogin);
+        navigate("/userinfo");
       })
       .catch((error) => {
         console.log("회원 정보가 일치하지 않습니다.");
         console.log(error);
       });
   };
-
   return (
     <>
       <Header />
@@ -153,8 +159,6 @@ const LoginPage = () => {
                   id="email"
                   type="text"
                   placeholder="Email"
-                  // value={email}
-                  // onChange={(e) => setEmail(e.target.value)}
                   required
                   {...register("email", {
                     required: true,
@@ -179,9 +183,7 @@ const LoginPage = () => {
                   id="password"
                   type="password"
                   placeholder="Password"
-                  // value={password}
-                  // onChange={(e) => setPassword(e.target.value)}
-                  required
+                  //required
                   {...register("password", {
                     required: true,
                     // pattern:
@@ -190,10 +192,10 @@ const LoginPage = () => {
                     //   value.length >= 8 && value.length <= 20,
                   })}
                 ></input>
-                {errors.password && errors.password.type === "required" && (
+                {/* {errors.password && errors.password.type === "required" && (
                   <p>비밀번호를 입력해주세요.</p>
                 )}
-                {/* {errors.password && errors.password.type === "pattern" && (
+                {errors.password && errors.password.type === "pattern" && (
                   <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
                 )}
                 {errors.password && errors.password.type === "validate" && (
