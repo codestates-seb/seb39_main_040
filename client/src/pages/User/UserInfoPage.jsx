@@ -1,4 +1,6 @@
-import React, { useState, useRef } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
@@ -10,8 +12,8 @@ const UserPageWrapper = styled.div`
   flex-direction: column;
   // justify-content: center;
   align-items: center;
-  width: 80%;
-  height: 90vh;
+  width: 60%;
+  height: 80vh;
   position: relative;
   margin: 0 auto;
 `;
@@ -73,11 +75,12 @@ const UserData = styled.span`
 
 const Button = styled.button`
   border: 1px solid var(--green-010);
+  border-radius: 5px;
   background: var(--white-010);
   color: var(--green-010);
   width: 100%;
   margin-top: 20px;
-  margin-left: 22px;
+  margin-left: 29px;
   font-size: 1.2rem;
   padding: 10px 40px;
   cursor: pointer;
@@ -89,6 +92,7 @@ const Button = styled.button`
 
 const UserInfoPage = () => {
   const [imgSrc, setImgSrc] = useState("");
+  const [userInfo, setUserInfo] = useState([]);
   const imgInput = useRef();
   const onSubmitImg = (e) => {
     e.preventDefault();
@@ -109,6 +113,20 @@ const UserInfoPage = () => {
       };
     });
   };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API}/users/information`, {
+        headers: { AccessToken: sessionStorage.getItem("access_token") },
+      })
+      .then((res) => {
+        console.log("데이터불러오기성공");
+        console.log(res.data);
+        setUserInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
       <Header />
@@ -119,7 +137,7 @@ const UserInfoPage = () => {
             src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
             alt="userimg"
           />
-          <UserImgUpload>
+          {/* <UserImgUpload>
             <button onClick={onSubmitImg}>프로필 사진 선택</button>
             <input
               className="profile"
@@ -128,22 +146,24 @@ const UserInfoPage = () => {
               accept="image/*"
               onChange={(e) => onImgChange(e.target.files[0])}
             />
-          </UserImgUpload>
+          </UserImgUpload> */}
         </UserImgBox>
         <UserInfoWrapper>
           <UserInfoBox>
             <UserDataType>이름</UserDataType>
-            <UserData>김유정</UserData>
+            <UserData>{userInfo.userName}</UserData>
           </UserInfoBox>
           <UserInfoBox>
             <UserDataType>이메일</UserDataType>
-            <UserData>KimU@naver.com</UserData>
+            <UserData>{userInfo.email}</UserData>
           </UserInfoBox>
           <UserInfoBox>
             <UserDataType>전화번호</UserDataType>
-            <UserData>010-1234-1234</UserData>
+            <UserData>{userInfo.mobile}</UserData>
           </UserInfoBox>
-          <Button>수정하기</Button>
+          <Link to="/userinfoedit">
+            <Button>수정하기</Button>
+          </Link>
         </UserInfoWrapper>
       </UserPageWrapper>
     </>
