@@ -9,7 +9,7 @@ const MainWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 400px;
-  height: 600px;
+  height: 510px;
   .imgUpload {
     display: none;
   }
@@ -26,10 +26,8 @@ const ImgContainer = styled.div`
     color: var(--gray-020);
   }
   img {
-    margin-right: 65px;
     width: 400px;
     height: 400px;
-    border-radius: 10px;
   }
 `;
 
@@ -40,14 +38,18 @@ const BtnContainer = styled.div`
   width: 400px;
   margin-top: 20px;
   button {
+    font-size: 18px;
     width: 400px;
-    height: 40px;
+    height: 50px;
     border-radius: 5px;
-    background-color: #bcbdbd;
-    color: #fff;
+    border: 1px solid var(--green-010);
+    background-color: var(--white-010);
+    color: var(--green-010);
+    cursor: pointer;
   }
   button:hover {
-    background-color: #919191;
+    background-color: var(--green-010);
+    color: var(--white-010);
   }
 `;
 

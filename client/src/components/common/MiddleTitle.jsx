@@ -7,8 +7,8 @@ const TitleArea = styled.div`
   width: 100%;
   height: 140px;
 
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   text-align: center;
   color: var(--black-010);
   opacity: 0.7;

@@ -13,8 +13,8 @@ const TagItem = styled.div`
   line-height: 50%;
 `;
 
-const Tag = ({ children }) => {
-  return <TagItem>{children}</TagItem>;
+const Tag = (props) => {
+  return <TagItem className={props.className}>{props.children}</TagItem>;
 };
 
 export default Tag;
