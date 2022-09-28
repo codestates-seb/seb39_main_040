@@ -1,16 +1,13 @@
 import styled from "styled-components";
 import ReviewForm from "../../components/review/ReviewForm";
 import Header from "../../components/common/Header";
+import MiddleTitle from "../../components/common/MiddleTitle";
 
 const NewReviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  width: 1520px;
-  height: 1400px;
-  border: 1px solid black;
 `;
 
 const FormContent = styled.div`
@@ -23,6 +20,7 @@ const NewReviewPage = () => {
   return (
     <NewReviewWrapper>
       <Header />
+      <MiddleTitle>리뷰쓰기</MiddleTitle>
       <FormContent>
         <ReviewForm />
       </FormContent>

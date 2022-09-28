@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 import Title from "../components/common/Title";
-import CafeCard from "../components/cafe/CafeCard";
 import Header from "../components/common/Header";
+import CafeCards from "../components/cafe/CafeCards";
+import SearchBar from "../components/common/SearchBar";
+import FilterBar from "../components/common/FilterBar";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -17,19 +19,6 @@ const MainWrapper = styled.div`
     width: 1400px;
     height: 80px;
   }
-
-  .cafelist {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 1200px;
-    align-items: center;
-    justify-content: center;
-    .cafeitem {
-      width: 250px;
-      margin-right: 30px;
-    }
-  }
 `;
 
 const MainPage = ({ cafeInfo }) => {
@@ -37,19 +26,9 @@ const MainPage = ({ cafeInfo }) => {
     <MainWrapper>
       <Header />
       <Title />
-      <div className="cafelist">
-        {cafeInfo.map((el) => (
-          <div className="cafeitem">
-            <CafeCard
-              key={el.id}
-              id={el.id}
-              title={el.name}
-              tags={el.tags}
-              image={el.main_img}
-            />
-          </div>
-        ))}
-      </div>
+      <SearchBar />
+      <FilterBar />
+      <CafeCards />
     </MainWrapper>
   );
 };

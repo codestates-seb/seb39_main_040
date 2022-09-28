@@ -10,12 +10,17 @@ import ReviewImageUpload from "./ReviewImageUpload";
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
-  width: 1320px;
-  height: 1200px;
-  margin-top: 150px;
-  border: 1px solid black;
+  width: 1360px;
+  height: 100%;
+  margin-bottom: 150px;
+  border-radius: 4px;
+  border: 1px solid var(--gray-030);
+  padding: 70px 20px;
+`;
+
+const FormContainer = styled.form`
+  width: 90%;
 `;
 
 const TitleContainer = styled.div`
@@ -23,17 +28,18 @@ const TitleContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 600px;
-  height: 60px;
+  height: 65px;
+  margin-bottom: 20px;
   span:first-child {
     width: 90px;
-    font-size: 18px;
-    font-weight: 500;
-    margin-left: 30px;
+    font-size: 23px;
+    font-weight: 700;
   }
   span:nth-child(2) {
     width: 490px;
-    font-size: 17px;
-    font-weight: 500;
+    color: var(--green-010);
+    font-size: 21px;
+    font-weight: 700;
   }
 `;
 
@@ -42,24 +48,45 @@ const NameContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 600px;
-  height: 60px;
-  margin-bottom: 10px;
-  .user-name {
+  height: 65px;
+  span:first-child {
     width: 90px;
-    font-size: 18px;
-    font-weight: 500;
-    margin-left: 30px;
+    font-size: 23px;
+    font-weight: 700;
   }
-  .user {
+  span:nth-child(2) {
     width: 490px;
-    font-size: 17px;
-    font-weight: 500;
+    color: var(--green-010);
+    font-size: 21px;
+    font-weight: 700;
   }
 `;
 
 const ImgContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  margin: 40px 0 0 10px;
+  p {
+    width: 600px;
+    margin-top: 20px;
+    color: var(--gray-020);
+    font-size: 19px;
+  }
+`;
+
+const ImgTitle = styled.div`
+  display: flex;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 600px;
+  height: 10px;
+  span {
+    position: absolute;
+    left: 0;
+    font-size: 23px;
+    font-weight: 700;
+  }
 `;
 
 const TagContainer = styled.div`
@@ -69,26 +96,28 @@ const TagContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 110px;
-  .tag-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 600px;
-    height: 40px;
-    span {
-      position: absolute;
-      left: 0;
-      font-size: 18px;
-      font-weight: 500;
-      margin-left: 30px;
-    }
+  margin: 30px 0 0 10px;
+`;
+
+const TagTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 600px;
+  height: 40px;
+  span {
+    position: absolute;
+    left: 0;
+    font-size: 23px;
+    font-weight: 700;
   }
-  .tag-container {
-    width: 600px;
-    height: 110px;
-    margin-left: 60px;
-  }
+`;
+
+const TagBox = styled.div`
+  width: 600px;
+  height: 110px;
+  margin-top: 20px;
 `;
 
 const StarContainer = styled.div`
@@ -98,27 +127,28 @@ const StarContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 110px;
+  margin: 30px 0 0 10px;
+`;
 
-  .star-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 600px;
-    height: 10px;
-    span {
-      position: absolute;
-      left: 0;
-      font-size: 18px;
-      font-weight: 500;
-      margin-left: 30px;
-    }
+const StarTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 600px;
+  height: 20px;
+  margin-top: 10px;
+  span {
+    position: absolute;
+    left: 0;
+    font-size: 23px;
+    font-weight: 700;
   }
-  .star-container {
-    width: 600px;
-    height: 70px;
-    margin-left: 60px;
-  }
+`;
+const StarBox = styled.div`
+  margin-top: 10px;
+  width: 600px;
+  height: 70px;
 `;
 
 const TextContainer = styled.div`
@@ -126,36 +156,36 @@ const TextContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 600px;
-  height: 110px;
-  margin-top: 15px;
+  width: 800px;
+  height: 190px;
+  margin-top: 50px;
 
-  .text-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 600px;
-    height: 40px;
-    span {
-      position: absolute;
-      left: 0;
-      font-size: 18px;
-      font-weight: 500;
-      margin-left: 30px;
-    }
-  }
   textarea {
     border: none;
     background-color: #f0ece3;
-    width: 600px;
-    height: 70px;
-    margin-left: 60px;
-    font-size: 17px;
+    width: 800px;
+    height: 100px;
+    font-size: 20px;
     padding: 10px;
+    margin-top: 10px;
   }
   textarea:focus {
     outline: none;
+  }
+`;
+
+const TextTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 800px;
+  height: 40px;
+  span {
+    position: absolute;
+    left: 0;
+    font-size: 23px;
+    font-weight: 700;
   }
 `;
 
@@ -163,9 +193,8 @@ const BtnContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 40px;
-  margin: 30px 0 0 560px;
+  width: 1100px;
+  margin: 40px 0 0 560px;
 `;
 
 const ReviewForm = () => {
@@ -209,38 +238,42 @@ const ReviewForm = () => {
 
   return (
     <MainContainer>
-      <form onSubmit={onSubmitHandler}>
+      <FormContainer onSubmit={onSubmitHandler}>
         <TitleContainer>
           <span>카페명</span>
           <span>Mood</span>
         </TitleContainer>
         <NameContainer>
-          <span className="user-name">작성자</span>
-          <span className="user">한소희</span>
+          <span>작성자</span>
+          <span>한소희</span>
         </NameContainer>
         <ImgContainer>
+          <ImgTitle>
+            <span>카페명</span>
+          </ImgTitle>
+          <p>카페에 대한 새로운 사진을 첨부해주세요. (최대 한장)</p>
           <ReviewImageUpload />
         </ImgContainer>
         <TagContainer>
-          <div className="tag-title">
+          <TagTitle>
             <span>태그</span>
-          </div>
-          <div className="tag-container">
+          </TagTitle>
+          <TagBox>
             <NewTagForm onChange={onChangeTagHandler} />
-          </div>
+          </TagBox>
         </TagContainer>
         <StarContainer>
-          <div className="star-title">
+          <StarTitle>
             <span>별점</span>
-          </div>
-          <div className="star-container">
+          </StarTitle>
+          <StarBox>
             <StarRating onChange={onChangeStarHandler} />
-          </div>
+          </StarBox>
         </StarContainer>
         <TextContainer>
-          <div className="text-title">
+          <TextTitle>
             <span>한줄평</span>
-          </div>
+          </TextTitle>
           <textarea
             name="content"
             onChange={(e) => setDescription(e.target.value)}
@@ -249,7 +282,7 @@ const ReviewForm = () => {
         <BtnContainer>
           <Button>리뷰등록</Button>
         </BtnContainer>
-      </form>
+      </FormContainer>
     </MainContainer>
   );
 };
