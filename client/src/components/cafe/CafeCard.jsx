@@ -74,17 +74,12 @@ const CafeCard = ({ id, title, tags, image }) => {
   return (
     <CafeItemWrapper>
       <Link to={`/cafe/${id}`}>
-        {/* <CafeImg src={`${image}`} /> */}
-        <CafeImg src="https://i.pinimg.com/564x/f6/7c/2b/f67c2be14cd4ffe78a16289dc995c09e.jpg" />
-
+        <CafeImg src={`${image}`} />
         <CafeInfoContent>
-          {/* <CafeTitle>{title}</CafeTitle> */}
-          <CafeTitle>Angel Coffee</CafeTitle>
+          <CafeTitle>{title}</CafeTitle>
           <CafeText>크로플이 맛있는 카페</CafeText>
-
-          {/* <CafeTag>#{tags[0]}</CafeTag> */}
           <CafeTag>
-            <Tag className="tag">#조용한</Tag>
+            <Tag className="tag">#{tags[0]}</Tag>
             <Tag className="tag">#디저트맛집</Tag>
           </CafeTag>
         </CafeInfoContent>

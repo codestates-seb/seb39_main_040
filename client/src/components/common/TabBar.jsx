@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import CafeReviewCards from "../cafe/CafePageBottomSection/CafeReviews/CafeReviewCards";
 import CafeMenu from "../cafe/CafePageBottomSection/CafeMenu";
 import CafePhotoCards from "../cafe/CafePageBottomSection/CafePhotos/CafePhotoCards";
