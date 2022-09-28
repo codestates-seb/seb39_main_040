@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
-// 메인페이지, 마이페이지, 상세페이지, 리뷰 작성페이지, 리뷰 수정페이지, 지역페이지, 로그인페이지, 회원가입페이지, 아이디찾기페이지, 비밀번호찾기페이지
+
 import CafeDetailPage from "./pages/CafeDetail/CafeDetailPage";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
@@ -10,6 +10,8 @@ import NewReviewPage from "./pages/Review/NewReviewPage";
 import EditReviewPage from "./pages/Review/EditReviewPage";
 import UserInfoPage from "./pages/User/UserInfoPage";
 import UserInfoEditPage from "./pages/User/UserInfoEditPage";
+import UserReviewPage from "./pages/User/UserReviewPage";
+import UserWishPage from "./pages/User/UserWishPage";
 
 function App() {
   const [cafeInfo, setCafeInfo] = useState([]);
@@ -41,6 +43,8 @@ function App() {
           <Route path="/editreview" element={<EditReviewPage />} />
           <Route path="/userinfo" element={<UserInfoPage />} />
           <Route path="/userinfoedit" element={<UserInfoEditPage />} />
+          <Route path="/user/review" element={<UserReviewPage />} />
+          <Route path="/user/wish" element={<UserWishPage />} />
         </Routes>
       </BrowserRouter>
     </>
