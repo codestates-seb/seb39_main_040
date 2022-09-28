@@ -17,7 +17,20 @@ const CafeCardWrapper = styled.div`
   }
 `;
 
-const CafeCards = ({ cafeInfo }) => {
+const CafeCards = () => {
+  const [cafeInfo, setCafeInfo] = useState([]);
+
+  // 카페 전체 리스트 불러오기
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API}/cafe`)
+      .then((res) => {
+        console.log(res.data.data);
+        setCafeInfo(res.data.data);
+      })
+      .catch((e) => console.log("error:", e));
+  }, []);
+
   return (
     <CafeCardWrapper>
       {cafeInfo.map((el) => (
