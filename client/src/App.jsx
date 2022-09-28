@@ -12,7 +12,7 @@ import UserInfoPage from "./pages/User/UserInfoPage";
 import UserInfoEditPage from "./pages/User/UserInfoEditPage";
 import UserReviewPage from "./pages/User/UserReviewPage";
 import UserWishPage from "./pages/User/UserWishPage";
-
+import ScrollToTop from "./components/common/ScrollToTop";
 function App() {
   const [cafeInfo, setCafeInfo] = useState([]);
 
@@ -30,6 +30,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<MainPage cafeInfo={cafeInfo} />} />
 
@@ -40,7 +41,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/cafe/:id/reviews" element={<NewReviewPage />} />
-          <Route path="/editreview" element={<EditReviewPage />} />
+          <Route
+            path="/cafe/:id/reviews/:reviewid"
+            element={<EditReviewPage />}
+          />
           <Route path="/userinfo" element={<UserInfoPage />} />
           <Route path="/userinfoedit" element={<UserInfoEditPage />} />
           <Route path="/user/review" element={<UserReviewPage />} />
