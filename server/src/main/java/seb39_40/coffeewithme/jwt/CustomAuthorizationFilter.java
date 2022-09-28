@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 //import seb39_40.coffeewithme.common.exeption.ErrorResponse;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
@@ -30,55 +32,61 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
+    private String TYPE="Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         String at = request.getHeader("AccessToken");
 
-        if (path.equals("/users/login") || path.equals("/users/signup") || request.getMethod().equals("GET")) {
+        if (path.equals("/users/login") || path.equals("/users/signup") || (request.getRequestURI().startsWith("/cafe") && request.getMethod().equals("GET"))) {
             filterChain.doFilter(request, response);
         }else if(path.equals("/users/token")){
-            String jwt = jwtProvider.substringToken(at);
-            Jws<Claims> claims = jwtProvider.parseToken(jwt);
+            String rt = request.getHeader("RefreshToken");
+            if(rt==null || !rt.startsWith(TYPE))
+                throw new BusinessLogicException(ExceptionCode.TOKEN_BAD_REQUEST);
+            String jwt = jwtProvider.substringToken(rt);
+            Claims claims = jwtProvider.parseToken(jwt);
             String email=jwtProvider.getEmailToClaims(claims);
             if(!jwtProvider.validationTheSameToken(email,jwt)){
-                response.setStatus(SC_UNAUTHORIZED);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding("utf-8");
+                //response.setStatus(SC_UNAUTHORIZED);
+                //response.setContentType(APPLICATION_JSON_VALUE);
+                //response.setCharacterEncoding("utf-8");
                 //ErrorResponse errorResponse = new ErrorResponse(401, "유효한 Refresh Token이 아닙니다.");
                 //new ObjectMapper().writeValue(response.getWriter(), errorResponse);
-                new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_UNAUTHORIZED);
-           // }else{
-//
-//                String new_at = jwtProvider.createAccessToken(user.getUser().getId(), user.getUser().getEmail());
-//                String new_rt = jwtProvider.createRefreshToken(user.getUser().getEmail());
-//
-//                jwtProvider.saveRefreshToken(user.getUser().getEmail(),rt);
-//                response.setHeader("AccessToken",TYPE+at);
-//                response.setHeader("RefreshToken",TYPE+rt);
-//                filterChain.doFilter(request, response);
+                //new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_UNAUTHORIZED);
+                throw new BusinessLogicException(ExceptionCode.TOKEN_UNAUTHORIZED);
+           }else{
+                User user = userRepository.findByEmail(email).get();
+                String new_at = jwtProvider.createAccessToken(user.getId(), email);
+                String new_rt = jwtProvider.createRefreshToken(email);
+
+                jwtProvider.saveRefreshToken(email,new_rt);
+                response.setHeader("AccessToken",TYPE+new_at);
+                response.setHeader("RefreshToken",TYPE+new_rt);
+                filterChain.doFilter(request, response);
             }
-        }else if(at==null || !at.startsWith("Bearer ")) {
+        }else if(at==null || !at.startsWith(TYPE)) {
             System.out.println("** Not a jwt token");
-            response.setStatus(SC_BAD_REQUEST);
-            response.setContentType(APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("utf-8");
-            new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_BAD_REQUEST);
+            //response.setStatus(SC_BAD_REQUEST);
+            //response.setContentType(APPLICATION_JSON_VALUE);
+            //response.setCharacterEncoding("utf-8");
+            throw new BusinessLogicException(ExceptionCode.TOKEN_BAD_REQUEST);
+            //new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_BAD_REQUEST);
        //정상적으로 인가 요청이 들어온 경우
         }else{
             String jwt = jwtProvider.substringToken(at);
-            Jws<Claims> claims = jwtProvider.parseToken(jwt);
+            Claims claims = jwtProvider.parseToken(jwt);
             String email = jwtProvider.getEmailToClaims(claims);
 
             //만료된 토큰의 경우
             if (!jwtProvider.validationTimeToken(claims)) {
-                System.out.println("** Expired token");
-                response.setStatus(SC_UNAUTHORIZED);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding("utf-8");
-
-                new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_EXPIRATION);
+               // System.out.println("** Expired token");
+               // response.setStatus(SC_UNAUTHORIZED);
+               // response.setContentType(APPLICATION_JSON_VALUE);
+               //response.setCharacterEncoding("utf-8");
+                //  new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_EXPIRATION);
+                throw new BusinessLogicException(ExceptionCode.TOKEN_EXPIRATION);
             }else {
                 User userEntity = userRepository.findByEmail(email).get();
 
