@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../assets/CoffeeWithMe.svg";
 import useAuthStore from "../../store/useAuth";
+import React from "react";
 
 const HeaderWrapper = styled.header`
   z-index: 999;

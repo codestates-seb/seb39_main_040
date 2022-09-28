@@ -3,6 +3,7 @@ import CafeReviewCard from "./CafeReviewCard";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 const ReviewCardsWrapper = styled.div`
   margin-top: 20px;

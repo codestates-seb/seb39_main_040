@@ -2,6 +2,7 @@ import styled from "styled-components";
 import CafeCard from "../../components/cafe/CafeCard";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
+import React from "react";
 
 const WishWrapper = styled.div`
   border: 1px solid var(--gray-030);

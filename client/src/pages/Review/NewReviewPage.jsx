@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ReviewForm from "../../components/review/ReviewForm";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
+import React from "react";
 
 const NewReviewWrapper = styled.div`
   display: flex;

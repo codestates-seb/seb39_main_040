@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
 import CafeReviewCards from "../../components/cafe/CafePageBottomSection/CafeReviews/CafeReviewCards";
+import React from "react";
 
 const ReviewWrapper = styled.div`
   border: 1px solid var(--gray-030);

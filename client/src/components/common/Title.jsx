@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import TitleImg1 from "../../assets/title1.svg";
+import React from "react";
 
 const TitleWrapper = styled.div`
   // margin-top: 20px;

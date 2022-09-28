@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
+import React from "react";
 
 const MainWrapper = styled.div`
   display: flex;
