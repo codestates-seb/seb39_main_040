@@ -14,10 +14,10 @@ const CafeDetailPage = () => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setCafeIdInfo(res.data);
       })
-      .catch((e) => console.log("error:", e));
+      .catch((e) => console.err("error:", e));
   }, []);
   return (
     <>

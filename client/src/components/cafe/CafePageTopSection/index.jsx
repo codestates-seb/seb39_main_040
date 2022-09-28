@@ -148,15 +148,12 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
     <CafeTopSection>
       <CafeTopInfo>
         <ImgBox>
-          <img
-            src="https://wishbeen-seoul.s3.ap-northeast-2.amazonaws.com/plan/1498208096160_17881746_1930702927147954_3202367211201101824_n.jpg"
-            alt="카페사진"
-          />
+          <img src={`${cafeIdInfo.main_img}`} alt="카페사진" />
         </ImgBox>
         <Cafedetail>
           <CafedetailContent>
             <TitleBox>
-              <p>Angle Coffee</p>
+              <p>{cafeIdInfo.name}</p>
               <ToolTip>
                 <button>
                   <FontAwesomeIcon className="icon" icon={faHeart} />
@@ -165,15 +162,15 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
               </ToolTip>
             </TitleBox>
             <Tagbox>
-              <Tag>#조용한</Tag>
+              <Tag>#{cafeIdInfo.tags}</Tag>
             </Tagbox>
             <CafeInfoBox>
               <div>
-                <p>조용하고 맛있는 카페</p>
+                <p>{cafeIdInfo.description}</p>
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faClock} />
-                <li>영업시간 : 9:00 ~ 22:00 매주 월요일 휴무</li>
+                <li>{cafeIdInfo.running_time}</li>
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faPhone} />
@@ -185,11 +182,11 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faLocationDot} />
-                <li>서울 강남구 도산대로 49길 39</li>
+                <li>{cafeIdInfo.address}</li>
               </div>
             </CafeInfoBox>
             <CafeMapbox>
-              <CafeInfoMap />
+              <CafeInfoMap address={cafeIdInfo.address} />
             </CafeMapbox>
           </CafedetailContent>
         </Cafedetail>

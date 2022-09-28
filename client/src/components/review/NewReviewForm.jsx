@@ -43,25 +43,6 @@ const TitleContainer = styled.div`
   }
 `;
 
-const NameContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 600px;
-  height: 65px;
-  span:first-child {
-    width: 90px;
-    font-size: 23px;
-    font-weight: 700;
-  }
-  span:nth-child(2) {
-    width: 490px;
-    color: var(--green-010);
-    font-size: 21px;
-    font-weight: 700;
-  }
-`;
-
 const ImgContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -162,7 +143,9 @@ const TextContainer = styled.div`
 
   textarea {
     border: none;
-    background-color: #f0ece3;
+    background-color: var(--white-010);
+    border: 1px solid var(--green-010);
+    border-radius: 8px;
     width: 800px;
     height: 100px;
     font-size: 20px;
@@ -216,13 +199,14 @@ const ReviewForm = () => {
     console.log(content);
 
     axios
-      .post(`http://175.125.6.189/cafe/${id}/reviews`, content)
+      .post(`${process.env.REACT_APP_API}/cafe/${id}/reviews`, content)
       .then((res) => console.log(res.data))
       .then(() => {
         navigate(`/cafe/${id}`);
       })
+      .then(() => console.log("리뷰가 작성되었습니다."))
       .catch((err) => {
-        console.log("err", err);
+        console.err("err", err);
       });
   };
 
@@ -243,13 +227,9 @@ const ReviewForm = () => {
           <span>카페명</span>
           <span>Mood</span>
         </TitleContainer>
-        <NameContainer>
-          <span>작성자</span>
-          <span>한소희</span>
-        </NameContainer>
         <ImgContainer>
           <ImgTitle>
-            <span>카페명</span>
+            <span>사진</span>
           </ImgTitle>
           <p>카페에 대한 새로운 사진을 첨부해주세요. (최대 한장)</p>
           <ReviewImageUpload />
@@ -277,6 +257,7 @@ const ReviewForm = () => {
           <textarea
             name="content"
             onChange={(e) => setDescription(e.target.value)}
+            placeholder="솔직한 리뷰를 자유롭게 작성해주세요."
           />
         </TextContainer>
         <BtnContainer>

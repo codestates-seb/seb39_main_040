@@ -1,9 +1,9 @@
 import CafePhotoCard from "./CafePhotoCard";
 
-const CafePhotoCards = () => {
+const CafePhotoCards = ({ cafeIdInfo }) => {
   return (
     <>
-      <CafePhotoCard />
+      <CafePhotoCard cafeIdInfo={cafeIdInfo} />
     </>
   );
 };

@@ -21,7 +21,7 @@ const MainWrapper = styled.div`
   }
 `;
 
-const MainPage = ({ cafeInfo }) => {
+const MainPage = () => {
   return (
     <MainWrapper>
       <Header />
