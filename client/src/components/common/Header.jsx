@@ -16,6 +16,7 @@ const HeaderWrapper = styled.header`
   width: 100%;
   border-bottom: 1px solid var(--gray-030);
   padding: 10px 40px;
+  background-color: var(--white-010);
 `;
 
 const HeaderTitle = styled.img`
