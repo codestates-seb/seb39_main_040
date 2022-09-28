@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
-import CafeReviewCards from "../../components/cafe/CafePageBottomSection/CafeReviews/CafeReviewCards";
+import UserReviewCards from "../../components/mypage/UserReviewCards";
 import React from "react";
 
 const ReviewWrapper = styled.div`
@@ -22,9 +22,7 @@ const UserReviewPage = () => {
     <>
       <Header />
       <MiddleTitle>나의리뷰</MiddleTitle>
-      <ReviewWrapper>
-        <CafeReviewCards />
-      </ReviewWrapper>
+      <UserReviewCards />
     </>
   );
 };

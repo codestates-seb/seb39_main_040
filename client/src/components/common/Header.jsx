@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../assets/CoffeeWithMe.svg";
 import useAuthStore from "../../store/useAuth";
+import useLoginStore from "../../store/useLoginStore";
 import React from "react";
 
 const HeaderWrapper = styled.header`
@@ -117,7 +118,8 @@ const DropItem = styled.li`
 `;
 
 const Header = () => {
-  const { isLogin, setIsLogin } = useAuthStore();
+  // const { isLogin, setIsLogin } = useAuthStore();
+  const { isLogin, setIsLogin } = useLoginStore();
   const [isOpen, setIsOpen] = useState(true);
 
   const navigate = useNavigate();

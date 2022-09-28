@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import useAuthStore from "../../store/useAuth";
+import useLoginStore from "../../store/useLoginStore";
 
 const EditWrapper = styled.div`
   display: flex;
@@ -98,6 +99,8 @@ const UserInfoEditPage = () => {
   const [imgSrc, setImgSrc] = useState("");
   const [userName, setUserName] = useState("");
   const [mobile, setMobile] = useState("");
+  const { userInfo, setUserInfo } = useAuthStore();
+  const { isLogin, setIsLogin } = useLoginStore();
 
   const imgInput = useRef();
 
@@ -129,9 +132,11 @@ const UserInfoEditPage = () => {
       .patch(`${process.env.REACT_APP_API}/users/information`, newInfo, {
         headers: { AccessToken: sessionStorage.getItem("access_token") },
       })
-      .then((res) => {
+      .then(() => {
         console.log("정보수정완료");
         e.preventDefault();
+        if (sessionStorage.getItem("access_token") === true) {
+        }
         navigate("/userinfo");
       })
       .catch((err) => console.log(err));
@@ -161,7 +166,7 @@ const UserInfoEditPage = () => {
           <InfoDataBox>
             <InputData>이름</InputData>
             <input
-              placeholder="변경할 이름을 적어주세요"
+              placeholder={userInfo.userName}
               onChange={(e) => setUserName(e.target.value)}
             ></input>
           </InfoDataBox>
