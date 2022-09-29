@@ -131,11 +131,12 @@ const Header = () => {
       })
       .then((res) => {
         console.log("로그아웃완료");
-        window.localStorage.removeItem("access_token");
-        setIsLogin(!isLogin);
+        setIsLogin();
+        window.localStorage.clear();
+        window.sessionStorage.clear();
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...
   };
 
   return (

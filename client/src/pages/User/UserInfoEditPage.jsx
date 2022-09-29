@@ -147,10 +147,7 @@ const UserInfoEditPage = () => {
       <Header />
       <EditWrapper>
         <UserImgUpdate>
-          <Img
-            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
-            alt="이미지확인"
-          />
+          <Img src={imgSrc} alt="이미지확인" />
           <ImgUpdateButton>
             <button onClick={onSubmitImg}>프로필 사진 선택</button>
             <input
