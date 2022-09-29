@@ -1,17 +1,15 @@
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Tag from "../common/Tag";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
-import { BsSuitHeartFill, BsSuitHeart } from "react-icons/bs";
+import { BsSuitHeartFill } from "react-icons/bs";
 
 const WishCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 450px;
   margin-top: 50px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   background-color: var(--white-010);
   position: relative;
   padding: 0 10px;
@@ -94,10 +92,10 @@ const UserWishCard = () => {
             </button>
           </CafeTitle>
           <CafeText>커피가 맛있는 분위기 맛집</CafeText>
-          <CafeTag>
+          {/* <CafeTag>
             <Tag className="tag">#분위기좋은</Tag>
             <Tag className="tag">#커피가맛있는</Tag>
-          </CafeTag>
+          </CafeTag> */}
         </CafeInfoContent>
       </Link>
     </WishCardWrapper>
