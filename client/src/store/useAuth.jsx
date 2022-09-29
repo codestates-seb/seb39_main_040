@@ -6,6 +6,8 @@ const useAuthStore = create((set) => ({
   isLogin: false,
   setIsLogin: () => set((state) => ({ isLogin: !state.isLogin })),
 
+  token: sessionStorage.getItem("access_token"),
+
   userInfo: [],
   setUserInfo: async () => {
     const response = await axios
@@ -13,7 +15,6 @@ const useAuthStore = create((set) => ({
         headers: { AccessToken: sessionStorage.getItem("access_token") },
       })
       .then((res) => {
-        console.log("유저데이터조회성공");
         set({ userInfo: res.data });
       })
       .catch((err) => console.log(err));

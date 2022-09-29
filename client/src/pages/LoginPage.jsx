@@ -141,7 +141,7 @@ const LoginPage = () => {
         sessionStorage.setItem("access_token", res.headers.accesstoken);
         localStorage.setItem("refresh_token", res.headers.refreshtoken);
         setIsLogin();
-        navigate("/userinfo");
+        navigate("/");
       })
       .catch((error) => {
         console.log("회원 정보가 일치하지 않습니다.");
