@@ -20,6 +20,7 @@ const CafeDetailPage = () => {
       })
       .catch((e) => console.err("error:", e));
   }, []);
+
   return (
     <>
       <Header />
