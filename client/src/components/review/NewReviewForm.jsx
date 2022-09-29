@@ -19,7 +19,7 @@ const ReviewForm = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const content = {
-      review_img: 5,
+      review_img: img,
       score: score,
       description: description,
       tags: tags,
@@ -49,14 +49,14 @@ const ReviewForm = () => {
 
   const onChangeTagHandler = (newTags) => {
     setTags(newTags);
-    console.log(tags);
   };
+  console.log(tags);
 
   // 사진 저장해서 보내기 핸들러
   const onUploadImg = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("img", imgInfo);
+    formData.append("images", imgInfo);
 
     axios
       .post(`${process.env.REACT_APP_API}/images/upload`, formData, {
@@ -67,6 +67,7 @@ const ReviewForm = () => {
       })
       .then((res) => {
         console.log(res.data);
+        setImg(res.data.id);
         alert("사진추가 완료");
         console.log("사진추가완료");
       })
@@ -77,12 +78,11 @@ const ReviewForm = () => {
 
   // 사진 첨부 핸들러
   const uploadImg = (e) => {
-    // let file = e.target.files[0];
-    // console.log(file);
-    console.log(e.target.files[0]);
+    e.preventDefault();
+    // console.log(e.target.files[0]);
     setImgInfo(e.target.files[0]);
-    console.log(imgInfo);
   };
+  console.log(imgInfo);
 
   return (
     <MainContainer>
