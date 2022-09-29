@@ -9,13 +9,13 @@ spring:
   jpa:
     hibernate:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
-    defer-datasource-initialization: true
+  #   defer-datasource-initialization: true
 
-  sql:
-    init:
-      mode: always
+  # sql:
+  #   init:
+  #     mode: always
 
   profiles:
     include:
