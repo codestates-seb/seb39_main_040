@@ -1,0 +1,92 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "be" ]
+    paths:
+      -"server/**"
+  pull_request:
+    branches: [ "be" ]
+    paths:
+      -"server/**"
+  workflow_dispatch:
+      inputs:
+         logLevel:
+            description: 'Log level'     
+            required: true
+            default: 'warning'
+         tags:
+            description: 'Test scenario tags'
+
+permissions:
+  contents: read
+
+env:
+  S3_BUCKET_NAME: seb40-main-server
+  RESOURCE_PATH: ./server/src/main/resources/application-prod.yml
+  working-directory: ./server
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: be
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    # 환경변수 세팅    
+    - name: Set yaml file 
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: ${{ env.RESOURCE_PATH }}
+      env:
+          spring.datasource.url: ${{ secrets.DATASOURCE_URL }}
+          spring.datasource.username: ${{ secrets.DATASOURCE_USERNAME }}
+          spring.datasource.password: ${{ secrets.DATASOURCE_PW }}
+          cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          cloud.aws.credentials.secret-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          cloud.aws.s3.bucket: ${{ secrets.BUCKET_NAME }}
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      working-directory: ${{ env.working-directory }}
+    - name: Build with Gradle
+      run : ./gradlew clean build
+      working-directory: ${{ env.working-directory }}
+        
+    - name: Make zip file
+      run: zip -r ./cwm-deploy.zip .
+      shell: bash
+      working-directory: ${{ env.working-directory }}
+  
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+    
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./cwm-deploy.zip s3://$S3_BUCKET_NAME/cwm-deploy.zip
+      working-directory: ${{ env.working-directory }}
+      
+    - name: Code Deploy
+      run: >
+        aws deploy create-deployment --application-name coffeewithme
+        --deployment-config-name CodeDeployDefault.AllAtOnce
+        --deployment-group-name cwm-seb40
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=cwm-deploy.zip
