@@ -1,4 +1,4 @@
-import Tag from "../../components/common/Tag";
+import Tag from "../common/Tag";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
@@ -7,107 +7,97 @@ import React from "react";
 
 const ReviewCardWrapper = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 8px;
   width: 100%;
-  height: 200px;
   background-color: var(--white-010);
-  margin-bottom: 50px;
-  position: relative;
-  border: 1px solid black;
-`;
-
-const ReviewImg = styled.img`
-  position: absolute;
-  left: 10px;
-  max-width: 20%;
-  height: 170px;
-  border-radius: 10px;
-`;
-
-const ContentBox = styled.div`
-  position: relative;
-  padding: 0 20px;
-  width: 70%;
-  margin-left: 100px;
-  margin-bottom: 25px;
-  p {
-    line-height: 30px;
-    margin-bottom: 20px;
+  margin-bottom: 30px;
+  &:hover {
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.25);
+    transition: 0.2s ease-out;
+    transform: scale(1.02);
   }
 `;
 
-const TagBox = styled.div`
-  margin: 8px 0 17px 0;
-  font-size: 17px;
-  width: 60px;
-`;
-
-const Infobox = styled.div`
+const ImgBox = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  margin-top: 23px;
-  width: 640px;
+  img {
+    width: 180px;
+    height: 180px;
+  }
 `;
 
-const Star = styled.div`
-  position: absolute;
-  left: 0;
-  align-items: center;
-  justify-content: center;
-  margin-left: 15px;
+const ContentBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: space-around;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+`;
+const TagBox = styled.div`
+  display: flex;
+  margin-top: 10px;
+
+  .tag-1 {
+    margin-right: 10px;
+  }
+`;
+
+const StarBox = styled.div`
+  display: flex;
   .star-icon {
     color: var(--green-010);
   }
 `;
 
 const ButtonBox = styled.div`
-  position: absolute;
-  right: 0;
-  width: 100%;
-  margin-top: 10px;
-  font-size: 14px;
-  button {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 20px;
+  margin-left: 150px;
+  button:hover {
+    color: var(--green-010);
   }
 `;
 
 const UserReviewCard = () => {
   return (
     <ReviewCardWrapper>
-      <ReviewImg
-        src="https://wishbeen-seoul.s3.ap-northeast-2.amazonaws.com/plan/1498208096160_17881746_1930702927147954_3202367211201101824_n.jpg"
-        alt="리뷰이미지"
-      />
+      <ImgBox>
+        <img
+          src="https://imgorg.catch.co.kr/job/catchapply/main/catchcafe/CAFE_P-6-1.jpg"
+          alt="리뷰이미지"
+        />
+      </ImgBox>
       <ContentBox>
+        <h2>카페이름</h2>
         <p>
-          요새 혼자 카페가서 공부하는게 습관이 되었는데 이번 기회에 좋은 카페를
-          찾은 것 같아요!
+          아인슈페너 맛집이에요! 분위기도 좋아요! 다음에도 또 방문하겠습니다~
         </p>
         <TagBox>
-          <Tag>#조용한</Tag>
+          <Tag className="tag-1">#조용한</Tag>
+          <Tag className="tag-2">#커피가맛있는</Tag>
         </TagBox>
-        <Infobox>
-          <Star>
-            <Box sx={{ "& > legend": { mt: 2 } }}>
-              <Typography component="legend"></Typography>
-              <Rating
-                className="star-icon"
-                name="read-only"
-                // value={star}
-                readOnly
-              />
-            </Box>
-          </Star>
-          <ButtonBox>
-            <button>수정</button>
-            <button>삭제</button>
-          </ButtonBox>
-        </Infobox>
+        <StarBox>
+          <Box sx={{ "& > legend": { mt: 2 } }}>
+            <Typography component="legend"></Typography>
+            <Rating className="star-icon" name="read-only" value={4} readOnly />
+          </Box>
+        </StarBox>
       </ContentBox>
+      <ButtonBox>
+        <button>수정</button>
+        <button>삭제</button>
+      </ButtonBox>
     </ReviewCardWrapper>
   );
 };
