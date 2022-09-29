@@ -44,10 +44,9 @@ const ContentBox = styled.div`
 const TagBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-top: 8px;
   font-size: 17px;
-  width: 150px;
+  width: 200px;
   .tag-1 {
     margin-right: 10px;
   }

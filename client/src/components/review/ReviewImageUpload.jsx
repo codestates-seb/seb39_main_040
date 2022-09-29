@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const MainWrapper = styled.div`
   width: 400px;
   height: 510px;
   .imgUpload {
-    display: none;
+    /* display: none; */
   }
 `;
 
@@ -53,33 +54,32 @@ const BtnContainer = styled.div`
   }
 `;
 
-const ReviewImageUpload = () => {
-  const [imgSrc, setImgSrc] = useState("");
+const ReviewImageUpload = ({ onChange }) => {
+  const [imgFiles, setImgFiles] = useState("");
 
-  const imgInput = useRef();
+  // const imgInput = useRef();
 
-  const onSubmitImg = (e) => {
-    e.preventDefault();
-    imgInput.current.click();
-  };
+  // const onSubmitImg = (e) => {
+  //   e.preventDefault();
+  //   imgInput.current.click();
+  // };
 
-  const onImgChange = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImgSrc(reader.result);
-        resolve();
-        console.log(fileBlob);
-      };
-    });
-  };
+  // const onImgChange = (fileBlob) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(fileBlob);
+  //   return new Promise((resolve) => {
+  //     reader.onload = () => {
+  //       setFiles(reader.result);
+  //       resolve();
+  //     };
+  //   });
+  // };
 
   return (
     <MainWrapper>
-      <ImgContainer>
-        {imgSrc ? (
-          <img src={imgSrc} alt="이미지 미리보기" />
+      {/* <ImgContainer>
+        {files ? (
+          <img src={files} alt="이미지 미리보기" />
         ) : (
           <FontAwesomeIcon className="icon" icon={faImage} size="3x" />
         )}
@@ -95,7 +95,15 @@ const ReviewImageUpload = () => {
         <button type="button" onClick={onSubmitImg}>
           사진 올리기
         </button>
-      </BtnContainer>
+      </BtnContainer> */}
+      <input
+        type="file"
+        name="file"
+        // ref={imgInput}
+        accept="image/*"
+        className="imgUpload"
+        // onChange={(e) => onImgChange(e.target.files[0])}
+      />
     </MainWrapper>
   );
 };

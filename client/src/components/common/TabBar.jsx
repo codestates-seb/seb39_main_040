@@ -69,7 +69,7 @@ const TabContentWrapper = styled.div`
   justify-content: center;
 `;
 
-const TabBar = ({ cafeIdInfo }) => {
+const TabBar = ({ cafeIdInfo, reviewInfo }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
