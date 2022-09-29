@@ -2,17 +2,14 @@ package seb39_40.coffeewithme.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-//import seb39_40.coffeewithme.common.exeption.ErrorResponse;
-import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ErrorResponse;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
@@ -23,8 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
@@ -37,65 +32,62 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
-        String at = request.getHeader("AccessToken");
+        String token;
 
         if (path.equals("/users/login") || path.equals("/users/signup")
                 || (request.getRequestURI().startsWith("/cafe") && request.getMethod().equals("GET"))) {
             filterChain.doFilter(request, response);
-        }else if(path.equals("/users/token")){
-            String rt = request.getHeader("RefreshToken");
-            if(rt==null || !rt.startsWith(TYPE))
-                throw new BusinessLogicException(ExceptionCode.TOKEN_BAD_REQUEST);
-            String jwt = jwtProvider.substringToken(rt);
-            Claims claims = jwtProvider.parseToken(jwt);
-            String email=jwtProvider.getEmailToClaims(claims);
-            if(!jwtProvider.validationTheSameToken(email,jwt)){
-                //response.setStatus(SC_UNAUTHORIZED);
-                //response.setContentType(APPLICATION_JSON_VALUE);
-                //response.setCharacterEncoding("utf-8");
-                //ErrorResponse errorResponse = new ErrorResponse(401, "유효한 Refresh Token이 아닙니다.");
-                //new ObjectMapper().writeValue(response.getWriter(), errorResponse);
-                //new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_UNAUTHORIZED);
-                throw new BusinessLogicException(ExceptionCode.TOKEN_UNAUTHORIZED);
-           }else{
-                User user = userRepository.findByEmail(email).get();
-                String new_at = jwtProvider.createAccessToken(user.getId(), email);
-                String new_rt = jwtProvider.createRefreshToken(email);
+        }else {
+            if(path.equals("/users/token"))
+                token = request.getHeader("RefreshToken");
+            else
+                token = request.getHeader("AccessToken");
 
-                jwtProvider.saveRefreshToken(email,new_rt);
-                response.setHeader("AccessToken",TYPE+new_at);
-                response.setHeader("RefreshToken",TYPE+new_rt);
-                filterChain.doFilter(request, response);
+            if(token==null || !token.startsWith(TYPE)){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("utf-8");
+                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_BAD_REQUEST);
+                new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             }
-        }else if(at==null || !at.startsWith(TYPE)) {
-            System.out.println("** Not a jwt token");
-            //response.setStatus(SC_BAD_REQUEST);
-            //response.setContentType(APPLICATION_JSON_VALUE);
-            //response.setCharacterEncoding("utf-8");
-            throw new BusinessLogicException(ExceptionCode.TOKEN_BAD_REQUEST);
-            //new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_BAD_REQUEST);
-       //정상적으로 인가 요청이 들어온 경우
-        }else{
-            String jwt = jwtProvider.substringToken(at);
-            Claims claims = jwtProvider.parseToken(jwt);
-            String email = jwtProvider.getEmailToClaims(claims);
+            String jwt = jwtProvider.substringToken(token);
 
-            //만료된 토큰의 경우
-            if (!jwtProvider.validationTimeToken(claims)) {
-               // System.out.println("** Expired token");
-               // response.setStatus(SC_UNAUTHORIZED);
-               // response.setContentType(APPLICATION_JSON_VALUE);
-               //response.setCharacterEncoding("utf-8");
-                //  new ObjectMapper().writeValue(response.getWriter(), ExceptionCode.TOKEN_EXPIRATION);
-                throw new BusinessLogicException(ExceptionCode.TOKEN_EXPIRATION);
-            }else {
-                User userEntity = userRepository.findByEmail(email).get();
+            try {
+                Claims claims = jwtProvider.parseToken(jwt);
+                String email = jwtProvider.getEmailToClaims(claims);
 
-                CustomUserDetails principalDetails = new CustomUserDetails(userEntity);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if(path.equals("/users/token")){
 
-                filterChain.doFilter(request, response);
+                    if (!jwtProvider.validationTheSameToken(email, jwt)){
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType(APPLICATION_JSON_VALUE);
+                        response.setCharacterEncoding("utf-8");
+                        ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_UNAUTHORIZED);
+                        new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+                    }
+                    User user = userRepository.findByEmail(email).get();
+                    String new_at = jwtProvider.createAccessToken(user.getId(), email);
+                    String new_rt = jwtProvider.createRefreshToken(email);
+
+                    jwtProvider.saveRefreshToken(email, new_rt);
+                    response.setHeader("AccessToken", TYPE + new_at);
+                    response.setHeader("RefreshToken", TYPE + new_rt);
+                    filterChain.doFilter(request, response);
+                } else {
+                    User userEntity = userRepository.findByEmail(email).get();
+
+                    CustomUserDetails principalDetails = new CustomUserDetails(userEntity);
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    filterChain.doFilter(request, response);
+                }
+            }catch(ExpiredJwtException e){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("utf-8");
+                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_EXPIRATION);
+                new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             }
         }
     }

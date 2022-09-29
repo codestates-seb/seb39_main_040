@@ -1,12 +1,10 @@
 package seb39_40.coffeewithme.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import seb39_40.coffeewithme.user.service.UserService;
 
@@ -16,7 +14,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     //액세스 토큰 만료 시간
-    private int ACCESS_EXPIRATION= 1000 * 60 * 10;
+    private int ACCESS_EXPIRATION= 1000 * 60 * 3;
     //리프레시 토큰 만료 시간
     private int REFRESH_EXPIRATION= 1000 * 60 * 120;
     //secret키 관련 정보
@@ -54,7 +52,6 @@ public class JwtProvider {
         userService.saveRefreshToken(email,token);
     }
 
-    //public Jws<Claims> parseToken(String jwt){
     public Claims parseToken(String jwt){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
         return Jwts.parserBuilder()
@@ -69,7 +66,6 @@ public class JwtProvider {
     }
 
     public String substringToken(String token){
-        //if(token==null || !token.startsWith("Bearer ")) return "fail";
         return token.replace("Bearer ", "");
     }
 
