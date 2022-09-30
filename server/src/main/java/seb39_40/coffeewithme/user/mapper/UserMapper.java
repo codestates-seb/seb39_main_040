@@ -24,22 +24,31 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = CafeMapper.class)
-public abstract class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
     @Mapping(target = "name", source = "userName")
-    public abstract UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
-    public abstract User userJoinToUser(UserRequestDto.UserJoin userJoin);
-    public abstract UserResponseDto.UserInfo userToUserInfo(User user);
-    public WishlistResponse cafesToWishlistDto(List<CafeResponseDto.SimpleCafeInfo> cafes){
+    UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
+    User userJoinToUser(UserRequestDto.UserJoin userJoin);
+    UserResponseDto.UserInfo userToUserInfo(User user);
+
+    default WishlistResponse cafesToWishlistDto(List<CafeResponseDto.SimpleCafeInfo> cafes){
         return new WishlistResponse(cafes);
     }
-    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getPath())")
-    public abstract UserReviewResponseDto.ReviewSimpleDto reviewToUserReviewSimpleDto(Review review);
 
-    public abstract List<UserReviewResponseDto.ReviewSimpleDto> reviewsToUserReviewListDto(List<Review> reviews);
-
-    public UserReviewResponseDto reviewsToUserReviewResponseDto(List<Review> reviews){
-        return new UserReviewResponseDto(reviewsToUserReviewListDto(reviews));
+    default UserReviewResponseDto reviewsToUserReviewResponseDto(List<Review> reviews){
+        if(reviews==null)
+            return new UserReviewResponseDto();
+        List<UserReviewResponseDto.ReviewSimpleDto> rsdl=reviews.stream().map(r -> {
+            UserReviewResponseDto.ReviewSimpleDto rsd=new UserReviewResponseDto.ReviewSimpleDto();
+            rsd.setId(r.getId());
+            rsd.setDescription(r.getDescription());
+            rsd.setReviewImg(r.getReviewImg().getPath());
+            rsd.setReviewTags(r.getReviewTags());
+            rsd.setScore(r.getScore());
+            rsd.setCafe(new UserReviewResponseDto.ReviewSimpleCafeDto(r.getCafe().getId(),r.getCafe().getName()));
+            return rsd;
+        }).collect(Collectors.toList());
+        return new UserReviewResponseDto(rsdl);
     }
 
 }
