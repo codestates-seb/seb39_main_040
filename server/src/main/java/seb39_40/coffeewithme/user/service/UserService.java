@@ -5,10 +5,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.review.domain.Review;
+import seb39_40.coffeewithme.review.repository.ReviewRepository;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ReviewRepository reviewRepository;
 
     public void createUser(User user) {
         verifyEmail(user.getEmail());
@@ -70,10 +75,19 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<Review> getReview(Long userId) {
+        List<Review> reviewList = new ArrayList<>();
+        if(reviewRepository.countByUserId(userId)==0)
+            return reviewList;
+        reviewList = reviewRepository.findAllByUserId(userId);
+
+        return null;
+    }
+
     public void verifyUser(String email){
         User user=userRepository.findByEmail(email).get();
         if(user.getStatus().equals(User.UserStatus.USER_WITHDRAW))
-            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
+            throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
     }
 
     private void verifyEmail(String email){

@@ -1,6 +1,7 @@
 package seb39_40.coffeewithme.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -66,9 +67,12 @@ public class JwtProvider {
     }
 
     public String substringToken(String token){
-        return token.replace("Bearer ", "");
+        if(!token.startsWith("Bearer "))
+            throw new JwtException("JWT 토큰 형식이 올바르지 않습니다.");
+        else return token.replace("Bearer ", "");
     }
 
+    /*
     public boolean validationTimeToken(Claims claims){
         System.out.println("Date : "+claims.getExpiration());
         System.out.println(new Date());
@@ -76,6 +80,7 @@ public class JwtProvider {
                 .getExpiration()
                 .before(new Date());
     }
+     */
 
     public String getEmailToClaims(Claims claims){
         return claims.get("email").toString();
