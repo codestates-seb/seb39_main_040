@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Wishlist, Long> {
     List<Wishlist> findAllByUserId(Long userId);
-    Optional<Wishlist> findByUserId(Long userId);
     Optional<Wishlist> findByUserIdAndCafeId(Long userId, Long cafeId);
     Long countByUserId(Long userId);
 }

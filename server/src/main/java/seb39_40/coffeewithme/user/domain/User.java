@@ -43,7 +43,10 @@ public class User {
     private Image profilePhoto; //외부에서 오는 키임둥, 객체를 받아와야할까용
     */
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL) //  @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
+    @Transient
+    private List<Wishlist> likes=new ArrayList<>();
+
+    @Transient //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews=new ArrayList<>();
 
     public List<String> getRoleList(){
@@ -52,9 +55,6 @@ public class User {
         }
         return new ArrayList<>();
     }
-
-    @Transient
-    private List<Wishlist> likes=new ArrayList<>();
 
     public enum UserStatus {
         USER_SIGNUP("signup"),
@@ -82,4 +82,5 @@ public class User {
             like.setUser(this);
         }
     }
+
 }

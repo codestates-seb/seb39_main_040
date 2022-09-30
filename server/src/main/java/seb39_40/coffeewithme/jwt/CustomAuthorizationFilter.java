@@ -3,7 +3,9 @@ package seb39_40.coffeewithme.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.MultipartStream;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,16 +45,19 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             else
                 token = request.getHeader("AccessToken");
 
-            if(token==null || !token.startsWith(TYPE)){
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding("utf-8");
-                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_BAD_REQUEST);
-                new ObjectMapper().writeValue(response.getWriter(), errorResponse);
-            }
-            String jwt = jwtProvider.substringToken(token);
+            try{
+                /*
+              if(token==null || !token.startsWith(TYPE)){
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    response.setCharacterEncoding("utf-8");
+                    ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_BAD_REQUEST);
+                    new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+                }
+                */
 
-            try {
+                String jwt = jwtProvider.substringToken(token);
+
                 Claims claims = jwtProvider.parseToken(jwt);
                 String email = jwtProvider.getEmailToClaims(claims);
 
@@ -87,6 +92,18 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 response.setContentType(APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
                 ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_EXPIRATION);
+                new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+            }catch(NullPointerException e){
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("utf-8");
+                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_BAD_REQUEST);
+                new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+            }catch(JwtException e){
+                response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("utf-8");
+                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_PRECONDITION_FAILED);
                 new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             }
         }

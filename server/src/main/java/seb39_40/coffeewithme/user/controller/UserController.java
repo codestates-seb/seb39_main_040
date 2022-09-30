@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
 import seb39_40.coffeewithme.jwt.CustomUserDetails;
+import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.dto.UserRequestDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
@@ -97,6 +98,13 @@ public class UserController {
     public ResponseEntity deleteLike(@AuthenticationPrincipal CustomUserDetails userDetails,
                                      @PathVariable("cafeId") Long cafeId){
         likeService.deleteLike(userDetails.getUser().getId(), cafeId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity getUserReviews(@AuthenticationPrincipal CustomUserDetails userDetails){
+        System.out.println("** Get User Review : "+userDetails.getUsername());
+        List<Review> reviewList = userService.getReview(userDetails.getUser().getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
