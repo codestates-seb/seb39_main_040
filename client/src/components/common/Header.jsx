@@ -16,7 +16,8 @@ const HeaderWrapper = styled.header`
   align-items: center;
   height: 75px;
   width: 100%;
-  border-bottom: 1px solid var(--gray-030);
+  //border-bottom: 1px solid var(--gray-030);
+  box-shadow: 4px 4px 10px var(--gray-030);
   padding: 10px 40px;
   background-color: var(--white-010);
 `;
@@ -136,7 +137,7 @@ const Header = () => {
         window.sessionStorage.clear();
         navigate("/");
       })
-      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...
+      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...하나..
   };
 
   return (
