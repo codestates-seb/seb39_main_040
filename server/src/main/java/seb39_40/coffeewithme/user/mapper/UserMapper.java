@@ -2,38 +2,49 @@ package seb39_40.coffeewithme.user.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.repository.query.FluentQuery;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.dto.CafeResponseDto;
+import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.image.repository.ImageRepository;
+import seb39_40.coffeewithme.image.service.ImageService;
+import seb39_40.coffeewithme.review.domain.Review;
+import seb39_40.coffeewithme.review.repository.ReviewRepository;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.dto.UserRequestDto;
 import seb39_40.coffeewithme.user.dto.UserResponseDto;
+import seb39_40.coffeewithme.user.dto.UserReviewResponseDto;
 import seb39_40.coffeewithme.user.dto.WishlistResponse;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
-    @Mapping(target = "name", source = "userName")
-    UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
-    User userJoinToUser(UserRequestDto.UserJoin userJoin);
-    UserResponseDto.UserInfo userToUserInfo(User user);
+@Mapper(componentModel = "spring", uses = CafeMapper.class)
+public abstract class UserMapper {
 
-    default WishlistResponse cafesToWishlistDto(List<CafeResponseDto.SimpleCafeInfo> cafes){
+    @Autowired
+    protected ImageService imageService;
+
+    @Mapping(target = "name", source = "userName")
+    public abstract UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
+    public abstract User userJoinToUser(UserRequestDto.UserJoin userJoin);
+    public abstract UserResponseDto.UserInfo userToUserInfo(User user);
+    public WishlistResponse cafesToWishlistDto(List<CafeResponseDto.SimpleCafeInfo> cafes){
         return new WishlistResponse(cafes);
     }
-    /*
-    default WishlistResponse cafesToWishlistDto(List<Cafe> cafes){
-        List<CafeResponseDto.SimpleCafeInfo> simpleCafeInfos
-                =cafes.stream().map(cafe -> {
-                    CafeResponseDto.SimpleCafeInfo simpleCafe=new CafeResponseDto.SimpleCafeInfo();
-                    simpleCafe.setCafeTags(cafe.getCafeTags());
+    @Mapping(target = "reviewImg", expression = "java(imageService.findById(review.getReviewImg()).getPath())")
+    public abstract UserReviewResponseDto.ReviewSimpleDto reviewToUserReviewSimpleDto(Review review);
 
-                    simpleCafe.setMainImg(cafe.getMainImg());
+    public abstract List<UserReviewResponseDto.ReviewSimpleDto> reviewsToUserReviewListDto(List<Review> reviews);
 
-        }).collect(Collectors.toList());
-        return new WishlistResponse(simpleCafeInfos);
-    };
-     */
+    public UserReviewResponseDto reviewsToUserReviewResponseDto(List<Review> reviews){
+        return new UserReviewResponseDto(reviewsToUserReviewListDto(reviews));
+    }
+
 }
+

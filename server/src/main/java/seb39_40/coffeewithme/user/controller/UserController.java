@@ -12,6 +12,7 @@ import seb39_40.coffeewithme.jwt.CustomUserDetails;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.dto.UserRequestDto;
+import seb39_40.coffeewithme.user.dto.UserReviewResponseDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
 import seb39_40.coffeewithme.user.service.LikeService;
 import seb39_40.coffeewithme.user.service.UserService;
@@ -91,7 +92,7 @@ public class UserController {
     @GetMapping("/wishlist")
     public ResponseEntity getLikes(@AuthenticationPrincipal CustomUserDetails userDetails){
         List<Cafe> cafes = likeService.getLike(userDetails.getUser().getId());
-        return new ResponseEntity<>(cafeMapper.cafeListToCafeSimpleDto(cafes),HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.cafesToWishlistDto(cafeMapper.cafeListToCafeSimpleDto(cafes)),HttpStatus.OK);
     }
 
     @DeleteMapping("/wishlist/{cafeId}")
@@ -105,6 +106,6 @@ public class UserController {
     public ResponseEntity getUserReviews(@AuthenticationPrincipal CustomUserDetails userDetails){
         System.out.println("** Get User Review : "+userDetails.getUsername());
         List<Review> reviewList = userService.getReview(userDetails.getUser().getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.reviewsToUserReviewResponseDto(reviewList),HttpStatus.OK);
     }
 }
