@@ -10,6 +10,7 @@ import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
@@ -18,6 +19,7 @@ import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.service.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +38,15 @@ public class ReviewService {
         review.setCafe(cafe);
         review.setUser(userService.findByEmail(email));
         review.setReviewTags(tagService.createReviewTag(review, tags));
+        review.getReviewImg().saveImg();
         return reviewRepository.save(review).getId();
     }
 
     @Transactional
     public Long update(String email, Long id, Review updateReview){
         Review review = findById(id);
+        if (!Objects.equals(review.getReviewImg().getId(), updateReview.getReviewImg().getId()))
+            review.getReviewImg().deleteImg();
         checkUser(email, review.getUser().getEmail());
         review.update(updateReview);
         return reviewRepository.save(review).getId();
@@ -50,8 +55,9 @@ public class ReviewService {
     @Transactional
     public void delete(String email, Long cafeId, Long reviewId){
         Review review = findById(reviewId);
-        checkUser(email, review.getUser().getEmail());
+        review.getReviewImg().deleteImg();
 
+        checkUser(email, review.getUser().getEmail());
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(-1);
         cafeService.save(cafe);

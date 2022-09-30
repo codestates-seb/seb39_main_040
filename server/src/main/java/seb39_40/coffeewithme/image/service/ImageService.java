@@ -13,11 +13,16 @@ public class ImageService {
     private final ImageRepository imageRepository;
 
     public Long save(String url){
-        Image image = imageRepository.save(Image.builder().path(url).build());
+        Image image = imageRepository.save(Image.builder()
+                .path(url).status(Image.ImgStatus.TEMP).build());
         return image.getId();
     }
 
     public Image findById(Long id){
         return imageRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
+    }
+
+    public void delete(Image img) {
+        imageRepository.delete(img);
     }
 }
