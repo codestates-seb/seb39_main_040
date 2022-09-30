@@ -26,10 +26,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = CafeMapper.class)
 public abstract class UserMapper {
-
-    @Autowired
-    protected ImageService imageService;
-
     @Mapping(target = "name", source = "userName")
     public abstract UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
     public abstract User userJoinToUser(UserRequestDto.UserJoin userJoin);
@@ -37,7 +33,7 @@ public abstract class UserMapper {
     public WishlistResponse cafesToWishlistDto(List<CafeResponseDto.SimpleCafeInfo> cafes){
         return new WishlistResponse(cafes);
     }
-    @Mapping(target = "reviewImg", expression = "java(imageService.findById(review.getReviewImg()).getPath())")
+    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getPath())")
     public abstract UserReviewResponseDto.ReviewSimpleDto reviewToUserReviewSimpleDto(Review review);
 
     public abstract List<UserReviewResponseDto.ReviewSimpleDto> reviewsToUserReviewListDto(List<Review> reviews);
