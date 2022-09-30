@@ -14,5 +14,4 @@ import java.util.List;
 public class WishlistResponse {
 
     List<CafeResponseDto.SimpleCafeInfo> wishlist;
-    //PageInfo pageInfo;
 }

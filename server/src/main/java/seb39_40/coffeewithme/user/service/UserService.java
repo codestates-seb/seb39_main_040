@@ -80,8 +80,7 @@ public class UserService {
         if(reviewRepository.countByUserId(userId)==0)
             return reviewList;
         reviewList = reviewRepository.findAllByUserId(userId);
-
-        return null;
+        return reviewList;
     }
 
     public void verifyUser(String email){

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 public class UserResponseDto {
     @Data @NoArgsConstructor
     public static class SimpleUserInfo{

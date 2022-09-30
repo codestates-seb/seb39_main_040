@@ -1,5 +1,6 @@
 package seb39_40.coffeewithme.cafe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import seb39_40.coffeewithme.review.domain.Review;
 
