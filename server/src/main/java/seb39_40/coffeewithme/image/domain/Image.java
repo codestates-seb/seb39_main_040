@@ -9,7 +9,7 @@ import seb39_40.coffeewithme.common.domain.BasicEntity;
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class Image extends BasicEntity {
     @Id @Column(name = "IMAGE_ID")
