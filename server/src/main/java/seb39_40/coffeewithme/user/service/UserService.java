@@ -1,14 +1,10 @@
 package seb39_40.coffeewithme.user.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
-import seb39_40.coffeewithme.jwt.JwtProvider;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 
@@ -16,12 +12,11 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-   // private final JwtProvider jwtProvider;
 
     public void createUser(User user) {
         verifyEmail(user.getEmail());
@@ -75,30 +70,20 @@ public class UserService {
         userRepository.save(user);
     }
 
-    /*
-    public String reissuanceTokens(String rt,String email){
-        String token = jwtProvider.substringToken(rt);
-        Jws<Claims> claims = jwtProvider.parseToken(token);
-        if(!jwtProvider.validationTheSameToken(email,token))
-            return "false";
-    }
-    */
-
     public void verifyUser(String email){
         User user=userRepository.findByEmail(email).get();
         if(user.getStatus().equals(User.UserStatus.USER_WITHDRAW))
             throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
     }
-    
-    public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-    }
 
-    //이메일 중복 검증 - 예외 처리 되면 반환 값 없애기! boolean -> void 로
     private void verifyEmail(String email){
         Optional<User> user=userRepository.findByEmail(email);
         if(user.isPresent())
             throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     public User findByEmail(String username) {

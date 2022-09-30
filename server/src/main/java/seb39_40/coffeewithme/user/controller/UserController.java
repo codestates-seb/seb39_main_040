@@ -56,13 +56,12 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-/*
+
     @PatchMapping("/token")
-    public ResponseEntity reissuanceToken(HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails userDetails){
-        userService.reissuanceTokens(request.getHeader("RefreshToken"),userDetails.getUsername());
+    public ResponseEntity reissuanceToken(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
- */
+
 
     @GetMapping("/information")
     public ResponseEntity getUserInformation(@AuthenticationPrincipal CustomUserDetails userDetails){
@@ -78,7 +77,7 @@ public class UserController {
         ObjectMapper om = new ObjectMapper();
         User user = om.readValue(request.getInputStream(), User.class);
         User result = userService.updateInformation(userDetails.getUsername(), user);
-        return new ResponseEntity<>(userMapper.userToUserInfo(user),HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.userToUserInfo(result),HttpStatus.OK);
     }
 
     @PostMapping("/wishlist/{cafeId}")
