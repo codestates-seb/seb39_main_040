@@ -32,7 +32,6 @@ public class Cafe {
     @Column(nullable = false, name="cafe_bdg")
     private Boolean badge = false;
 
-    // am/pm 00시 00분 형태 validation 추후 추가
     @Column(nullable = false, name = "open_tm")
     private String openTime = "00:00";
 
