@@ -37,8 +37,8 @@ public class CafeService {
     public String formatSortType(String target){
         Map<String, String> map = new HashMap<>();
         map.put("newest", "cafe_id");
-        map.put("likes", "like_count");
-        map.put("reviews", "review_count");
+        map.put("likes", "like_cnt");
+        map.put("reviews", "rvw_cnt");
         map.put("newestA", "id");
         map.put("likesA", "likeCount");
         map.put("reviewsA", "reviewCount");

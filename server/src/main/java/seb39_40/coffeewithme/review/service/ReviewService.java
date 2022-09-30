@@ -10,6 +10,7 @@ import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
@@ -27,6 +28,7 @@ public class ReviewService {
     private final UserService userService;
     private final TagService tagService;
 
+    @Transactional
     public Long save(String email, Long cafeId, Review review, List<String> tags){
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(1);
@@ -45,6 +47,7 @@ public class ReviewService {
         return reviewRepository.save(review).getId();
     }
 
+    @Transactional
     public void delete(String email, Long cafeId, Long reviewId){
         Review review = findById(reviewId);
         checkUser(email, review.getUser().getEmail());
@@ -55,19 +58,23 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+    @Transactional(readOnly = true)
     public void checkUser(String writer, String user){
         assert writer.equals(user) : ExceptionCode.BAD_REQUEST;
     }
 
+    @Transactional(readOnly = true)
     public Review findById(Long id){
         return reviewRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public Page<Review> findByCafeId(Long cafeId, Integer page) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
         return reviewRepository.findByCafeId(cafeId, pageRequest);
     }
 
+    @Transactional(readOnly = true)
     public Page<Review> findByUserId(Long userId, Integer page) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
         return reviewRepository.findByUserId(userId, pageRequest);

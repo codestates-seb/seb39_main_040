@@ -16,8 +16,9 @@ public abstract class ReviewMapper {
     @Autowired
     protected ImageService imageService;
 
+    @Mapping(target = "reviewImg", expression = "java(imageService.findById(postDto.getReviewImg()))")
     public abstract Review reviewDtoToReview(ReviewRequestDto postDto);
-    @Mapping(target = "reviewImg", expression = "java(imageService.findById(review.getReviewImg()).getPath())")
+    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getPath())")
     public abstract ReviewResponseDto reviewToReviewDto(Review review);
     public abstract List<ReviewResponseDto> reviewsToReviewDtos(List<Review> reviews);
 }

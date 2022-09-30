@@ -9,6 +9,8 @@ import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
 import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -17,7 +19,7 @@ public class CafeAdminController {
     private final CafeMapper cafeMapper;
 
     @PostMapping("/cafe")
-    public ResponseEntity postCafe(@RequestBody CafeRequestDto.Post postDto){
+    public ResponseEntity postCafe(@RequestBody @Valid CafeRequestDto.Post postDto){
         Long id = cafeService.save(cafeMapper.cafeDtoToCafe(postDto));
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }

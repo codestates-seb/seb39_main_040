@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity @Getter @Setter
+@Entity @Getter
 @NoArgsConstructor
 public class Cafe {
     @Id @Column(name = "CAFE_ID")
@@ -32,7 +32,6 @@ public class Cafe {
     @Column(nullable = false, name="cafe_bdg")
     private Boolean badge = false;
 
-    // am/pm 00시 00분 형태 validation 추후 추가
     @Column(nullable = false, name = "open_tm")
     private String openTime = "00:00";
 
@@ -53,8 +52,22 @@ public class Cafe {
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
+    @Setter
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<CafeTag> cafeTags = new ArrayList<>();
+
+    @Builder
+    public Cafe(String name, String address, String phone, String homepage, String description, String openTime, String closeTime, Long mainImg, Long menuImg) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.homepage = homepage;
+        this.description = description;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.mainImg = mainImg;
+        this.menuImg = menuImg;
+    }
 
     public void addReviews(Review review) {
         this.reviews.add(review);
@@ -74,5 +87,9 @@ public class Cafe {
 
     public void updateReviewCount(Integer num){
         this.reviewCount += num;
+    }
+
+    public void updateBadge(Boolean badge){
+        this.badge = badge;
     }
 }

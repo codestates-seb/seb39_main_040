@@ -18,6 +18,7 @@ import seb39_40.coffeewithme.review.service.ReviewService;
 import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -28,7 +29,7 @@ public class ReviewController {
     private final ReviewMapper reviewMapper;
 
     @PostMapping("/{cafe_id}/reviews")
-    public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto postDto){
+    public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody @Valid ReviewRequestDto postDto){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long id = reviewService.save(email, cafe_id, reviewMapper.reviewDtoToReview(postDto), postDto.getTags());
         return new ResponseEntity(id, HttpStatus.CREATED);
