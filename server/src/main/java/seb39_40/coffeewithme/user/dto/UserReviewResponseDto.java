@@ -24,7 +24,7 @@ public class UserReviewResponseDto {
     @AllArgsConstructor
     public static class ReviewSimpleDto{
         Long id;
-        CafeResponseDto.SimpleCafeInfo cafe;
+        ReviewSimpleCafeDto cafe;
         String description;
         Integer score;
         String reviewImg;
@@ -33,5 +33,12 @@ public class UserReviewResponseDto {
         public void setReviewTags(List<ReviewTag> reviewTags){
             this.tags = reviewTags.stream().map(reviewTag -> reviewTag.getTag().getName()).collect(Collectors.toList());
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ReviewSimpleCafeDto{
+        Long id;
+        String name;
     }
 }

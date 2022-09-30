@@ -15,7 +15,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     //액세스 토큰 만료 시간
-    private int ACCESS_EXPIRATION= 1000 * 60 * 3;
+    private int ACCESS_EXPIRATION= 1000 * 60 * 10;
     //리프레시 토큰 만료 시간
     private int REFRESH_EXPIRATION= 1000 * 60 * 120;
     //secret키 관련 정보
