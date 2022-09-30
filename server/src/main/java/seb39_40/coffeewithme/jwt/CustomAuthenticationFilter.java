@@ -9,18 +9,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import seb39_40.coffeewithme.user.domain.User;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    // private final CustomAuthenticationManager authenticationManager
     private final AuthenticationManager authenticationManager;
-   // private final JwtProvider jwtProvider;
-   // private final String TYPE="Bearer ";
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {

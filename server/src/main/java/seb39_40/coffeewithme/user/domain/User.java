@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
@@ -37,11 +38,10 @@ public class User {
     //테스트용
     @Column
     private String refresh;
-    /*
-    @OneToOne
-    @JoinColumn(name ="user_id")
-    private Image profilePhoto; //외부에서 오는 키임둥, 객체를 받아와야할까용
-    */
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="prf_pt")
+    private Image profilePhoto;
 
     @Transient
     private List<Wishlist> likes=new ArrayList<>();

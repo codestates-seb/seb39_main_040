@@ -1,6 +1,5 @@
 package seb39_40.coffeewithme.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +11,10 @@ import seb39_40.coffeewithme.jwt.CustomUserDetails;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.dto.UserRequestDto;
-import seb39_40.coffeewithme.user.dto.UserReviewResponseDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
 import seb39_40.coffeewithme.user.service.LikeService;
 import seb39_40.coffeewithme.user.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -74,10 +71,12 @@ public class UserController {
 
     @PatchMapping("/information")
     public ResponseEntity updateUserInformation(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                HttpServletRequest request) throws IOException {
-        System.out.println("** Update User Information : "+userDetails.getUsername());
-        ObjectMapper om = new ObjectMapper();
-        User user = om.readValue(request.getInputStream(), User.class);
+                                                @RequestBody UserRequestDto.UserUpdate userRequestDto) throws IOException {
+                                                //HttpServletRequest request) throws IOException {
+        //System.out.println("** Update User Information : "+userDetails.getUsername());
+        //ObjectMapper om = new ObjectMapper();
+        //User user = om.readValue(request.getInputStream(), User.class);
+        User user = userMapper.userUpdateDtoToUser(userRequestDto);
         User result = userService.updateInformation(userDetails.getUsername(), user);
         return new ResponseEntity<>(userMapper.userToUserInfo(result),HttpStatus.OK);
     }
