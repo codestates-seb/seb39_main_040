@@ -5,7 +5,6 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import NewTagForm from "./ReviewTag";
 import StarRating from "./ReviewStarRating";
-import ReviewImageUpload from "./ReviewImageUpload";
 
 const ReviewForm = () => {
   const { id } = useParams();
@@ -49,6 +48,7 @@ const ReviewForm = () => {
 
   const onChangeTagHandler = (newTags) => {
     setTags(newTags);
+    // debugger;
   };
   console.log(tags);
 
@@ -91,16 +91,6 @@ const ReviewForm = () => {
           <span>카페명</span>
           <span>Mood</span>
         </TitleContainer>
-        <ImgContainer>
-          <ImgTitle>
-            <span>사진</span>
-          </ImgTitle>
-          <p>카페에 대한 새로운 사진을 첨부해주세요. (최대 한장)</p>
-          {/* <ReviewImageUpload onChange={onChangeImgHandler} /> */}
-          {/* <form encType="multipart/form-data"> */}
-
-          {/* </form> */}
-        </ImgContainer>
         <TagContainer>
           <TagTitle>
             <span>태그</span>
@@ -131,10 +121,16 @@ const ReviewForm = () => {
           <Button>리뷰등록</Button>
         </BtnContainer>
       </FormContainer>
-      <form onSubmit={onUploadImg}>
-        <input type="file" accept="image/*" onChange={uploadImg} />
-        <button type="submit">사진 첨부하기</button>
-      </form>
+      <ImgContainer>
+        <form onSubmit={onUploadImg}>
+          <ImgTitle>
+            <span>사진</span>
+          </ImgTitle>
+          <p>카페에 대한 새로운 사진을 첨부해주세요. (최대 한장)</p>
+          <input type="file" accept="image/*" onChange={uploadImg} />
+          <button type="submit">사진 첨부하기</button>
+        </form>
+      </ImgContainer>
     </MainContainer>
   );
 };
@@ -143,18 +139,19 @@ export default ReviewForm;
 
 const MainContainer = styled.div`
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   flex-direction: column;
   width: 1360px;
-  height: 100%;
+  height: 1360px;
   margin-bottom: 150px;
   border-radius: 4px;
   border: 1px solid var(--gray-030);
-  padding: 70px 20px;
+  padding: 70px 80px;
 `;
 
 const FormContainer = styled.form`
   width: 90%;
+  height: 600px;
 `;
 
 const TitleContainer = styled.div`
@@ -180,12 +177,16 @@ const TitleContainer = styled.div`
 const ImgContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 40px 0 0 10px;
+  width: 600px;
+  margin-top: 30px;
   p {
     width: 600px;
     margin-top: 20px;
     color: var(--gray-020);
     font-size: 19px;
+  }
+  form {
+    width: 600px;
   }
 `;
 
@@ -311,5 +312,5 @@ const BtnContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 1100px;
-  margin: 40px 0 0 560px;
+  margin: 450px 0 0 560px;
 `;
