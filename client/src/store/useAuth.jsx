@@ -1,6 +1,6 @@
 import axios from "axios";
 import create from "zustand";
-import { persist } from "zustand/middleware";
+import instance from "../api/core";
 
 const useAuthStore = create((set) => ({
   isLogin: false,
@@ -10,14 +10,21 @@ const useAuthStore = create((set) => ({
 
   userInfo: [],
   setUserInfo: async () => {
-    const response = await axios
-      .get(`${process.env.REACT_APP_API}/users/information`, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
-      })
-      .then((res) => {
-        set({ userInfo: res.data });
-      })
-      .catch((err) => console.log(err));
+    // let token = sessionStorage.getItem("access_token") || "";
+    // axios.defaults.headers.common["AccessToken"] = `${token}`;
+    // const response = await axios
+    //   .get(`${process.env.REACT_APP_API}/users/information`)
+    //   .then((res) => {
+    //     set({ userInfo: res.data });
+    //   })
+    //   .catch((err) => console.log(err));
+    // const response = await core
+    //   .get(`${process.env.REACT_APP_API}/users/information`)
+    //   .then((res) => {
+    //     set({ userInfo: res.data });
+    //   });
+    const response = await instance.get(`/users/information`);
+    set({ userInfo: response });
   },
 }));
 

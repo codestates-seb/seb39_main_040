@@ -129,14 +129,10 @@ const UserInfoEditPage = () => {
     e.preventDefault();
     const newInfo = { userName: userName, mobile: mobile };
     axios
-      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
-      })
+      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
       .then(() => {
         console.log("정보수정완료");
         e.preventDefault();
-        if (sessionStorage.getItem("access_token") === true) {
-        }
         navigate("/userinfo");
       })
       .catch((err) => console.log(err));
