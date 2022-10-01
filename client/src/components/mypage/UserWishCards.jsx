@@ -43,17 +43,20 @@ const UserWishCards = () => {
   const [wishInfos, setWishInfos] = useState([]);
 
   useEffect(() => {
+    let token = localStorage.getItem("access_token") || "";
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
     axios
-      .get(`${process.env.REACT_APP_API}/users/wishlist`, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
+      .get(`${process.env.REACT_APP_API}/users/wishlist`)
+      .then((res) => {
+        console.log(res.data.wishlist);
+        setWishInfos(res.data.wishlist);
       })
-      .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   return (
     <WishCardsWrapper>
-      {/* {wishInfos.length === 0 ? (
+      {wishInfos.length === 0 ? (
         <MessageBox>
           <div>찜한 카페가 없습니다!</div>
           <a href="/">카페구경하러 가기</a>
@@ -63,20 +66,12 @@ const UserWishCards = () => {
           <UserWishCard
             key={el.id}
             id={el.id}
-            title={el.name}
-            description={el.description}
-            img={el.mainImgUrl}
+            name={el.name}
+            tags={el.tags}
+            img={el.main_img}
           />
         ))
-      )} */}
-      <UserWishCard />
-      <UserWishCard />
-      <UserWishCard />
-      <UserWishCard />
-      <UserWishCard />
-      <UserWishCard />
-      <UserWishCard />
-      <UserWishCard />
+      )}
     </WishCardsWrapper>
   );
 };
