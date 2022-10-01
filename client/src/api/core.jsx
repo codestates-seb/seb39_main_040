@@ -1,63 +1,20 @@
-// import axios from "axios";
-
-// const instance = axios.create({
-//   baseURL: `${process.env.REACT_APP_API}`,
-// });
-
-// axios.interceptors.request.use(
-//   // function(config) {
-//   //     config.headers["Authorization"] = ${}
-//   // }
-//   (response) => {
-//     return response;
-//   },
-
-//   async (error) => {
-//     const {
-//       config,
-//       response: { status },
-//     } = error;
-//     if (status === 401) {
-//       if (error.response.data.message === "Unauthorized") {
-//         const originalRequest = config;
-//         const refreshToken = localStorage.getItem("refresh_token");
-//         // token 재발급 요청
-//         const { data } = await axios.post(`${baseURL}/users/token`, {
-//           refreshToken,
-//         });
-//         // 새로운 access token 저장
-//         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-//           data;
-//         localStorage.multiSet([
-//           ["accessToken", newAccessToken],
-//           ["refreshToken", newRefreshToken],
-//         ]);
-//         axios.defaults.headers.common.AccessToken = `${newAccessToken}`;
-//         originalRequest.headers.common.AccessToken = `${newAccessToken}`;
-
-//         // 만료된 액세스 토큰 대신 새로 발급 받은 액세스 토큰으로 재요청
-//         return axios(originalRequest);
-//       }
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
-// export default instance;
-
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: "",
   // baseURL: "http://localhost:3001/",
   // baseURL: process.env.REACT_APP_DB_HOST,
 });
 
 instance.interceptors.request.use(
   async (config) => {
-    let token = sessionStorage.getItem("access_token") || "";
+    let token = localStorage.getItem("access_token") || "";
+    const refreshtoken = localStorage.getItem("refresh_token");
+    // config.headers["Content-Type"] = "application/json; charset=utf-8";
     config.headers["AccessToken"] = `${token}`; //여기는 accessToken
+    // axios.defaults.withCredentials = true;
     axios.defaults.headers.common["AccessToken"] = `${token}`;
+    // axios.defaults.headers.common["RefreshToken"] = `${refreshtoken}`;
     return config;
   },
   (error) => {
@@ -71,30 +28,59 @@ instance.interceptors.response.use(
     return res;
   },
   (error) => {
-    const { config, response: status } = error;
-    if (status === 401) {
-      if (error.response.data.message === "TokenExpiredError") {
-        const originalRequest = config;
-        const refreshToken = localStorage.getItem("refresh_Token");
-        // token refresh 요청
-        const { data } = axios.patch(
-          `${process.env.REACT_APP_API}/users/token`, // token refresh api
-          {
-            refreshToken,
-          }
-        );
-        // 새로운 토큰 저장
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-          data;
-        localStorage.multiSet([
-          ["accessToken", newAccessToken],
-          ["refreshToken", newRefreshToken],
-        ]);
-        axios.defaults.headers.common["AccessToken"] = `${newAccessToken}`;
-        originalRequest.headers["AccessToken"] = `${newAccessToken}`;
-        // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
-        return axios(originalRequest);
+    // const { config, response: status } = error;
+    console.log(error.response.status);
+    if (error.response.status === 401) {
+      console.log("토큰 재발급");
+      const originalRequest = error.config;
+      const refreshtoken = localStorage.getItem("refresh_token");
+      //const accesstoken = localStorage.getItem("access_token");
+      console.log(refreshtoken);
+      if (refreshtoken) {
+        axios.defaults.headers.common["RefreshToken"] = `${refreshtoken}`;
+        axios
+          .patch(`${process.env.REACT_APP_API}/users/token`, {
+            headers: { RefreshToken: refreshtoken },
+          })
+          .then((res) => {
+            console.log(res.headers);
+            localStorage.setItem("access_token", res.headers.accesstoken);
+            localStorage.setItem("refresh_token", res.headers.refreshtoken);
+            // const newRefreshToken = localStorage.getItem("refresh_token");
+            const newAccessToken = localStorage.getItem("access_token");
+            originalRequest.headers["AccessToken"] = `${newAccessToken}`;
+            axios.defaults.headers.common["AccessToken"] = `${newAccessToken}`;
+            window.location.reload();
+            // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+            return axios(originalRequest);
+          })
+          .catch((err) => {
+            // localStorage.clear();
+            window.alert("토큰 재발급 실패");
+            console.log(err);
+            // window.location.href = "/";
+
+            return false;
+          });
       }
+      // token refresh 요청
+      // const data = axios.patch(
+      //   `${process.env.REACT_APP_API}/users/token`, // token refresh api
+      //   { headers: { RefreshToken: refreshtoken } }
+      // );
+      // console.log(data);
+
+      // 새로운 토큰 저장
+      // const { accesstoken: newAccessToken, refreshtoken: newRefreshToken } =
+      //   data;
+      // localStorage.multiSet([
+      //   ["accessToken", newAccessToken],
+      //   ["refreshToken", newRefreshToken],
+      // ]);
+      // axios.defaults.headers.common.Authorization = `${newAccessToken}`;
+      // originalRequest.headers.Authorization = `${newAccessToken}`;
+      // // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+      // return axios(originalRequest);
     }
     return Promise.reject(error);
   }

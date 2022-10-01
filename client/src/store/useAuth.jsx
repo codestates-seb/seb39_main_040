@@ -23,7 +23,9 @@ const useAuthStore = create((set) => ({
     //   .then((res) => {
     //     set({ userInfo: res.data });
     //   });
-    const response = await instance.get(`/users/information`);
+    const response = await instance.get(
+      `${process.env.REACT_APP_API}/users/information`
+    );
     set({ userInfo: response });
   },
 }));

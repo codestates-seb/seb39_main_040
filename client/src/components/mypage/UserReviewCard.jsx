@@ -4,6 +4,74 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const UserReviewCard = ({
+  review_id,
+  cafe_id,
+  cafe_name,
+  content,
+  star,
+  review_img,
+  tags,
+}) => {
+  const navigate = useNavigate();
+
+  const reviewDelete = (e) => {
+    let token = localStorage.getItem("access_token") || "";
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
+    axios
+      .delete(
+        `${process.env.REACT_APP_API}/cafe/${cafe_id}/reviews/${review_id}`
+      )
+      .then((res) => {
+        window.alert("리뷰가 삭제되었습니다.");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        window.alert("리뷰 삭제를 실패했습니다.");
+      });
+  };
+
+  return (
+    <ReviewCardWrapper>
+      <ImgBox>
+        <img src={`${review_img}`} alt="리뷰이미지" />
+      </ImgBox>
+      <ContentBox>
+        <h2>{cafe_name}</h2>
+        <p>{content}</p>
+        <TagBox>
+          <Tag className="tag-1">#{tags[0]}</Tag>
+          <Tag className="tag-2">#{tags[1]}</Tag>
+        </TagBox>
+        <StarBox>
+          <Box sx={{ "& > legend": { mt: 2 } }}>
+            <Typography component="legend"></Typography>
+            <Rating
+              className="star-icon"
+              name="read-only"
+              value={star}
+              readOnly
+            />
+          </Box>
+        </StarBox>
+      </ContentBox>
+      <ButtonBox>
+        <button
+          onClick={() => navigate(`/cafe/${cafe_id}/reviews/${review_id}`)}
+        >
+          수정
+        </button>
+        <button onClick={reviewDelete}>삭제</button>
+      </ButtonBox>
+    </ReviewCardWrapper>
+  );
+};
+
+export default UserReviewCard;
 
 const ReviewCardWrapper = styled.div`
   display: flex;
@@ -29,6 +97,7 @@ const ImgBox = styled.div`
 const ContentBox = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   padding: 20px;
   justify-content: space-around;
 
@@ -40,6 +109,10 @@ const ContentBox = styled.div`
 
   p {
     font-size: 1rem;
+    line-height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 const TagBox = styled.div`
@@ -60,46 +133,11 @@ const StarBox = styled.div`
 
 const ButtonBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  width: 19%;
   align-items: flex-end;
-  padding: 20px;
-  margin-left: 150px;
+  /* margin-left: 20px; */
+  padding: 30px;
   button:hover {
     color: var(--green-010);
   }
 `;
-
-const UserReviewCard = () => {
-  return (
-    <ReviewCardWrapper>
-      <ImgBox>
-        <img
-          src="https://imgorg.catch.co.kr/job/catchapply/main/catchcafe/CAFE_P-6-1.jpg"
-          alt="리뷰이미지"
-        />
-      </ImgBox>
-      <ContentBox>
-        <h2>카페이름</h2>
-        <p>
-          아인슈페너 맛집이에요! 분위기도 좋아요! 다음에도 또 방문하겠습니다~
-        </p>
-        <TagBox>
-          <Tag className="tag-1">#조용한</Tag>
-          <Tag className="tag-2">#커피가맛있는</Tag>
-        </TagBox>
-        <StarBox>
-          <Box sx={{ "& > legend": { mt: 2 } }}>
-            <Typography component="legend"></Typography>
-            <Rating className="star-icon" name="read-only" value={4} readOnly />
-          </Box>
-        </StarBox>
-      </ContentBox>
-      <ButtonBox>
-        <button>수정</button>
-        <button>삭제</button>
-      </ButtonBox>
-    </ReviewCardWrapper>
-  );
-};
-
-export default UserReviewCard;

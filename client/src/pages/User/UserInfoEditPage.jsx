@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import useAuthStore from "../../store/useAuth";
-import useLoginStore from "../../store/useLoginStore";
+import instance from "../../api/core";
+import { HiPhotograph } from "react-icons/hi";
 
 const EditWrapper = styled.div`
   display: flex;
@@ -22,6 +23,11 @@ const UserImgUpdate = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .icon {
+    //background-color: var(--gray-020);
+    width: 70%;
+    height: 70%;
+  }
 `;
 
 const Img = styled.img`
@@ -37,13 +43,31 @@ const ImgUpdateButton = styled.div`
   border: none;
   background: none;
   cursor: pointer;
-  > button {
+
+  > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    > input {
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    > input .profile {
+      display: none;
+    }
+  }
+
+  > input {
     margin-top: 10px;
     font-weight: 600;
     font-size: 1.2rem;
   }
-  > input.profile {
-    display: none;
+  form > input.profile {
+    border: 1px solid red;
   }
 `;
 
@@ -99,18 +123,44 @@ const UserInfoEditPage = () => {
   const [imgSrc, setImgSrc] = useState("");
   const [userName, setUserName] = useState("");
   const [mobile, setMobile] = useState("");
-  const { userInfo, setUserInfo } = useAuthStore();
-  const { isLogin, setIsLogin } = useLoginStore();
+  const [img, setImg] = useState("");
+  const [imgInfo, setImgInfo] = useState(null);
+  const { userInfo } = useAuthStore();
 
   const imgInput = useRef();
 
   const navigate = useNavigate();
-  const onSubmitImg = (e) => {
+
+  const onUploadImg = (e) => {
     e.preventDefault();
-    imgInput.current.click();
+    const formData = new FormData();
+    formData.append("images", imgInfo);
+
+    axios
+      .post(`${process.env.REACT_APP_API}/images/upload`, formData, {
+        headers: {
+          "Content-type": "multipart/form-data",
+          AccessToken: localStorage.getItem("access_token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setImg(res.data.id);
+        alert("사진추가 완료");
+        console.log("사진추가완료");
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
-  const onImgChange = (fileBlob) => {
+  const uploadImg = (e) => {
+    e.preventDefault();
+    setImgInfo(e.target.files[0]);
+    onImgPreivew(e.target.files[0]);
+  };
+
+  const onImgPreivew = (fileBlob) => {
     const reader = new FileReader();
     reader.readAsDataURL(fileBlob);
     return new Promise((resolve) => {
@@ -127,8 +177,8 @@ const UserInfoEditPage = () => {
 
   const onChangeInfo = (e) => {
     e.preventDefault();
-    const newInfo = { userName: userName, mobile: mobile };
-    axios
+    const newInfo = { userName: userName, mobile: mobile, profilePhoto: img };
+    instance
       .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
       .then(() => {
         console.log("정보수정완료");
@@ -143,16 +193,22 @@ const UserInfoEditPage = () => {
       <Header />
       <EditWrapper>
         <UserImgUpdate>
-          <Img src={imgSrc} alt="이미지확인" />
+          {!imgSrc ? (
+            <HiPhotograph className="icon" />
+          ) : (
+            <Img src={imgSrc} alt="이미지확인" />
+          )}
           <ImgUpdateButton>
-            <button onClick={onSubmitImg}>프로필 사진 선택</button>
-            <input
-              className="profile"
-              type="file"
-              ref={imgInput}
-              accept="image/*"
-              onChange={(e) => onImgChange(e.target.files[0])}
-            />
+            <form onSubmit={onUploadImg}>
+              <input
+                className="profile"
+                type="file"
+                accept="image/*"
+                onChange={uploadImg}
+                ref={imgInput}
+              />
+              <button type="submit">이미지 등록하기</button>
+            </form>
           </ImgUpdateButton>
         </UserImgUpdate>
         <InfoWrapper onSubmit={onChangeInfo}>

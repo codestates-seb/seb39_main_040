@@ -138,7 +138,7 @@ const LoginPage = () => {
       .then((res) => {
         console.log("로그인성공");
         console.log(res.headers);
-        sessionStorage.setItem("access_token", res.headers.accesstoken);
+        localStorage.setItem("access_token", res.headers.accesstoken);
         localStorage.setItem("refresh_token", res.headers.refreshtoken);
         setIsLogin();
         navigate("/");

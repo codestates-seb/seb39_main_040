@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
+import axios from "axios";
 
 const CafeTopSection = styled.div`
   display: flex;
@@ -133,6 +134,24 @@ const CafeMapbox = styled.div`
 `;
 
 const CafePageTopSection = ({ cafeIdInfo }) => {
+  const addWishHandler = () => {
+    let token = localStorage.getItem("access_token") || "";
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
+    axios
+      .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
+        headers: { AccessToken: localStorage.getItem("access_token") },
+      })
+      .then(() => {
+        window.alert("위시리스트 추가완료");
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === 404) {
+          window.alert("이미 찜한 카페입니다.");
+        }
+      });
+  };
+
   return (
     // <Wrapper>
     //   <div className="img-box">
@@ -156,7 +175,7 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
             <TitleBox>
               <p>{cafeIdInfo.name}</p>
               <ToolTip>
-                <button>
+                <button onClick={addWishHandler}>
                   <FontAwesomeIcon className="icon" icon={faHeart} />
                 </button>
                 <span className="tooltip-text">위시리스트 추가하기</span>
