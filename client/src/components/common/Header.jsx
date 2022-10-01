@@ -4,7 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../assets/CoffeeWithMe.svg";
 import useAuthStore from "../../store/useAuth";
+import useLoginStore from "../../store/useLoginStore";
 import React from "react";
+import instance from "../../api/core";
 
 const HeaderWrapper = styled.header`
   z-index: 999;
@@ -15,7 +17,8 @@ const HeaderWrapper = styled.header`
   align-items: center;
   height: 75px;
   width: 100%;
-  border-bottom: 1px solid var(--gray-030);
+  //border-bottom: 1px solid var(--gray-030);
+  box-shadow: 4px 4px 10px var(--gray-030);
   padding: 10px 40px;
   background-color: var(--white-010);
 `;
@@ -117,23 +120,23 @@ const DropItem = styled.li`
 `;
 
 const Header = () => {
-  const { isLogin, setIsLogin } = useAuthStore();
+  // const { isLogin, setIsLogin } = useAuthStore();
+  const { isLogin, setIsLogin } = useLoginStore();
   const [isOpen, setIsOpen] = useState(true);
 
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    axios
-      .post(`${process.env.REACT_APP_API}/users/logout`, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
-      })
+    instance
+      .post(`${process.env.REACT_APP_API}/users/logout`)
       .then((res) => {
         console.log("로그아웃완료");
-        window.localStorage.removeItem("access_token");
-        setIsLogin(!isLogin);
+        setIsLogin();
+        window.localStorage.clear();
+        window.sessionStorage.clear();
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...하나..
   };
 
   return (

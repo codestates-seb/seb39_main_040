@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
+import axios from "axios";
 
 const CafeTopSection = styled.div`
   display: flex;
@@ -133,6 +134,24 @@ const CafeMapbox = styled.div`
 `;
 
 const CafePageTopSection = ({ cafeIdInfo }) => {
+  const addWishHandler = () => {
+    let token = localStorage.getItem("access_token") || "";
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
+    axios
+      .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
+        headers: { AccessToken: localStorage.getItem("access_token") },
+      })
+      .then(() => {
+        window.alert("위시리스트 추가완료");
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === 404) {
+          window.alert("이미 찜한 카페입니다.");
+        }
+      });
+  };
+
   return (
     // <Wrapper>
     //   <div className="img-box">
@@ -149,32 +168,29 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
     <CafeTopSection>
       <CafeTopInfo>
         <ImgBox>
-          <img
-            src="https://wishbeen-seoul.s3.ap-northeast-2.amazonaws.com/plan/1498208096160_17881746_1930702927147954_3202367211201101824_n.jpg"
-            alt="카페사진"
-          />
+          <img src={`${cafeIdInfo.main_img}`} alt="카페사진" />
         </ImgBox>
         <Cafedetail>
           <CafedetailContent>
             <TitleBox>
-              <p>Angle Coffee</p>
+              <p>{cafeIdInfo.name}</p>
               <ToolTip>
-                <button>
+                <button onClick={addWishHandler}>
                   <FontAwesomeIcon className="icon" icon={faHeart} />
                 </button>
                 <span className="tooltip-text">위시리스트 추가하기</span>
               </ToolTip>
             </TitleBox>
             <Tagbox>
-              <Tag>#조용한</Tag>
+              <Tag>#{cafeIdInfo.tags}</Tag>
             </Tagbox>
             <CafeInfoBox>
               <div>
-                <p>조용하고 맛있는 카페</p>
+                <p>{cafeIdInfo.description}</p>
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faClock} />
-                <li>영업시간 : 9:00 ~ 22:00 매주 월요일 휴무</li>
+                <li>{cafeIdInfo.running_time}</li>
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faPhone} />
@@ -186,11 +202,11 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faLocationDot} />
-                <li>서울 강남구 도산대로 49길 39</li>
+                <li>{cafeIdInfo.address}</li>
               </div>
             </CafeInfoBox>
             <CafeMapbox>
-              <CafeInfoMap />
+              <CafeInfoMap address={cafeIdInfo.address} />
             </CafeMapbox>
           </CafedetailContent>
         </Cafedetail>

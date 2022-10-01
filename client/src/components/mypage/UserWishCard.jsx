@@ -1,20 +1,22 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import Tag from "../common/Tag";
 import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import Tag from "../common/Tag";
+import { BsSuitHeartFill } from "react-icons/bs";
+import axios from "axios";
 
-const CafeItemWrapper = styled.div`
+const WishCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 450px;
   margin-top: 50px;
+  /* margin-bottom: 20px; */
   background-color: var(--white-010);
   position: relative;
   padding: 0 10px;
-  /* border: 1px solid black; */
+  //border: 1px solid blue;
 `;
 
-// 이미지 (img)
 const CafeImg = styled.img`
   width: 300px;
   height: 300px;
@@ -36,7 +38,6 @@ const CafeInfoContent = styled.div`
   justify-content: center;
 `;
 
-// 이름 (title)
 const CafeTitle = styled.h2`
   width: 300px;
   font-weight: bold;
@@ -45,17 +46,25 @@ const CafeTitle = styled.h2`
   background: none;
   margin-left: 5px;
   color: var(--black-010);
+
+  button {
+    position: absolute;
+    color: var(--green-010);
+    font-size: 20px;
+    top: 71%;
+    right: 64%;
+    cursor: pointer;
+  }
 `;
 
-// 카페텍스트
 const CafeText = styled.p`
   width: 300px;
   font-size: 1.1rem;
   color: var(--black-010);
   margin-top: 18px;
+  margin-left: 5px;
 `;
 
-// 카페태그 (cafeTag)
 const CafeTag = styled.div`
   width: 300px;
   display: flex;
@@ -63,7 +72,7 @@ const CafeTag = styled.div`
 
   font-size: 1rem;
   margin-top: 18px;
-  margin-left: 50px;
+  margin-left: 5px;
   position: relative;
   .tag {
     width: auto;
@@ -71,22 +80,40 @@ const CafeTag = styled.div`
   }
 `;
 
-const CafeCard = ({ id, title, tags, image }) => {
+const UserWishCard = ({ id, name, tags, img }) => {
+  console.log(tags);
+  const deleteWishHandler = (e) => {
+    e.preventDefault();
+    axios
+      .delete(`${process.env.REACT_APP_API}/users/wishlist/${id}`)
+      .then(() => {
+        window.alert("위시리스트 삭제완료");
+        window.location.reload();
+      })
+      .catch((err) => console.log(err.response.status));
+  };
+
   return (
-    <CafeItemWrapper>
+    <WishCardWrapper>
       <Link to={`/cafe/${id}`}>
-        <CafeImg src={`${image}`} />
+        <CafeImg src={`${img}`} />
         <CafeInfoContent>
-          <CafeTitle>{title}</CafeTitle>
-          <CafeText>크로플이 맛있는 카페</CafeText>
+          <CafeTitle>
+            {name}
+            <button onClick={deleteWishHandler}>
+              <BsSuitHeartFill className="fill" />
+            </button>
+          </CafeTitle>
+          {/* <CafeText>{name}</CafeText> */}
           <CafeTag>
-            <Tag className="tag">#{tags[0]}</Tag>
-            <Tag className="tag">#디저트맛집</Tag>
+            {tags.map((el) => (
+              <Tag className="tag">#{el}</Tag>
+            ))}
           </CafeTag>
         </CafeInfoContent>
       </Link>
-    </CafeItemWrapper>
+    </WishCardWrapper>
   );
 };
 
-export default CafeCard;
+export default UserWishCard;

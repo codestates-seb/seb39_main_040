@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import useAuthStore from "../../store/useAuth";
+import useLoginStore from "../../store/useLoginStore";
 
 const EditWrapper = styled.div`
   display: flex;
@@ -98,6 +99,8 @@ const UserInfoEditPage = () => {
   const [imgSrc, setImgSrc] = useState("");
   const [userName, setUserName] = useState("");
   const [mobile, setMobile] = useState("");
+  const { userInfo, setUserInfo } = useAuthStore();
+  const { isLogin, setIsLogin } = useLoginStore();
 
   const imgInput = useRef();
 
@@ -126,10 +129,8 @@ const UserInfoEditPage = () => {
     e.preventDefault();
     const newInfo = { userName: userName, mobile: mobile };
     axios
-      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
-      })
-      .then((res) => {
+      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
+      .then(() => {
         console.log("정보수정완료");
         e.preventDefault();
         navigate("/userinfo");
@@ -142,10 +143,7 @@ const UserInfoEditPage = () => {
       <Header />
       <EditWrapper>
         <UserImgUpdate>
-          <Img
-            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
-            alt="이미지확인"
-          />
+          <Img src={imgSrc} alt="이미지확인" />
           <ImgUpdateButton>
             <button onClick={onSubmitImg}>프로필 사진 선택</button>
             <input
@@ -161,7 +159,7 @@ const UserInfoEditPage = () => {
           <InfoDataBox>
             <InputData>이름</InputData>
             <input
-              placeholder="변경할 이름을 적어주세요"
+              placeholder={userInfo.userName}
               onChange={(e) => setUserName(e.target.value)}
             ></input>
           </InfoDataBox>

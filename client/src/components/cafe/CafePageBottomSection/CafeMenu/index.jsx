@@ -31,13 +31,14 @@ const ImgBox = styled.div`
   justify-content: center;
   width: 800px;
   height: 600px;
+  margin-top: 30px;
   img {
-    width: auto;
-    height: auto;
+    width: 500px;
+    height: 600px;
   }
 `;
 
-const CafeMenu = () => {
+const CafeMenu = ({ menuImg }) => {
   return (
     <MenuWrapper>
       <TextBox>
@@ -45,14 +46,7 @@ const CafeMenu = () => {
         <span>메뉴를 확인해보세요.</span>
       </TextBox>
       <ImgBox>
-        {/* <img
-          src="https://file.miricanvas.com/template_thumb/2021/06/28/16/40/kh6m4tls8qin433p/thumb.jpg"
-          alt="높이가 긴 메뉴이미지"
-        /> */}
-        <img
-          src="https://file.miricanvas.com/template_thumb/2021/05/20/16/00/kedgej4vde8gl9ji/thumb.jpg"
-          alt="너비가 긴 메뉴이미지"
-        />
+        <img src={`${menuImg}`} alt="너비가 긴 메뉴이미지" />
       </ImgBox>
     </MenuWrapper>
   );

@@ -4,16 +4,91 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
+import useAuthStore from "../../store/useAuth";
+
+const UserInfoPage = () => {
+  const [imgSrc, setImgSrc] = useState("");
+  const { userInfo, setUserInfo } = useAuthStore();
+
+  const imgInput = useRef();
+  const onSubmitImg = (e) => {
+    e.preventDefault();
+    imgInput.current.click();
+  };
+
+  const onImgChange = (fileBlob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImgSrc(reader.result);
+        resolve();
+        // 우리가 입력한 파일정보
+        console.log(fileBlob);
+        // base64로 인코딩한 파일정보
+        // console.log(reader.result);
+      };
+    });
+  };
+
+  const withDrawHandler = () => {
+    axios
+      .post(`${process.env.REACT_APP_API}/users/withdraw`, {
+        headers: { AccessToken: localStorage.getItem("access_token") },
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err.response.status));
+  };
+
+  useEffect(() => {
+    setUserInfo();
+  }, []);
+
+  return (
+    <>
+      <Header />
+      <MiddleTitle>회원정보</MiddleTitle>
+      <UserPageWrapper>
+        <UserImgBox>
+          <UserImg
+            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
+            alt="userimg"
+          />
+        </UserImgBox>
+        <UserInfoWrapper>
+          <UserInfoBox>
+            <UserDataType>이름</UserDataType>
+            <UserData>{userInfo.userName}</UserData>
+          </UserInfoBox>
+          <UserInfoBox>
+            <UserDataType>이메일</UserDataType>
+            <UserData>{userInfo.email}</UserData>
+          </UserInfoBox>
+          <UserInfoBox>
+            <UserDataType>전화번호</UserDataType>
+            <UserData>{userInfo.mobile}</UserData>
+          </UserInfoBox>
+          <Link to="/userinfoedit">
+            <Button>수정하기</Button>
+          </Link>
+          <Button onClick={withDrawHandler}>탈퇴하기</Button>
+        </UserInfoWrapper>
+      </UserPageWrapper>
+    </>
+  );
+};
+
+export default UserInfoPage;
 
 const UserPageWrapper = styled.div`
   border: 1px solid var(--gray-030);
   border-radius: 4px;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
+  justify-content: center;
   align-items: center;
-  width: 60%;
-  height: 80vh;
+  width: 80%;
+  height: 70vh;
   position: relative;
   margin: 0 auto;
 `;
@@ -26,7 +101,7 @@ const UserImgBox = styled.div`
 `;
 
 const UserImg = styled.img`
-  margin-top: 30px;
+  //margin-top: 30px;
   width: 250px;
   height: 250px;
 
@@ -49,28 +124,32 @@ const UserImgUpload = styled.div`
 `;
 
 const UserInfoWrapper = styled.div`
-  width: 400px;
-  padding: 10px 30px;
+  width: 350px;
+  padding: 5px 30px;
 `;
 
 const UserInfoBox = styled.div`
   display: flex;
-  width: 400px;
-  padding: 10px 30px;
+  width: 350px;
+  padding: 5px 0px;
 `;
 
 const UserDataType = styled.div`
   margin: 10px 0;
   width: 80px;
-  padding: 10px;
+  padding: 8px;
+  color: var(--black-010);
+  opacity: 0.7;
 `;
 
 const UserData = styled.span`
-  width: 70%;
+  width: 50%;
   padding: 10px;
   margin: 10px 0;
   border-bottom: 1px solid var(--gray-030);
   margin-left: 15px;
+  color: var(--black-010);
+  opacity: 0.7;
 `;
 
 const Button = styled.button`
@@ -80,7 +159,7 @@ const Button = styled.button`
   color: var(--green-010);
   width: 100%;
   margin-top: 20px;
-  margin-left: 29px;
+
   font-size: 1.2rem;
   padding: 10px 40px;
   cursor: pointer;
@@ -89,85 +168,3 @@ const Button = styled.button`
     background: var(--green-010);
   }
 `;
-
-const UserInfoPage = () => {
-  const [imgSrc, setImgSrc] = useState("");
-  const [userInfo, setUserInfo] = useState([]);
-  const imgInput = useRef();
-  const onSubmitImg = (e) => {
-    e.preventDefault();
-    imgInput.current.click();
-  };
-
-  const onImgChange = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImgSrc(reader.result);
-        resolve();
-        // 우리가 입력한 파일정보
-        console.log(fileBlob);
-        // base64로 인코딩한 파일정보
-        // console.log(reader.result);
-      };
-    });
-  };
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API}/users/information`, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
-      })
-      .then((res) => {
-        console.log("데이터불러오기성공");
-        console.log(res.data);
-        setUserInfo(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  return (
-    <>
-      <Header />
-      <MiddleTitle>회원정보</MiddleTitle>
-      <UserPageWrapper>
-        <UserImgBox>
-          <UserImg
-            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
-            alt="userimg"
-          />
-          {/* <UserImgUpload>
-            <button onClick={onSubmitImg}>프로필 사진 선택</button>
-            <input
-              className="profile"
-              type="file"
-              ref={imgInput}
-              accept="image/*"
-              onChange={(e) => onImgChange(e.target.files[0])}
-            />
-          </UserImgUpload> */}
-        </UserImgBox>
-        <UserInfoWrapper>
-          <UserInfoBox>
-            <UserDataType>이름</UserDataType>
-            <UserData>{userInfo.userName}</UserData>
-          </UserInfoBox>
-          <UserInfoBox>
-            <UserDataType>이메일</UserDataType>
-            <UserData>{userInfo.email}</UserData>
-          </UserInfoBox>
-          <UserInfoBox>
-            <UserDataType>전화번호</UserDataType>
-            <UserData>{userInfo.mobile}</UserData>
-          </UserInfoBox>
-          <Link to="/userinfoedit">
-            <Button>수정하기</Button>
-          </Link>
-        </UserInfoWrapper>
-      </UserPageWrapper>
-    </>
-  );
-};
-
-export default UserInfoPage;
