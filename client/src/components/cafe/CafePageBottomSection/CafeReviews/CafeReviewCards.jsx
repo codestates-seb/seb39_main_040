@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import useLoginStore from "../../../../store/useLoginStore";
 
 const ReviewCardsWrapper = styled.div`
   margin-top: 20px;
@@ -51,6 +52,7 @@ const IconBox = styled.div`
 const CafeReviewCards = () => {
   const [reviewInfo, setReviewInfo] = useState([]);
   const { id } = useParams();
+  const { isLogin, setIsLogin } = useLoginStore();
 
   // 카페 상세 정보 불러오기
   useEffect(() => {
@@ -65,14 +67,18 @@ const CafeReviewCards = () => {
 
   return (
     <ReviewCardsWrapper>
-      <Link to={`/cafe/${id}/reviews`}>
-        <IconBox>
-          <span className="tooltip">
+      <IconBox>
+        <span className="tooltip">
+          {isLogin === true ? (
+            <Link to={`/cafe/${id}/reviews`}>
+              <FontAwesomeIcon className="icon" icon={faPenToSquare} />
+            </Link>
+          ) : (
             <FontAwesomeIcon className="icon" icon={faPenToSquare} />
-            <span className="tooltip-text">리뷰쓰기</span>
-          </span>
-        </IconBox>
-      </Link>
+          )}
+          <span className="tooltip-text">리뷰쓰기</span>
+        </span>
+      </IconBox>
       {reviewInfo.map((el) => (
         <CafeReviewCard
           key={el.id}

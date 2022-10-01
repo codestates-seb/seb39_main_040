@@ -38,6 +38,11 @@ const ContentBox = styled.div`
   p {
     line-height: 30px;
     margin-bottom: 20px;
+    width: 500px;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -46,7 +51,7 @@ const TagBox = styled.div`
   align-items: center;
   margin-top: 8px;
   font-size: 17px;
-  width: 200px;
+  width: auto;
   .tag-1 {
     margin-right: 10px;
   }
@@ -89,8 +94,9 @@ const CafeReviewCard = ({ text, tag, user, image, star }) => {
       <ContentBox>
         <p>{text}</p>
         <TagBox>
-          <Tag className="tag-1">#{tag[0]}</Tag>
-          <Tag className="tag-2">#{tag[1]}</Tag>
+          {tag.map((el) => (
+            <Tag className="tag-1">#{el}</Tag>
+          ))}
         </TagBox>
         <Infobox>
           <Star>
