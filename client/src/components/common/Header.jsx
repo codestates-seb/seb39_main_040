@@ -6,6 +6,7 @@ import Logo from "../../assets/CoffeeWithMe.svg";
 import useAuthStore from "../../store/useAuth";
 import useLoginStore from "../../store/useLoginStore";
 import React from "react";
+import instance from "../../api/core";
 
 const HeaderWrapper = styled.header`
   z-index: 999;
@@ -126,10 +127,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    axios
-      .post(`${process.env.REACT_APP_API}/users/logout`, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
-      })
+    instance
+      .post(`${process.env.REACT_APP_API}/users/logout`)
       .then((res) => {
         console.log("로그아웃완료");
         setIsLogin();

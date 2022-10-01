@@ -32,17 +32,9 @@ const UserInfoPage = () => {
   };
 
   const withDrawHandler = () => {
-    // if(sessionStorage.getItem("access_token") === undefined) {
-    //  토큰 재발급 함수
-    //  로컬 스토리지에 저장된 refresh token을 통해 토큰을 재발급한다.
-    //  그 과정에서 로컬스토리지, 세션스토리지에 각각 refresh token / access token을 다시 저장한다.
-    //  그러고 나서 원래 핸들러 함수로 돌아와 axios 요청을 시행한다.
-    //  만약 리프레쉬 토큰까지 만료되었다면 -> 로그인 재요청 해야함!
-    // -> 로컬에 저장된 isLogin 상태가 사라지거나 false로 되어야함!
-    // }
     axios
       .post(`${process.env.REACT_APP_API}/users/withdraw`, {
-        headers: { AccessToken: sessionStorage.getItem("access_token") },
+        headers: { AccessToken: localStorage.getItem("access_token") },
       })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err.response.status));
