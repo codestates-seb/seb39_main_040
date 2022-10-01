@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Tag from "../common/Tag";
 import { BsSuitHeartFill } from "react-icons/bs";
+import axios from "axios";
 
 const WishCardWrapper = styled.div`
   display: flex;
@@ -79,23 +80,36 @@ const CafeTag = styled.div`
   }
 `;
 
-const UserWishCard = () => {
+const UserWishCard = ({ id, name, tags, img }) => {
+  console.log(tags);
+  const deleteWishHandler = (e) => {
+    e.preventDefault();
+    axios
+      .delete(`${process.env.REACT_APP_API}/users/wishlist/${id}`)
+      .then(() => {
+        window.alert("위시리스트 삭제완료");
+        window.location.reload();
+      })
+      .catch((err) => console.log(err.response.status));
+  };
+
   return (
     <WishCardWrapper>
-      <Link to={`/cafe/1`}>
-        <CafeImg src="https://i.pinimg.com/564x/f6/7c/2b/f67c2be14cd4ffe78a16289dc995c09e.jpg" />
+      <Link to={`/cafe/${id}`}>
+        <CafeImg src={`${img}`} />
         <CafeInfoContent>
           <CafeTitle>
-            MODE
-            <button>
+            {name}
+            <button onClick={deleteWishHandler}>
               <BsSuitHeartFill className="fill" />
             </button>
           </CafeTitle>
-          <CafeText>커피가 맛있는 분위기 맛집</CafeText>
-          {/* <CafeTag>
-            <Tag className="tag">#분위기좋은</Tag>
-            <Tag className="tag">#커피가맛있는</Tag>
-          </CafeTag> */}
+          {/* <CafeText>{name}</CafeText> */}
+          <CafeTag>
+            {tags.map((el) => (
+              <Tag className="tag">#{el}</Tag>
+            ))}
+          </CafeTag>
         </CafeInfoContent>
       </Link>
     </WishCardWrapper>
