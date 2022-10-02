@@ -43,8 +43,9 @@ const UserReviewCard = ({
         <h2>{cafe_name}</h2>
         <p>{content}</p>
         <TagBox>
-          <Tag className="tag-1">#{tags[0]}</Tag>
-          <Tag className="tag-2">#{tags[1]}</Tag>
+          {tags.map((el) => (
+            <Tag className="tag">#{el}</Tag>
+          ))}
         </TagBox>
         <StarBox>
           <Box sx={{ "& > legend": { mt: 2 } }}>
@@ -66,7 +67,11 @@ const UserReviewCard = ({
         </button> */}
         <Link
           to={`/cafe/${cafe_id}/reviews/${review_id}`}
-          state={{ cafe_id: cafe_id, review_id: review_id }}
+          state={{
+            cafe_id: cafe_id,
+            review_id: review_id,
+            cafe_name: cafe_name,
+          }}
         >
           <button>수정</button>
         </Link>
@@ -124,7 +129,7 @@ const TagBox = styled.div`
   display: flex;
   margin-top: 10px;
 
-  .tag-1 {
+  .tag {
     margin-right: 10px;
   }
 `;

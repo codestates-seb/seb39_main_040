@@ -1,9 +1,8 @@
-import styled from "styled-components";
-import UserWishCard from "./UserWishCard";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamation } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+
+import UserWishCard from "./UserWishCard";
 
 const WishCardsWrapper = styled.div`
   //border: 1px solid red;
@@ -13,7 +12,7 @@ const WishCardsWrapper = styled.div`
   width: 72%;
   margin: 0 auto;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
 `;
 
 const MessageBox = styled.div`
@@ -48,7 +47,7 @@ const UserWishCards = () => {
     axios
       .get(`${process.env.REACT_APP_API}/users/wishlist`)
       .then((res) => {
-        console.log(res.data.wishlist);
+        // console.log(res.data.wishlist);
         setWishInfos(res.data.wishlist);
       })
       .catch((err) => console.log(err));

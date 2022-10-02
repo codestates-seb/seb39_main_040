@@ -13,12 +13,11 @@ const EditReviewPage = () => {
   // const cafe_id = location.state.cafe_id;
   const cafeId = location.state.cafe_id;
   const reviewId = location.state.review_id;
+  const cafe_name = location.state.cafe_name;
 
-  const [originReview, setOriginReview] = useState();
+  const [originReview, setOriginReview] = useState("");
   const [originDescription, setOriginDescription] = useState("");
   const [originImg, setOriginImg] = useState("");
-  const [originScore, setOriginScore] = useState(0);
-  const [originTags, setOriginTags] = useState([]);
 
   useEffect(() => {
     // let token = localStorage.getItem("access_token");
@@ -38,6 +37,8 @@ const EditReviewPage = () => {
       setOriginImg(response.review_img);
     }
     fetchData();
+    // console.log(originReview);
+    // console.log(cafe_name);
   }, []);
 
   return (
@@ -45,14 +46,17 @@ const EditReviewPage = () => {
       <Header />
       <MiddleTitle>리뷰 수정하기</MiddleTitle>
       <FormContent>
-        <EditReviewForm
-          originReview={originReview}
-          originDescription={originDescription}
-          originImg={originImg}
-          cafeId={cafeId}
-          reviewId={reviewId}
-          isEdit={true}
-        />
+        {originReview && (
+          <EditReviewForm
+            originReview={originReview}
+            originDescription={originDescription}
+            originImg={originImg}
+            cafeId={cafeId}
+            reviewId={reviewId}
+            isEdit={true}
+            cafe_name={cafe_name}
+          />
+        )}
       </FormContent>
     </EditReviewWrapper>
   );

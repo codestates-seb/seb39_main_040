@@ -1,11 +1,32 @@
+import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
 // import useStore from "../../store/search";
+
+const SearchBar = ({ setSearchInput }) => {
+  return (
+    <SearchWrapper>
+      <TextBox>
+        <p>원하는 카페가 있으신가요?</p>
+      </TextBox>
+      <BarBox>
+        <FontAwesomeIcon className="search" icon={faMagnifyingGlass} />
+        <input
+          type="search"
+          placeholder="카페 이름으로 검색해보세요"
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <FontAwesomeIcon className="marker" icon={faLocationDot} />
+      </BarBox>
+    </SearchWrapper>
+  );
+};
+
+export default SearchBar;
 
 const SearchWrapper = styled.div`
   width: 880px;
@@ -60,31 +81,3 @@ const BarBox = styled.div`
     color: var(--green-010);
   }
 `;
-
-const SearchBar = ({ searchInput, setSearchInput }) => {
-  // const { searchInput, setSearchInput } = useStore();
-  // const [searchInput, setSearchInput] = useState("");
-
-  // useEffect(() => {
-  //   console.log(searchInput);
-  // }, [searchInput]);
-
-  return (
-    <SearchWrapper>
-      <TextBox>
-        <p>원하는 카페가 있으신가요?</p>
-      </TextBox>
-      <BarBox>
-        <FontAwesomeIcon className="search" icon={faMagnifyingGlass} />
-        <input
-          type="search"
-          placeholder="카페 이름으로 검색해보세요"
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <FontAwesomeIcon className="marker" icon={faLocationDot} />
-      </BarBox>
-    </SearchWrapper>
-  );
-};
-
-export default SearchBar;

@@ -1,7 +1,8 @@
 import React from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
 // 사용된 이모티콘
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,8 +10,131 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
+
 import Header from "../components/common/Header";
-import axios from "axios";
+import Swal from "sweetalert2";
+
+const SignUpPage = () => {
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
+
+  const navigate = useNavigate();
+
+  const onSubmit = (data) => {
+    axios
+      .post(`${process.env.REACT_APP_API}/users/signup`, data)
+      .then(() => {
+        Swal.fire({
+          title: "회원가입에 성공했습니다!",
+          text: "로그인을 시도해주세요.",
+        });
+        navigate("/login");
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  return (
+    <>
+      <Header />
+      <SignUpBox>
+        <InputBox>
+          <h1>회원가입</h1>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="input">
+              <label htmlFor="userName">
+                <FontAwesomeIcon icon={faUser} />
+                <input
+                  id="userName"
+                  type="text"
+                  placeholder="Name"
+                  required
+                  {...register("userName", {
+                    required: true,
+                    pattern: /^[가-힣]+$/,
+                  })}
+                ></input>
+                {errors.userName && errors.userName.type === "required" && (
+                  <p>이름을 입력해주세요</p>
+                )}
+                {errors.userName && errors.userName.type === "pattern" && (
+                  <p>올바른 이름이 아닙니다.</p>
+                )}
+              </label>
+            </div>
+            <div className="input">
+              <label htmlFor="email">
+                <FontAwesomeIcon icon={faEnvelope} />
+                <input
+                  id="email"
+                  type="text"
+                  placeholder="Email"
+                  required
+                  {...register("email", {
+                    required: true,
+                    pattern:
+                      // eslint-disable-next-line
+                      /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  })}
+                ></input>
+                {errors.email && errors.email.type === "required" && (
+                  <p>이메일을 입력해주세요.</p>
+                )}
+                {errors.email && errors.email.type === "pattern" && (
+                  <p>올바른 이메일이 아닙니다.</p>
+                )}
+              </label>
+            </div>
+            <div className="input">
+              <label htmlFor="password">
+                <FontAwesomeIcon icon={faLock} />
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  required
+                  {...register("password", {
+                    required: true,
+                  })}
+                ></input>
+                {errors.password && errors.password.type === "required" && (
+                  <p>비밀번호를 입력해주세요.</p>
+                )}
+              </label>
+            </div>
+            <div className="input">
+              <label htmlFor="mobile">
+                <FontAwesomeIcon icon={faPhone} />
+                <input
+                  id="mobile"
+                  type="mobile"
+                  placeholder="PhoneNumber"
+                  required
+                  {...register("mobile", {
+                    required: true,
+                    pattern: /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/,
+                  })}
+                ></input>
+                {errors.mobile && errors.mobile.type === "required" && (
+                  <p>- 를 포함해 전화번호를 입력해주세요.</p>
+                )}
+                {errors.mobile && errors.mobile.type === "pattern" && (
+                  <p>올바른 전화번호가 아닙니다.</p>
+                )}
+              </label>
+            </div>
+            <SignUpButton>가입하기</SignUpButton>
+          </form>
+        </InputBox>
+      </SignUpBox>
+    </>
+  );
+};
+
+export default SignUpPage;
 
 const SignUpBox = styled.div`
   display: flex;
@@ -98,162 +222,3 @@ const SignUpButton = styled.button`
     border: 1px solid var(--green-010);
   }
 `;
-
-const SignUpPage = () => {
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ mode: "onChange" });
-
-  const navigate = useNavigate();
-
-  // 유저데이터 확인용
-  const onSubmit = (data) => {
-    axios
-      .post(`${process.env.REACT_APP_API}/users/signup`, data)
-      .then((res) => {
-        console.log(data);
-        navigate("/login");
-      })
-      .catch((err) => console.log(err.message));
-  };
-
-  return (
-    <>
-      <Header />
-      <SignUpBox>
-        <InputBox>
-          <h1>회원가입</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="input">
-              <label htmlFor="userName">
-                <FontAwesomeIcon icon={faUser} />
-                <input
-                  id="userName"
-                  type="text"
-                  placeholder="Name"
-                  // value={name}
-                  // onChange={(e) => setName(e.target.value)}
-                  required
-                  {...register("userName", {
-                    required: true,
-                    pattern: /^[가-힣]+$/,
-                  })}
-                ></input>
-                {/* 유효성 검사를 실패할 경우 화면에 출력되는 값 */}
-                {errors.userName && errors.userName.type === "required" && (
-                  <p>이름을 입력해주세요</p>
-                )}
-                {errors.userName && errors.userName.type === "pattern" && (
-                  <p>올바른 이름이 아닙니다.</p>
-                )}
-              </label>
-            </div>
-            <div className="input">
-              <label htmlFor="email">
-                <FontAwesomeIcon icon={faEnvelope} />
-                <input
-                  id="email"
-                  type="text"
-                  placeholder="Email"
-                  // value={email}
-                  // onChange={(e) => setEmail(e.target.value)}
-                  required
-                  {...register("email", {
-                    required: true,
-                    pattern:
-                      /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  })}
-                ></input>
-                {/* 유효성 검사를 실패할 경우 화면에 출력되는 값 */}
-                {errors.email && errors.email.type === "required" && (
-                  <p>이메일을 입력해주세요.</p>
-                )}
-                {errors.email && errors.email.type === "pattern" && (
-                  <p>올바른 이메일이 아닙니다.</p>
-                )}
-              </label>
-            </div>
-            <div className="input">
-              <label htmlFor="password">
-                <FontAwesomeIcon icon={faLock} />
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  // value={password}
-                  // onChange={(e) => setPassword(e.target.value)}
-                  required
-                  {...register("password", {
-                    required: true,
-                    // pattern:
-                    //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
-                    // validate: (value) =>
-                    //   value.length >= 8 && value.length <= 20,
-                  })}
-                ></input>
-                {errors.password && errors.password.type === "required" && (
-                  <p>비밀번호를 입력해주세요.</p>
-                )}
-                {/* {errors.password && errors.password.type === "pattern" && (
-                  <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
-                )}
-                {errors.password && errors.password.type === "validate" && (
-                  <p>비밀번호는 최소 8글자 이상 20글자 이하입니다.</p>
-                )} */}
-              </label>
-            </div>
-            {/* <div className="input">
-              <label htmlFor="passwordcheck">
-                <FontAwesomeIcon icon={faCheck} />
-                <input
-                  id="passwordcheck"
-                  type="password"
-                  placeholder="PasswordCheck"
-                  // value={checkPassword}
-                  // onChange={(e) => setCheckPassword(e.target.value)}
-                  required
-                  {...register("passwordcheck", {
-                    validate: (value) => value === watch("password"),
-                  })}
-                ></input>
-                {errors.passwordcheck &&
-                  errors.passwordcheck.type === "validate" && (
-                    <p>비밀번호가 일치하지 않습니다.</p>
-                  )}
-              </label>
-            </div> */}
-            <div className="input">
-              <label htmlFor="mobile">
-                <FontAwesomeIcon icon={faPhone} />
-                <input
-                  id="mobile"
-                  type="mobile"
-                  placeholder="PhoneNumber"
-                  // value={phone}
-                  // onChange={(e) => setPhone(e.target.value)}
-                  required
-                  {...register("mobile", {
-                    required: true,
-                    pattern: /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/,
-                  })}
-                ></input>
-                {errors.mobile && errors.mobile.type === "required" && (
-                  <p>- 를 포함해 전화번호를 입력해주세요.</p>
-                )}
-                {errors.mobile && errors.mobile.type === "pattern" && (
-                  <p>올바른 전화번호가 아닙니다.</p>
-                )}
-              </label>
-            </div>
-            <SignUpButton>가입하기</SignUpButton>
-          </form>
-        </InputBox>
-      </SignUpBox>
-    </>
-  );
-};
-
-export default SignUpPage;
