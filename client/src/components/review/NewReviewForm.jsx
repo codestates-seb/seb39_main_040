@@ -17,8 +17,20 @@ const ReviewForm = () => {
   const [img, setImg] = useState("");
   const [imgSrc, setImgSrc] = useState("");
   const [imgInfo, setImgInfo] = useState(null);
-  // const imgRef = useRef();
+  const [cafeTitle, setCafeTitle] = useState("");
 
+  // 카페 상세 정보 불러오기
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API}/cafe/${id}`)
+      .then((res) => {
+        // console.log(res.data);
+        setCafeTitle(res.data.name);
+      })
+      .catch((e) => console.err("error:", e));
+  }, []);
+
+  // 리뷰작성 핸들러
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const content = {
@@ -31,10 +43,10 @@ const ReviewForm = () => {
     console.log(content);
 
     if (description && score && tags && img) {
+      let token = localStorage.getItem("access_token");
+      axios.defaults.headers.common["AccessToken"] = `${token}`;
       axios
-        .post(`${process.env.REACT_APP_API}/cafe/${id}/reviews`, content, {
-          headers: { AccessToken: sessionStorage.getItem("access_token") },
-        })
+        .post(`${process.env.REACT_APP_API}/cafe/${id}/reviews`, content)
         .then((res) => {
           console.log(res.data);
           console.log("리뷰작성완료");
@@ -43,6 +55,9 @@ const ReviewForm = () => {
         })
         .catch((err) => {
           console.log("err", err);
+          if (err.response.status === 412 || 400) {
+            window.alert("!! 리뷰가 정상적으로 작성되지 않았습니다.");
+          }
         });
     } else if (!tags) {
       alert("태그를 두개 이상 선택해주세요.");
@@ -68,12 +83,12 @@ const ReviewForm = () => {
     const formData = new FormData();
     formData.append("images", imgInfo);
     console.log(formData);
-
+    let token = localStorage.getItem("access_token");
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
     axios
       .post(`${process.env.REACT_APP_API}/images/upload`, formData, {
         headers: {
           "Content-type": "multipart/form-data",
-          AccessToken: sessionStorage.getItem("access_token"),
         },
       })
       .then((res) => {
@@ -103,24 +118,19 @@ const ReviewForm = () => {
     });
   };
 
-  // 동작이 안된다.
-  // const onClickHandler = () => {
-  //   debugger;
-  //   imgRef.current.click();
-  // };
-
   return (
     <MainContainer>
       <FormContainer onSubmit={onSubmitHandler}>
         <TitleContainer>
           <span>카페명</span>
-          <span>Mood</span>
+          <span>{cafeTitle}</span>
         </TitleContainer>
         <TagContainer>
           <TagTitle>
             <span>태그</span>
           </TagTitle>
           <TagBox>
+            <p>태그를 두개 이상 선택해 주세요. </p>
             <NewTagForm onChange={onChangeTagHandler} />
           </TagBox>
         </TagContainer>
@@ -155,13 +165,14 @@ const ReviewForm = () => {
           <div className="preview">
             {imgInfo && <img src={imgSrc} alt="이미지 미리보기" />}
           </div>
-          <input
-            type="file"
-            accept="image/*"
-            // ref={imgRef}
-            onChange={uploadImg}
-          />
-          <button>이미지 등록하기</button>
+          <div className="filebox">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={uploadImg}
+              placeholder="사진 파일"
+            />
+          </div>
         </form>
       </ImgContainer>
     </MainContainer>
@@ -172,7 +183,6 @@ export default ReviewForm;
 
 const MainContainer = styled.div`
   display: flex;
-  /* align-items: center; */
   flex-direction: column;
   width: 1360px;
   height: 1360px;
@@ -230,6 +240,15 @@ const ImgContainer = styled.div`
         height: 450px;
       }
     }
+    .filebox .upload-name {
+      display: inline-block;
+      height: 40px;
+      padding: 0 10px;
+      vertical-align: middle;
+      border: 1px solid #dddddd;
+      width: 58%;
+      color: #999999;
+    }
   }
 `;
 
@@ -255,7 +274,7 @@ const TagContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 110px;
-  margin: 30px 0 0 10px;
+  margin: 40px 0 0 10px;
 `;
 
 const TagTitle = styled.div`
@@ -277,6 +296,12 @@ const TagBox = styled.div`
   width: 600px;
   height: 110px;
   margin-top: 20px;
+  p {
+    width: 600px;
+    margin: 10px 0 20px 0;
+    color: var(--gray-020);
+    font-size: 19px;
+  }
 `;
 
 const StarContainer = styled.div`
@@ -286,7 +311,7 @@ const StarContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 110px;
-  margin: 30px 0 0 10px;
+  margin: 40px 0 0 10px;
 `;
 
 const StarTitle = styled.div`
