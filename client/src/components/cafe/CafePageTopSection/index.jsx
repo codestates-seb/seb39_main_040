@@ -206,7 +206,7 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
               </div>
             </CafeInfoBox>
             <CafeMapbox>
-              <CafeInfoMap address={cafeIdInfo.address} />
+              <CafeInfoMap place={cafeIdInfo.address} />
             </CafeMapbox>
           </CafedetailContent>
         </Cafedetail>
