@@ -1,14 +1,15 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import instance from "../../api/core";
 import styled from "styled-components";
+
 import Logo from "../../assets/CoffeeWithMe.svg";
 import useLoginStore from "../../store/useLoginStore";
-import React from "react";
-import instance from "../../api/core";
+import Swal from "sweetalert2";
+
+// import SuccessAlert from "./SuccessAlert";
 
 const Header = () => {
-  // const { isLogin, setIsLogin } = useAuthStore();
   const { isLogin, setIsLogin } = useLoginStore();
   const [isOpen, setIsOpen] = useState(true);
   const [userProfile, setUserProfile] = useState();
@@ -18,31 +19,37 @@ const Header = () => {
   const logoutHandler = () => {
     instance
       .post(`${process.env.REACT_APP_API}/users/logout`)
-      .then((res) => {
-        console.log("로그아웃완료");
+      .then(() => {
+        Swal.fire({
+          title: "정말 로그아웃하시겠습니까?",
+          icon: "question",
+          showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+          confirmButtonColor: "#3085d6", // confrim 버튼 색깔 지정
+          cancelButtonColor: "var(--red-010)", // cancel 버튼 색깔 지정
+          confirmButtonText: "확인", // confirm 버튼 텍스트 지정
+          cancelButtonText: "취소", // cancel 버튼 텍스트 지정
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire(
+              "로그아웃 되었습니다.",
+              "다음에 다시 만나요😁",
+              "success"
+            );
+          }
+        });
         setIsLogin();
         window.localStorage.clear();
         window.sessionStorage.clear();
         navigate("/");
       })
-      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...하나..
+      .catch((err) => console.log(err.response.status));
   };
 
   useEffect(() => {
-    // setUserInfo();
-    // let token = localStorage.getItem("access_token") || "";
-    // axios.defaults.headers.common["AccessToken"] = `${token}`;
-    // axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
-    //   // setUserInfo(res.data);
-    //   // console.log(res.data.profilePhoto.path);
-    //   setUserProfile(res.data.profilePhoto.path);
-    // });
     async function fetchData() {
       const response = await instance.get(
         `${process.env.REACT_APP_API}/users/information`
       );
-      // console.log(response);
-      // setUserInfo(response);
       setUserProfile(response.profilePhoto.path);
     }
     fetchData();

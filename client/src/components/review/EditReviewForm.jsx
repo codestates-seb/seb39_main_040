@@ -5,20 +5,15 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import NewTagForm from "./ReviewTag";
 import StarRating from "./ReviewStarRating";
-import instance from "../../api/core";
 
-const ReviewForm = ({ cafeId, reviewId, isEdit, originDescription }) => {
+const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
   const navigate = useNavigate();
   const [description, setDescription] = useState();
-  const [score, setScore] = useState();
-  const [tags, setTags] = useState();
+  const [score, setScore] = useState(0);
+  const [tags, setTags] = useState([]);
   const [img, setImg] = useState("");
   const [imgSrc, setImgSrc] = useState();
   const [imgInfo, setImgInfo] = useState(null);
-  // const [originReview, setOriginReview] = useState([]);
-
-  // const imgRef = useRef();
-  // console.log(originReview);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -44,7 +39,7 @@ const ReviewForm = ({ cafeId, reviewId, isEdit, originDescription }) => {
           console.log(res.data);
           console.log("리뷰수정완료");
           alert("리뷰가 수정되었습니다.");
-          navigate(`/cafe/${cafeId}`);
+          // navigate(`/cafe/${cafeId}`);
         })
         .catch((err) => {
           console.log("err", err);
@@ -58,8 +53,6 @@ const ReviewForm = ({ cafeId, reviewId, isEdit, originDescription }) => {
     } else if (!img) {
       alert("사진을 등록해주세요.");
     }
-    // console.log(originReview.description);
-    // setDescription(originReview.description);
   };
 
   const onChangeStarHandler = (newStar) => {
@@ -115,7 +108,7 @@ const ReviewForm = ({ cafeId, reviewId, isEdit, originDescription }) => {
       <FormContainer onSubmit={onSubmitHandler}>
         <TitleContainer>
           <span>카페명</span>
-          <span>Mood</span>
+          <span>{cafe_name}</span>
         </TitleContainer>
         <TagContainer>
           <TagTitle>
@@ -140,7 +133,7 @@ const ReviewForm = ({ cafeId, reviewId, isEdit, originDescription }) => {
           <textarea
             name="content"
             onChange={(e) => setDescription(e.target.value)}
-            placeholder={`${originDescription}`}
+            placeholder={`${originReview.description}`}
           />
         </TextContainer>
         <BtnContainer>

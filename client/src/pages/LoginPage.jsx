@@ -1,15 +1,113 @@
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
 import React from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import Header from "../components/common/Header";
-import axios from "axios";
-// import useAuthStore from "../store/useAuth";
+
 import useLoginStore from "../store/useLoginStore";
+import Swal from "sweetalert2";
+
+const LoginPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
+
+  const navigate = useNavigate();
+  const { setIsLogin } = useLoginStore();
+
+  const onSubmit = (data) => {
+    axios
+      .post(`${process.env.REACT_APP_API}/users/login`, data)
+      .then((res) => {
+        localStorage.setItem("access_token", res.headers.accesstoken);
+        localStorage.setItem("refresh_token", res.headers.refreshtoken);
+        setIsLogin();
+        Swal.fire({
+          title: "로그인에 성공했습니다 ☕️",
+          imageUrl:
+            "https://cdn.pixabay.com/photo/2016/03/24/13/45/coffee-1276778_960_720.jpg",
+          imageWidth: 500,
+          imageHeight: 300,
+          imageAlt: "Login image",
+        });
+        navigate("/");
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "로그인에 실패했습니다 🥲",
+          text: "다시 로그인을 시도해주세요!",
+          icon: "error",
+        });
+      });
+  };
+  return (
+    <>
+      <Header />
+      <LoginBox>
+        <InputBox>
+          <h1>로그인</h1>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="input">
+              <label htmlFor="email">
+                <FontAwesomeIcon icon={faEnvelope} />
+                <input
+                  id="email"
+                  type="text"
+                  placeholder="Email"
+                  required
+                  {...register("email", {
+                    required: true,
+                    pattern:
+                      // eslint-disable-next-line
+                      /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  })}
+                ></input>
+                {errors.email && errors.email.type === "required" && (
+                  <p>이메일을 입력해주세요.</p>
+                )}
+                {errors.email && errors.email.type === "pattern" && (
+                  <p>올바른 이메일이 아닙니다.</p>
+                )}
+              </label>
+            </div>
+            <div className="input">
+              <label htmlFor="password">
+                <FontAwesomeIcon icon={faLock} />
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  //required
+                  {...register("password", {
+                    required: true,
+                  })}
+                ></input>
+              </label>
+            </div>
+            <SignUpBox>
+              <StyledLink to="/signup">
+                <div>회원이 아니십니까?</div>
+              </StyledLink>
+              <span>아이디찾기</span>
+              <span> | </span>
+              <span>비밀번호찾기</span>
+            </SignUpBox>
+            <LoginButton>로그인</LoginButton>
+          </form>
+        </InputBox>
+      </LoginBox>
+    </>
+  );
+};
+
+export default LoginPage;
 
 const LoginBox = styled.div`
   display: flex;
@@ -119,108 +217,3 @@ const LoginButton = styled.button`
     border: 1px solid var(--green-010);
   }
 `;
-
-const LoginPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ mode: "onChange" });
-
-  const navigate = useNavigate();
-
-  // const { isLogin, setIsLogin } = useAuthStore();
-  const { isLogin, setIsLogin } = useLoginStore();
-
-  const onSubmit = (data) => {
-    axios
-      .post(`${process.env.REACT_APP_API}/users/login`, data)
-      .then((res) => {
-        console.log("로그인성공");
-        console.log(res.headers);
-        localStorage.setItem("access_token", res.headers.accesstoken);
-        localStorage.setItem("refresh_token", res.headers.refreshtoken);
-        setIsLogin();
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("회원 정보가 일치하지 않습니다.");
-        console.log(error);
-      });
-  };
-  return (
-    <>
-      <Header />
-      <LoginBox>
-        <InputBox>
-          <h1>로그인</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="input">
-              <label htmlFor="email">
-                <FontAwesomeIcon icon={faEnvelope} />
-                <input
-                  id="email"
-                  type="text"
-                  placeholder="Email"
-                  required
-                  {...register("email", {
-                    required: true,
-                    pattern:
-                      // eslint-disable-next-line
-                      /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  })}
-                ></input>
-                {/* 유효성 검사를 실패할 경우 화면에 출력되는 값 */}
-                {errors.email && errors.email.type === "required" && (
-                  <p>이메일을 입력해주세요.</p>
-                )}
-                {errors.email && errors.email.type === "pattern" && (
-                  <p>올바른 이메일이 아닙니다.</p>
-                )}
-              </label>
-            </div>
-            <div className="input">
-              <label htmlFor="password">
-                <FontAwesomeIcon icon={faLock} />
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  //required
-                  {...register("password", {
-                    required: true,
-                    // pattern:
-                    //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
-                    // validate: (value) =>
-                    //   value.length >= 8 && value.length <= 20,
-                  })}
-                ></input>
-                {/* {errors.password && errors.password.type === "required" && (
-                  <p>비밀번호를 입력해주세요.</p>
-                )}
-                {errors.password && errors.password.type === "pattern" && (
-                  <p>비밀번호는 문자, 숫자, 특수문자의 조합이어야합니다.</p>
-                )}
-                {errors.password && errors.password.type === "validate" && (
-                  <p>비밀번호는 최소 8글자 이상 20글자 이하입니다.</p>
-                )} */}
-              </label>
-            </div>
-            <SignUpBox>
-              {/*아래 div, span 태그에는 Link를 연결해 해당 페이지로 이동하게 연결해야함 */}
-              <StyledLink to="/signup">
-                <div>회원이 아니십니까?</div>
-              </StyledLink>
-              <span>아이디찾기</span>
-              <span> | </span>
-              <span>비밀번호찾기</span>
-            </SignUpBox>
-            <LoginButton>로그인</LoginButton>
-          </form>
-        </InputBox>
-      </LoginBox>
-    </>
-  );
-};
-
-export default LoginPage;
