@@ -57,9 +57,9 @@ public class ReviewController {
     }
 
     @PatchMapping("/{cafe_id}/reviews/{review_id}")
-    public ResponseEntity patchReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto patchDto){
+    public ResponseEntity patchReview(@PathVariable Long review_id, @RequestBody ReviewRequestDto patchDto){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        reviewService.update(email, cafe_id, reviewMapper.reviewDtoToReview(patchDto));
+        reviewService.update(email, review_id, reviewMapper.reviewDtoToReview(patchDto), patchDto.getTags());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -10,10 +10,7 @@ import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
-import seb39_40.coffeewithme.image.domain.Image;
-import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
-import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
 import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.service.UserService;
@@ -34,8 +31,9 @@ public class ReviewService {
     public Long save(String email, Long cafeId, Review review, List<String> tags){
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(1);
-
+        // 여기 리팩토링 해야 함.
         review.setCafe(cafe);
+
         review.setUser(userService.findByEmail(email));
         review.setReviewTags(tagService.createReviewTag(review, tags));
         review.getReviewImg().saveImg();
@@ -43,11 +41,13 @@ public class ReviewService {
     }
 
     @Transactional
-    public Long update(String email, Long id, Review updateReview){
+    public Long update(String email, Long id, Review updateReview, List<String> tags){
         Review review = findById(id);
+        // 이벤트로 업데이트시에 temp, 등록시에 save로 상태 바꾸게
         if (!Objects.equals(review.getReviewImg().getId(), updateReview.getReviewImg().getId()))
             review.getReviewImg().deleteImg();
         checkUser(email, review.getUser().getEmail());
+        review.setReviewTags(tagService.createReviewTag(review, tags));
         review.update(updateReview);
         return reviewRepository.save(review).getId();
     }
