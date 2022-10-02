@@ -1,12 +1,99 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../assets/CoffeeWithMe.svg";
-import useAuthStore from "../../store/useAuth";
 import useLoginStore from "../../store/useLoginStore";
 import React from "react";
 import instance from "../../api/core";
+
+const Header = () => {
+  // const { isLogin, setIsLogin } = useAuthStore();
+  const { isLogin, setIsLogin } = useLoginStore();
+  const [isOpen, setIsOpen] = useState(true);
+  const [userProfile, setUserProfile] = useState();
+
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    instance
+      .post(`${process.env.REACT_APP_API}/users/logout`)
+      .then((res) => {
+        console.log("로그아웃완료");
+        setIsLogin();
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+        navigate("/");
+      })
+      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...하나..
+  };
+
+  useEffect(() => {
+    // setUserInfo();
+    // let token = localStorage.getItem("access_token") || "";
+    // axios.defaults.headers.common["AccessToken"] = `${token}`;
+    // axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
+    //   // setUserInfo(res.data);
+    //   // console.log(res.data.profilePhoto.path);
+    //   setUserProfile(res.data.profilePhoto.path);
+    // });
+    async function fetchData() {
+      const response = await instance.get(
+        `${process.env.REACT_APP_API}/users/information`
+      );
+      // console.log(response);
+      // setUserInfo(response);
+      setUserProfile(response.profilePhoto.path);
+    }
+    fetchData();
+  }, []);
+
+  return (
+    <HeaderWrapper>
+      <Link to="/">
+        <HeaderTitle src={Logo} alt="logo" />
+      </Link>
+
+      {isLogin === true ? (
+        <DropBox>
+          <UserProfile
+            src={`${userProfile}`}
+            alt="profile"
+            onClick={() => setIsOpen(!isOpen)}
+          />
+          <DropMenu className={isOpen ? "hidden" : "activate"}>
+            <Link
+              to="/userinfo"
+              style={{ color: "inherit", textDecoration: "inherit" }}
+            >
+              <DropItem>나의정보</DropItem>
+            </Link>
+            <Link to="/user/wish">
+              <DropItem>찜한카페</DropItem>
+            </Link>
+            <Link to="/user/review">
+              <DropItem>나의리뷰</DropItem>
+            </Link>
+            <button onClick={logoutHandler}>
+              <DropItem>로그아웃</DropItem>
+            </button>
+          </DropMenu>
+        </DropBox>
+      ) : (
+        <NavList>
+          <Link to="/login">
+            <NavItem>로그인</NavItem>
+          </Link>
+          <Link to="/signup">
+            <NavItem>회원가입</NavItem>
+          </Link>
+        </NavList>
+      )}
+    </HeaderWrapper>
+  );
+};
+
+export default Header;
 
 const HeaderWrapper = styled.header`
   z-index: 999;
@@ -118,70 +205,3 @@ const DropItem = styled.li`
     color: var(--green-010);
   }
 `;
-
-const Header = () => {
-  // const { isLogin, setIsLogin } = useAuthStore();
-  const { isLogin, setIsLogin } = useLoginStore();
-  const [isOpen, setIsOpen] = useState(true);
-
-  const navigate = useNavigate();
-
-  const logoutHandler = () => {
-    instance
-      .post(`${process.env.REACT_APP_API}/users/logout`)
-      .then((res) => {
-        console.log("로그아웃완료");
-        setIsLogin();
-        window.localStorage.clear();
-        window.sessionStorage.clear();
-        navigate("/");
-      })
-      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...하나..
-  };
-
-  return (
-    <HeaderWrapper>
-      <Link to="/">
-        <HeaderTitle src={Logo} alt="logo" />
-      </Link>
-
-      {isLogin === true ? (
-        <DropBox>
-          <UserProfile
-            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
-            alt="profile"
-            onClick={() => setIsOpen(!isOpen)}
-          />
-          <DropMenu className={isOpen ? "hidden" : "activate"}>
-            <Link
-              to="/userinfo"
-              style={{ color: "inherit", textDecoration: "inherit" }}
-            >
-              <DropItem>나의정보</DropItem>
-            </Link>
-            <Link to="/user/wish">
-              <DropItem>찜한카페</DropItem>
-            </Link>
-            <Link to="/user/review">
-              <DropItem>나의리뷰</DropItem>
-            </Link>
-            <button onClick={logoutHandler}>
-              <DropItem>로그아웃</DropItem>
-            </button>
-          </DropMenu>
-        </DropBox>
-      ) : (
-        <NavList>
-          <Link to="/login">
-            <NavItem>로그인</NavItem>
-          </Link>
-          <Link to="/signup">
-            <NavItem>회원가입</NavItem>
-          </Link>
-        </NavList>
-      )}
-    </HeaderWrapper>
-  );
-};
-
-export default Header;

@@ -4,35 +4,18 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../../components/common/Header";
 import MiddleTitle from "../../components/common/MiddleTitle";
-import useAuthStore from "../../store/useAuth";
+// import useAuthStore from "../../store/useAuth";
+import instance from "../../api/core";
 
 const UserInfoPage = () => {
-  const [imgSrc, setImgSrc] = useState("");
-  const { userInfo, setUserInfo } = useAuthStore();
+  // const { userInfo, setUserInfo } = useAuthStore();
+  const [userInfo, setUserInfo] = useState([]);
+  const [userProfile, setUserProfile] = useState();
 
   const imgInput = useRef();
-  const onSubmitImg = (e) => {
-    e.preventDefault();
-    imgInput.current.click();
-  };
-
-  const onImgChange = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImgSrc(reader.result);
-        resolve();
-        // 우리가 입력한 파일정보
-        console.log(fileBlob);
-        // base64로 인코딩한 파일정보
-        // console.log(reader.result);
-      };
-    });
-  };
 
   const withDrawHandler = () => {
-    axios
+    instance
       .post(`${process.env.REACT_APP_API}/users/withdraw`, {
         headers: { AccessToken: localStorage.getItem("access_token") },
       })
@@ -41,7 +24,43 @@ const UserInfoPage = () => {
   };
 
   useEffect(() => {
-    setUserInfo();
+    // setUserInfo();
+    // let token = localStorage.getItem("access_token") || "";
+    // axios.defaults.headers.common["AccessToken"] = `${token}`;
+    // axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
+    //   setUserInfo(res.data);
+    //   setUserProfile(res.data.profilePhoto.path);
+    // });
+    // ------------------------------------------
+    async function fetchData() {
+      const response = await instance.get(
+        `${process.env.REACT_APP_API}/users/information`
+      );
+      // console.log(response);
+      setUserInfo(response);
+      setUserProfile(response.profilePhoto.path);
+    }
+    fetchData();
+    // let token = localStorage.getItem("access_token") || "";
+    // instance.defaults.headers.common["AccessToken"] = `${token}`;
+    //1) 실패
+    // instance({
+    //   method: "GET",
+    //   url: `${process.env.REACT_APP_API}/users/information`,
+    // })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setUserInfo(res.data);
+    //   })
+    //   .catch((err) => console.log(err));
+    // setUserInfo(userData);
+    // console.log(userInfo);
+    // 2)
+    // const response = instance.get(
+    //   `${process.env.REACT_APP_API}/users/information`
+    // );
+    // setUserInfo(response.data);
+    // console.log(response);
   }, []);
 
   return (
@@ -50,10 +69,7 @@ const UserInfoPage = () => {
       <MiddleTitle>회원정보</MiddleTitle>
       <UserPageWrapper>
         <UserImgBox>
-          <UserImg
-            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
-            alt="userimg"
-          />
+          <UserImg src={`${userProfile}`} alt="userimg" />
         </UserImgBox>
         <UserInfoWrapper>
           <UserInfoBox>

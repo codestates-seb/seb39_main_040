@@ -30,7 +30,7 @@ instance.interceptors.response.use(
   (error) => {
     // const { config, response: status } = error;
     console.log(error.response.status);
-    if (error.response.status === 401) {
+    if (error.response.data.status === 401) {
       console.log("토큰 재발급");
       const originalRequest = error.config;
       const refreshtoken = localStorage.getItem("refresh_token");
@@ -50,15 +50,16 @@ instance.interceptors.response.use(
             const newAccessToken = localStorage.getItem("access_token");
             originalRequest.headers["AccessToken"] = `${newAccessToken}`;
             axios.defaults.headers.common["AccessToken"] = `${newAccessToken}`;
+            window.alert("토큰재발급 성공!");
             window.location.reload();
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
             return axios(originalRequest);
           })
           .catch((err) => {
-            // localStorage.clear();
+            localStorage.clear();
             window.alert("토큰 재발급 실패");
             console.log(err);
-            // window.location.href = "/";
+            window.location.href = "/";
 
             return false;
           });
