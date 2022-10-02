@@ -86,6 +86,11 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
+    public List<Review> findByCafeId(Long cafeId) {
+        return reviewRepository.findByCafeId(cafeId);
+    }
+
+    @Transactional(readOnly = true)
     public Page<Review> findByUserId(Long userId, Integer page) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
         return reviewRepository.findByUserId(userId, pageRequest);

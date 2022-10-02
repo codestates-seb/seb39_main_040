@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.common.dto.MultiResponseDto;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.mapper.ReviewMapper;
@@ -20,6 +21,8 @@ import seb39_40.coffeewithme.user.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,6 +50,14 @@ public class ReviewController {
     public ResponseEntity getReview(@PathVariable Long review_id){
         Review review = reviewService.findById(review_id);
         return new ResponseEntity(reviewMapper.reviewToReviewDto(review), HttpStatus.OK);
+    }
+
+    @GetMapping("/{cafe_id}/reviews/images")
+    public ResponseEntity getImage(@PathVariable Long cafe_id){
+        List<Review> reviews = reviewService.findByCafeId(cafe_id);
+        List<Image> images = reviews.stream().map(review -> review.getReviewImg()).collect(Collectors.toList());
+        return new ResponseEntity(reviewMapper.reviewsToReviewImageDtos(images),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{cafe_id}/reviews/{review_id}")
