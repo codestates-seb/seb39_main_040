@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import React from "react";
 import Title from "../components/common/Title";
 import Header from "../components/common/Header";
 import CafeCards from "../components/cafe/CafeCards";
 import SearchBar from "../components/common/SearchBar";
 import FilterBar from "../components/common/FilterBar";
+import React, { useState } from "react";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -22,13 +22,15 @@ const MainWrapper = styled.div`
 `;
 
 const MainPage = () => {
+  const [searchInput, setSearchInput] = useState("");
+
   return (
     <MainWrapper>
       <Header />
       <Title />
-      <SearchBar />
+      <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
       <FilterBar />
-      <CafeCards />
+      <CafeCards searchInput={searchInput} setSearchInput={setSearchInput} />
     </MainWrapper>
   );
 };
