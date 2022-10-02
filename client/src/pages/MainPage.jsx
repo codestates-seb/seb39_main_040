@@ -21,16 +21,33 @@ const MainWrapper = styled.div`
   }
 `;
 
+const FilterBarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 1370px;
+`;
+
 const MainPage = () => {
   const [searchInput, setSearchInput] = useState("");
+  const [targetFilter, setTargetFilter] = useState(`all`);
 
   return (
     <MainWrapper>
       <Header />
       <Title />
       <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
-      <FilterBar />
-      <CafeCards searchInput={searchInput} setSearchInput={setSearchInput} />
+      <FilterBarContainer>
+        <FilterBar
+          targetFilter={targetFilter}
+          setTargetFilter={setTargetFilter}
+        />
+      </FilterBarContainer>
+      <CafeCards
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        targetFilter={targetFilter}
+        setTargetFilter={setTargetFilter}
+      />
     </MainWrapper>
   );
 };
