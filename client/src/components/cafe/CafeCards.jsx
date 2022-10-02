@@ -17,7 +17,7 @@ const CafeCardWrapper = styled.div`
   }
 `;
 
-const CafeCards = ({ searchInput }) => {
+const CafeCards = ({ searchInput, targetFilter }) => {
   const [cafeInfo, setCafeInfo] = useState([]);
   // const { searchInput } = useStore();
 
@@ -29,6 +29,18 @@ const CafeCards = ({ searchInput }) => {
     setCafeInfo(response.data.data);
   };
 
+  const filterGet = async (targetId) => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API}/cafe?category=${targetId}`
+    );
+    // console.log(response.data.data);
+    setCafeInfo(response.data.data);
+    if (response.data.data.length === 0) {
+      alert("해당하는 카페가 없습니다.");
+    }
+    // console.log(targetId, response.data.data);
+  };
+
   // 카페 전체 리스트 불러오기
   useEffect(() => {
     axios
@@ -37,8 +49,9 @@ const CafeCards = ({ searchInput }) => {
         setCafeInfo(res.data.data);
       })
       .catch((e) => console.log("error:", e));
+
     if (searchInput) {
-      console.log(searchInput);
+      // console.log(searchInput);
       axios
         .get(`${process.env.REACT_APP_API}/cafe/search?name=${searchInput}`)
         .then((res) => {
@@ -46,20 +59,29 @@ const CafeCards = ({ searchInput }) => {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
 
-  useEffect(() => {
-    // if (searchInput) {
-    //   console.log(searchInput);
+    // if (targetFilter) {
+    //   // console.log(targetFilter);
     //   axios
-    //     .get(`${process.env.REACT_APP_API}/cafe/search/keyword=${searchInput}`)
+    //     .get(`${process.env.REACT_APP_API}/cafe?category=${targetFilter}`)
     //     .then((res) => {
     //       console.log(res.data.data);
+    //       if (res.data.data.length === 0) {
+    //         alert("해당하는 카페가 없습니다.");
+    //       }
     //     })
     //     .catch((err) => console.log(err));
     // }
+  }, []);
+
+  useEffect(() => {
     searchGet(searchInput);
   }, [searchInput]);
+
+  useEffect(() => {
+    filterGet(targetFilter);
+    // console.log(targetFilter);
+  }, [targetFilter]);
 
   return (
     <CafeCardWrapper>
