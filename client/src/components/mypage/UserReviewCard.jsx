@@ -4,7 +4,7 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const UserReviewCard = ({
@@ -17,7 +17,6 @@ const UserReviewCard = ({
   tags,
 }) => {
   const navigate = useNavigate();
-
   const reviewDelete = (e) => {
     let token = localStorage.getItem("access_token") || "";
     axios.defaults.headers.common["AccessToken"] = `${token}`;
@@ -60,11 +59,17 @@ const UserReviewCard = ({
         </StarBox>
       </ContentBox>
       <ButtonBox>
-        <button
+        {/* <button
           onClick={() => navigate(`/cafe/${cafe_id}/reviews/${review_id}`)}
         >
           수정
-        </button>
+        </button> */}
+        <Link
+          to={`/cafe/${cafe_id}/reviews/${review_id}`}
+          state={{ cafe_id: cafe_id, review_id: review_id }}
+        >
+          <button>수정</button>
+        </Link>
         <button onClick={reviewDelete}>삭제</button>
       </ButtonBox>
     </ReviewCardWrapper>
