@@ -7,10 +7,14 @@ import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.image.repository.ImageRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
+    private final S3UploaderService s3Service;
 
     public Long save(String url){
         Image image = imageRepository.save(Image.builder()
@@ -18,11 +22,18 @@ public class ImageService {
         return image.getId();
     }
 
+    public void delete(Image img) {
+        s3Service.delete(img);
+        imageRepository.delete(img);
+    }
+
     public Image findById(Long id){
         return imageRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
     }
 
-    public void delete(Image img) {
-        imageRepository.delete(img);
+    public List<Image> findTempImages() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tenDaysAgo = now.minusDays(10);
+        return imageRepository.findByStatusAndCreatedAtLessThan(Image.ImgStatus.TEMP, tenDaysAgo);
     }
 }

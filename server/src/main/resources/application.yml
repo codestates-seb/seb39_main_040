@@ -17,6 +17,12 @@ spring:
   # init:
   #  mode: always
 
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
   profiles:
     include:
       - db
