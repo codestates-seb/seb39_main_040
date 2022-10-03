@@ -11,7 +11,7 @@ spring:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
       ddl-auto: update
     show-sql: true
-  #  defer-datasource-initialization: true
+    #defer-datasource-initialization: true
 
   #sql:
   # init:

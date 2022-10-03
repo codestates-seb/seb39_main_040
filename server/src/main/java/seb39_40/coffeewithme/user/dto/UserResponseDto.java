@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import seb39_40.coffeewithme.image.domain.Image;
 
 
 public class UserResponseDto {
@@ -22,5 +23,6 @@ public class UserResponseDto {
         private String userName;
         private String email;
         private String mobile;
+        private Image profilePhoto;
     }
 }

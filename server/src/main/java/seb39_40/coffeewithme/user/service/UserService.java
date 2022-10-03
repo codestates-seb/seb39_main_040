@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
 import seb39_40.coffeewithme.user.domain.User;
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ReviewRepository reviewRepository;
+    private final ImageService imageService;
 
     public void createUser(User user) {
         verifyEmail(user.getEmail());
@@ -30,6 +32,10 @@ public class UserService {
         user.setRoles("ROLE_USER");
         user.setStatus(User.UserStatus.USER_SIGNUP);
         user.setRegisterDate(LocalDate.now());
+
+        //이미지 처리 - 처음엔 기본 이미지로 처리
+        user.setProfilePhoto(imageService.findById(Long.valueOf(1)));
+
         userRepository.save(user);
     }
 
@@ -59,6 +65,8 @@ public class UserService {
             result.setUserName(temp.getUserName());
         if(!temp.getMobile().isEmpty())
             result.setMobile(temp.getMobile());
+        if(temp.getProfilePhoto().getId()!= result.getProfilePhoto().getId())
+            result.setProfilePhoto(imageService.findById(temp.getProfilePhoto().getId()));
         return userRepository.save(result);
     }
 
