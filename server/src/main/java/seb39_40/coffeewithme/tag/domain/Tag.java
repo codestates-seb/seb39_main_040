@@ -24,10 +24,10 @@ public class Tag {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag")
     private List<CafeTag> cafeTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag")
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
 
