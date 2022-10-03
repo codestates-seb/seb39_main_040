@@ -1,31 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CafeCard from "./CafeCard";
 import styled from "styled-components";
 import axios from "axios";
-
-const CafeCardWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 1500px;
-  align-items: center;
-  justify-content: center;
-  margin-left: 40px;
-  div {
-    width: 300px;
-    margin-right: 50px;
-  }
-`;
+import Loading from "../common/Loading";
 
 const CafeCards = ({ searchInput, targetFilter }) => {
   const [cafeInfo, setCafeInfo] = useState([]);
+  const [page, setPage] = useState(0);
+  const target = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
   // const { searchInput } = useStore();
 
   const searchGet = async (param) => {
     const response = await axios.get(
       `${process.env.REACT_APP_API}/cafe/search?keyword=${param}`
     );
-    console.log(response.data.data);
+    // console.log(response.data.data);
     setCafeInfo(response.data.data);
   };
 
@@ -38,41 +28,54 @@ const CafeCards = ({ searchInput, targetFilter }) => {
     if (response.data.data.length === 0) {
       alert("해당하는 카페가 없습니다.");
     }
-    // console.log(targetId, response.data.data);
   };
 
   // 카페 전체 리스트 불러오기
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API}/cafe`)
+  const CafeGet = async () => {
+    // 로딩상태를 true로 변경해준다.
+    setIsLoading(true);
+    // 로딩 스피너를 약 3초간 보여준다.
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    await axios
+      .get(`${process.env.REACT_APP_API}/cafe/?page=${page}`)
       .then((res) => {
-        setCafeInfo(res.data.data);
+        setCafeInfo(cafeInfo.concat(res.data.data));
+        setIsLoading(false);
       })
       .catch((e) => console.log("error:", e));
+  };
 
-    if (searchInput) {
-      // console.log(searchInput);
-      axios
-        .get(`${process.env.REACT_APP_API}/cafe/search?name=${searchInput}`)
-        .then((res) => {
-          console.log(res.data.data);
-        })
-        .catch((err) => console.log(err));
+  const onIntersect = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setPage((page) => page + 1);
+        console.log(page);
+
+        // 현재 타켓 observe
+        observer.observe(entry.target);
+      }
+    });
+  };
+
+  useEffect(() => {
+    CafeGet();
+  }, [page]);
+
+  const options = {
+    rootMargin: "30px",
+    threshold: 0.7,
+  };
+
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(onIntersect, options);
+      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
+      observer.observe(target.current);
     }
-
-    // if (targetFilter) {
-    //   // console.log(targetFilter);
-    //   axios
-    //     .get(`${process.env.REACT_APP_API}/cafe?category=${targetFilter}`)
-    //     .then((res) => {
-    //       console.log(res.data.data);
-    //       if (res.data.data.length === 0) {
-    //         alert("해당하는 카페가 없습니다.");
-    //       }
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
-  }, []);
+    return () => observer && observer.disconnect();
+  }, [target]);
 
   useEffect(() => {
     searchGet(searchInput);
@@ -80,24 +83,50 @@ const CafeCards = ({ searchInput, targetFilter }) => {
 
   useEffect(() => {
     filterGet(targetFilter);
-    // console.log(targetFilter);
   }, [targetFilter]);
 
   return (
-    <CafeCardWrapper>
-      {cafeInfo.map((el) => (
-        <div>
-          <CafeCard
-            key={el.id}
-            id={el.id}
-            title={el.name}
-            tags={el.tags}
-            image={el.main_img}
-          />
-        </div>
-      ))}
-    </CafeCardWrapper>
+    <MainWrapper>
+      <CafeCardWrapper>
+        {cafeInfo.map((el) => (
+          <div id="observer">
+            <CafeCard
+              key={el.id}
+              id={el.id}
+              title={el.name}
+              tags={el.tags}
+              image={el.main_img}
+            />
+          </div>
+        ))}
+        <LoadingWrapper>{isLoading ? <Loading /> : null}</LoadingWrapper>
+      </CafeCardWrapper>
+      <div ref={target}></div>
+    </MainWrapper>
   );
 };
 
 export default CafeCards;
+
+const MainWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+const CafeCardWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+  margin-left: 40px;
+  div {
+    width: 300px;
+    margin-right: 50px;
+  }
+`;
+const LoadingWrapper = styled.div`
+  width: 100%;
+`;
