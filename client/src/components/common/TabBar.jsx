@@ -69,7 +69,7 @@ const TabContentWrapper = styled.div`
   justify-content: center;
 `;
 
-const TabBar = ({ cafeIdInfo, reviewInfo }) => {
+const TabBar = ({ cafeIdInfo, cafeImages }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -103,7 +103,7 @@ const TabBar = ({ cafeIdInfo, reviewInfo }) => {
           <CafeMenu menuImg={cafeIdInfo.menu_img} />
         </TabBarPanel>
         <TabBarPanel value={value} index={2}>
-          <CafePhotoCards />
+          <CafePhotoCards cafeImages={cafeImages} />
         </TabBarPanel>
       </TabContentWrapper>
     </Box>

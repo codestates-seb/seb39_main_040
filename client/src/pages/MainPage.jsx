@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Title from "../components/common/Title";
+import SimpleSlider from "../components/common/Carousel";
 import Header from "../components/common/Header";
 import CafeCards from "../components/cafe/CafeCards";
 import SearchBar from "../components/common/SearchBar";
@@ -16,9 +16,14 @@ const MainWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 1400px;
+    width: 1600px;
     height: 80px;
   }
+`;
+
+const CarouselContainer = styled.div`
+  width: 1700px;
+  height: 800px;
 `;
 
 const FilterBarContainer = styled.div`
@@ -34,7 +39,9 @@ const MainPage = () => {
   return (
     <MainWrapper>
       <Header />
-      <Title />
+      <CarouselContainer>
+        <SimpleSlider />
+      </CarouselContainer>
       <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
       <FilterBarContainer>
         <FilterBar
