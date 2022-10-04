@@ -27,19 +27,17 @@ public class CafeController {
     public ResponseEntity getCafes(@RequestParam(required = false, defaultValue = "1") Integer page,
                                      @RequestParam(required = false, defaultValue = "newest") String sort,
                                      @RequestParam(required = false, defaultValue = "all") String category){
-        Page<Cafe> cafe = cafeService.findAll(category, page - 1, sort);
+        Page<Cafe> cafe = cafeService.find(category, page - 1, sort);
         return new ResponseEntity(new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(cafe.getContent()), cafe),
                 HttpStatus.OK);
     }
 
     @GetMapping("/search")
-    public ResponseEntity searchCafe(@RequestParam(required = false, defaultValue = "name") String type,
-                                     @RequestParam(required = false) String keyword,
+    public ResponseEntity searchCafe(@RequestParam(required = false) String keyword,
                                      @RequestParam(required = false, defaultValue = "1") Integer page,
                                      @RequestParam(required = false, defaultValue = "newest") String sort){
-        Page<Cafe> cafe = cafeService.search(type, keyword, page - 1, sort);
+        Page<Cafe> cafe = cafeService.search(keyword, page - 1, sort);
         return new ResponseEntity(new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(cafe.getContent()), cafe),
                 HttpStatus.OK);
     }
-
 }
