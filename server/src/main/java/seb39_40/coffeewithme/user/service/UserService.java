@@ -1,10 +1,11 @@
 package seb39_40.coffeewithme.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
-import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.exception.ErrorResponse;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
@@ -41,15 +42,11 @@ public class UserService {
 
     public void withdrawUser(String email){
         User user = findVerifiedUserWithEmail(email);
-        //false인 경우 - 로그아웃에 실패한 경우는 뭘로 해야되나 이미 null인 경우를 봐야하는 건가? 일단 보류
         user.setStatus(User.UserStatus.USER_WITHDRAW);
-        user.setRefresh("");
         userRepository.save(user);
     }
     public boolean logoutUser(String email){
         User user = findVerifiedUserWithEmail(email);
-        //false인 경우 - 로그아웃에 실패한 경우는 뭘로 해야되나 이미 null인 경우를 봐야하는 건가? 일단 보류
-        user.setRefresh("");
         userRepository.save(user);
         return true;
     }
@@ -71,16 +68,8 @@ public class UserService {
     }
 
     public User findVerifiedUserWithEmail(String email){
-        Optional<User> user = userRepository.findByEmail(email);
-        user.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-        return user.get();
-    }
-
-    public void saveRefreshToken(String email,String token){
-        User user = findVerifiedUserWithEmail(email);
-        user.setRefresh(token);
-        userRepository.save(user);
+        User user = findByEmail(email);
+        return user;
     }
 
     public List<Review> getReview(Long userId) {
@@ -93,21 +82,31 @@ public class UserService {
 
     public void verifyUser(String email){
         User user=userRepository.findByEmail(email).get();
-        if(user.getStatus().equals(User.UserStatus.USER_WITHDRAW))
-            throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
+        if(user.getStatus().equals(User.UserStatus.USER_WITHDRAW)) {
+            ErrorResponse errorResponse=new ErrorResponse(HttpStatus.FORBIDDEN,"이미 탈퇴한 회원입니다.");
+            throw new BusinessLogicException(errorResponse);
+        }
     }
 
     private void verifyEmail(String email){
         Optional<User> user=userRepository.findByEmail(email);
-        if(user.isPresent())
-            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS); //이미 이메일이 존재합니다(이미 사용중인 이메일입니다.)
+        if(user.isPresent()) {
+            ErrorResponse errorResponse=new ErrorResponse(HttpStatus.CONFLICT, "이미 사용중인 이메일 입니다.");
+            throw new BusinessLogicException(errorResponse);
+        }
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(() -> {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, "존재하지 않는 회원 ID입니다.");
+            throw new BusinessLogicException(errorResponse);
+        });
     }
 
     public User findByEmail(String username) {
-        return userRepository.findByEmail(username).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        return userRepository.findByEmail(username).orElseThrow(() -> {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, "존재하지 않는 회원 EMAIL입니다.");
+            throw new BusinessLogicException(errorResponse);
+        });
     }
 }

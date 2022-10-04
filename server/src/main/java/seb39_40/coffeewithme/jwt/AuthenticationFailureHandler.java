@@ -1,6 +1,7 @@
 package seb39_40.coffeewithme.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
@@ -25,14 +26,14 @@ public class AuthenticationFailureHandler implements org.springframework.securit
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
-            ErrorResponse e = ErrorResponse.of(ExceptionCode.USER_NOT_FOUND);
+            ErrorResponse e = new ErrorResponse(HttpStatus.UNAUTHORIZED,"Email 혹은 Password가 일치하지 않습니다.");
             new ObjectMapper().writeValue(response.getWriter(), e);
         }
         else if(exception instanceof DisabledException){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
-            ErrorResponse e = ErrorResponse.of(ExceptionCode.USER_BAD_REQUEST);
+            ErrorResponse e = new ErrorResponse(HttpStatus.BAD_REQUEST,"존재하지 않는 회원입니다.");
             new ObjectMapper().writeValue(response.getWriter(), e);
         }
     }

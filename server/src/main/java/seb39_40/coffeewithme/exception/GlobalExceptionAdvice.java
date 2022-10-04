@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionAdvice {
+    /*
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleBusinessLogicException(BusinessLogicException e) {
-        System.out.println(e.getExceptionCode().getStatus());
+        //System.out.println(e.getExceptionCode().getStatus());
         System.out.println(e.getMessage());
 
-        final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
+        //final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
 
-        return response;
+        //return response;
     }
 
     @ExceptionHandler
@@ -49,4 +50,5 @@ public class GlobalExceptionAdvice {
 
         return response;
     }
+     */
 }

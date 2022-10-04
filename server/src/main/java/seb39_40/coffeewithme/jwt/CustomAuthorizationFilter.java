@@ -6,6 +6,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.MultipartStream;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,15 +47,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 token = request.getHeader("AccessToken");
 
             try{
-                /*
-              if(token==null || !token.startsWith(TYPE)){
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.setContentType(APPLICATION_JSON_VALUE);
-                    response.setCharacterEncoding("utf-8");
-                    ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_BAD_REQUEST);
-                    new ObjectMapper().writeValue(response.getWriter(), errorResponse);
-                }
-                */
 
                 String jwt = jwtProvider.substringToken(token);
 
@@ -67,7 +59,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setContentType(APPLICATION_JSON_VALUE);
                         response.setCharacterEncoding("utf-8");
-                        ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_UNAUTHORIZED);
+                        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED,"RefreshToken이 일치하지 않습니다.");
                         new ObjectMapper().writeValue(response.getWriter(), errorResponse);
                     }
                     User user = userRepository.findByEmail(email).get();
@@ -91,19 +83,19 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
-                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_EXPIRATION);
+                ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED,"만료된 AccessToken 입니다. 재발급 받으세요.");
                 new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             }catch(NullPointerException e){
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
-                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_BAD_REQUEST);
+                ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST,"토큰 정보가 요청에 담기지 않았습니다.");
                 new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             }catch(JwtException e){
                 response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
-                ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.TOKEN_PRECONDITION_FAILED);
+                ErrorResponse errorResponse = new ErrorResponse(HttpStatus.PRECONDITION_FAILED,"토큰 타입이 일치하지 않습니다.");
                 new ObjectMapper().writeValue(response.getWriter(), errorResponse);
             }
         }

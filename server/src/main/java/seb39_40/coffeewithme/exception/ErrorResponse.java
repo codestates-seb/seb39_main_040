@@ -14,79 +14,18 @@ public class ErrorResponse {
 
     private Integer status;
     private String message;
-    private List<FieldError> fieldErrors;
-    private List<ConstraintViolationError> violationErrors;
 
-    private ErrorResponse(final List<FieldError> fieldErrors,
-                          final List<ConstraintViolationError> violationErrors,
-                          final Integer status,final String message) {
-        this.fieldErrors = fieldErrors;
-        this.violationErrors = violationErrors;
-        this.status=status;
+
+    public ErrorResponse(final HttpStatus status, final String message) {
+        this.status=status.value();
         this.message=message;
     }
 
-    public static ErrorResponse of(BindingResult bindingResult, HttpStatus httpStatus) {
-        return new ErrorResponse(FieldError.of(bindingResult), null, httpStatus.value(), httpStatus.getReasonPhrase());
-    }
+    //public static ErrorResponse of(HttpStatus httpStatus, String message){
+    //    return new ErrorResponse(httpStatus.value(), message);
+    //}
 
-    public static ErrorResponse of(Set<ConstraintViolation<?>> violations, HttpStatus httpStatus) {
-        return new ErrorResponse(null, ConstraintViolationError.of(violations), httpStatus.value(), httpStatus.getReasonPhrase());
-    }
-    public static ErrorResponse of(ExceptionCode exceptionCode){
-        return new ErrorResponse(null,null,exceptionCode.getStatus(), exceptionCode.getMessage());
-    }
-
-    public static ErrorResponse of(HttpStatus httpStatus){
-        return new ErrorResponse(null,null, httpStatus.value(), httpStatus.getReasonPhrase());
-    }
-
-    @Getter
-    public static class FieldError {
-        private String field;
-        private Object rejectedValue;
-        private String reason;
-
-        private FieldError(String field, Object rejectedValue, String reason) {
-            this.field = field;
-            this.rejectedValue = rejectedValue;
-            this.reason = reason;
-        }
-
-        public static List<FieldError> of(BindingResult bindingResult) {
-            final List<org.springframework.validation.FieldError> fieldErrors =
-                    bindingResult.getFieldErrors();
-            return fieldErrors.stream()
-                    .map(error -> new FieldError(
-                            error.getField(),
-                            error.getRejectedValue() == null ?
-                                    "" : error.getRejectedValue().toString(),
-                            error.getDefaultMessage()))
-                    .collect(Collectors.toList());
-        }
-    }
-
-    @Getter
-    public static class ConstraintViolationError {
-        private String propertyPath;
-        private Object rejectedValue;
-        private String reason;
-
-        private ConstraintViolationError(String propertyPath, Object rejectedValue,
-                                         String reason) {
-            this.propertyPath = propertyPath;
-            this.rejectedValue = rejectedValue;
-            this.reason = reason;
-        }
-
-        public static List<ConstraintViolationError> of(
-                Set<ConstraintViolation<?>> constraintViolations) {
-            return constraintViolations.stream()
-                    .map(constraintViolation -> new ConstraintViolationError(
-                            constraintViolation.getPropertyPath().toString(),
-                            constraintViolation.getInvalidValue().toString(),
-                            constraintViolation.getMessage()
-                    )).collect(Collectors.toList());
-        }
-    }
+    //public static ErrorResponse of(HttpStatus httpStatus){
+    //    return new ErrorResponse(null,null, httpStatus.value(), httpStatus.getReasonPhrase());
+    //}
 }

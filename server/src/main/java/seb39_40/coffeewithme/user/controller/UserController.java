@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.jwt.CustomUserDetails;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.user.domain.User;
@@ -31,15 +32,23 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity joinUser(@RequestBody UserRequestDto.UserJoin join){
         User user = userMapper.userJoinToUser(join);
-        userService.createUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            userService.createUser(user);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (BusinessLogicException e){
+            return new ResponseEntity<>(e.getErrorResponse(),e.getErrorResponse().getStatus());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity loginUser(@AuthenticationPrincipal CustomUserDetails userDetails){
-        userService.verifyUser(userDetails.getUsername());
-        System.out.println("** Success Login : " + userDetails.getUsername());
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            userService.verifyUser(userDetails.getUsername());
+            System.out.println("** Success Login : " + userDetails.getUsername());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (BusinessLogicException e){
+            return new ResponseEntity<>(e.getErrorResponse(),e.getErrorResponse().getStatus());
+        }
     }
 
     @PostMapping("/logout")
@@ -64,28 +73,36 @@ public class UserController {
 
     @GetMapping("/information")
     public ResponseEntity getUserInformation(@AuthenticationPrincipal CustomUserDetails userDetails){
-        System.out.println("** Get User Information : "+userDetails.getUsername());
-        User user = userService.getInformation(userDetails.getUsername());
-        return new ResponseEntity<>(userMapper.userToUserInfo(user),HttpStatus.OK);
+        try {
+            System.out.println("** Get User Information : " + userDetails.getUsername());
+            User user = userService.getInformation(userDetails.getUsername());
+            return new ResponseEntity<>(userMapper.userToUserInfo(user), HttpStatus.OK);
+        }catch (BusinessLogicException e){
+            return new ResponseEntity<>(e.getErrorResponse(),e.getErrorResponse().getStatus());
+        }
     }
 
     @PatchMapping("/information")
     public ResponseEntity updateUserInformation(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @RequestBody UserRequestDto.UserUpdate userRequestDto) throws IOException {
-                                                //HttpServletRequest request) throws IOException {
-        //System.out.println("** Update User Information : "+userDetails.getUsername());
-        //ObjectMapper om = new ObjectMapper();
-        //User user = om.readValue(request.getInputStream(), User.class);
-        User user = userMapper.userUpdateDtoToUser(userRequestDto);
-        User result = userService.updateInformation(userDetails.getUsername(), user);
-        return new ResponseEntity<>(userMapper.userToUserInfo(result),HttpStatus.OK);
+                                                @RequestBody UserRequestDto.UserUpdate userRequestDto){
+        try{
+            User user = userMapper.userUpdateDtoToUser(userRequestDto);
+            User result = userService.updateInformation(userDetails.getUsername(), user);
+            return new ResponseEntity<>(userMapper.userToUserInfo(result),HttpStatus.OK);
+        }catch (BusinessLogicException e){
+            return new ResponseEntity<>(e.getErrorResponse(),e.getErrorResponse().getStatus());
+        }
     }
 
     @PostMapping("/wishlist/{cafeId}")
     public ResponseEntity setLike(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @PathVariable("cafeId") Long cafeId){
-        likeService.addLike(userDetails.getUser().getId(), cafeId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            likeService.addLike(userDetails.getUser().getId(), cafeId);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (BusinessLogicException e){
+            return new ResponseEntity<>(e.getErrorResponse(),e.getErrorResponse().getStatus());
+        }
     }
 
     @GetMapping("/wishlist")
@@ -97,8 +114,12 @@ public class UserController {
     @DeleteMapping("/wishlist/{cafeId}")
     public ResponseEntity deleteLike(@AuthenticationPrincipal CustomUserDetails userDetails,
                                      @PathVariable("cafeId") Long cafeId){
-        likeService.deleteLike(userDetails.getUser().getId(), cafeId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            likeService.deleteLike(userDetails.getUser().getId(), cafeId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BusinessLogicException e) {
+            return new ResponseEntity<>(e.getErrorResponse(), e.getErrorResponse().getStatus());
+        }
     }
 
     @GetMapping("/reviews")

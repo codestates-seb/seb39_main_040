@@ -35,9 +35,6 @@ public class User {
     private UserStatus status;
     @Column(nullable = false, length = 50, name="reg_dt")
     private LocalDate registerDate;
-    //테스트용
-    @Column
-    private String refresh;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="prf_pt")
@@ -46,7 +43,7 @@ public class User {
     @Transient
     private List<Wishlist> likes=new ArrayList<>();
 
-    @Transient //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Transient
     private List<Review> reviews=new ArrayList<>();
 
     public List<String> getRoleList(){

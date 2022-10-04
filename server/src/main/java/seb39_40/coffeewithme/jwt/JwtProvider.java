@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import seb39_40.coffeewithme.user.service.UserService;
 
@@ -13,6 +14,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
     //액세스 토큰 만료 시간
     private int ACCESS_EXPIRATION= 1000 * 60 * 10;
@@ -23,10 +25,7 @@ public class JwtProvider {
 
 
     private final UserService userService;
-
-    public JwtProvider(UserService userService) {
-        this.userService = userService;
-    }
+    private final RedisRepository redisRepository;
 
     public String createAccessToken(Long id,String email){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
@@ -41,6 +40,7 @@ public class JwtProvider {
     }
     public String createRefreshToken(String email){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setSubject("cwm_refresh_token")
@@ -50,7 +50,8 @@ public class JwtProvider {
     }
 
     public void saveRefreshToken(String email,String token){
-        userService.saveRefreshToken(email,token);
+        //userService.saveRefreshToken(email,token);
+        redisRepository.save(token, email);
     }
 
     public Claims parseToken(String jwt){
@@ -63,7 +64,11 @@ public class JwtProvider {
     }
 
     public boolean validationTheSameToken(String email,String token){
-        return token.equals(userService.findVerifiedUserWithEmail(email).getRefresh());
+        //return token.equals(userService.findVerifiedUserWithEmail(email).getRefresh());
+        String result = redisRepository.findByEmail(email);
+        if(result.equals("false"))
+            throw new JwtException("refresh 토큰을 찾을 수 없슴둥 다시 로그인 하시라요");
+        return token.equals(result);
     }
 
     public String substringToken(String token){
