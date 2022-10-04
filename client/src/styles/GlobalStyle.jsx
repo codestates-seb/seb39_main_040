@@ -35,6 +35,7 @@ ${reset}
     --gray-030: #dcdcdc;
     // 컨셉 색상
     --green-010: #809A6F;
+    --green-020: #738568;
     --black-010: #000000;
     --white-010: #ffffff;
     --red-010: #e64848;
