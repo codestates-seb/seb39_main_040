@@ -16,7 +16,6 @@ const CafeDetailPage = () => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}`)
       .then((res) => {
-        // console.log(res.data);
         setCafeIdInfo(res.data);
       })
       .catch((e) => console.err("error:", e));
@@ -27,7 +26,6 @@ const CafeDetailPage = () => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}/reviews/images`)
       .then((res) => {
-        console.log(res.data);
         setCafeImages(res.data);
       })
       .catch((e) => console.err("error:", e));

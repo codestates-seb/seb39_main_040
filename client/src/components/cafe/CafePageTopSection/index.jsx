@@ -11,6 +11,7 @@ import {
 import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
 import axios from "axios";
+import ManagerBadge from "../../../assets/badge.svg";
 
 const CafeTopSection = styled.div`
   display: flex;
@@ -75,7 +76,9 @@ const ToolTip = styled.span`
     border: none;
     font-size: 25px;
     color: var(--green-010);
-    cursor: pointer;
+  }
+  button:hover {
+    color: var(--green-020);
   }
   .tooltip-text {
     z-index: 100;
@@ -90,6 +93,13 @@ const ToolTip = styled.span`
   }
   :hover .tooltip-text {
     display: block;
+  }
+`;
+
+const Badge = styled.div`
+  margin-left: 10px;
+  img {
+    width: 100px;
   }
 `;
 
@@ -153,18 +163,6 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
   };
 
   return (
-    // <Wrapper>
-    //   <div className="img-box">
-    //     <img src={`${cafeIdInfo.main_img}`} alt="카페사진" />
-    //   </div>
-    //   <div className="title-box">
-    //     <p>{cafeIdInfo.name}</p>
-    //     <button>♥︎</button>
-    //   </div>
-    //   <div className="tag-box">
-    //     <span>#{cafeIdInfo.tags}</span>
-    //   </div>
-    // </Wrapper>
     <CafeTopSection>
       <CafeTopInfo>
         <ImgBox>
@@ -180,6 +178,15 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
                 </button>
                 <span className="tooltip-text">위시리스트 추가하기</span>
               </ToolTip>
+              <Badge>
+                {cafeIdInfo.badge === true ? (
+                  <span>
+                    <img src={ManagerBadge} alt="관리자뱃지" />
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </Badge>
             </TitleBox>
             <Tagbox>
               <Tag>#{cafeIdInfo.tags}</Tag>
