@@ -7,8 +7,6 @@ import Logo from "../../assets/CoffeeWithMe.svg";
 import useLoginStore from "../../store/useLoginStore";
 import Swal from "sweetalert2";
 
-// import SuccessAlert from "./SuccessAlert";
-
 const Header = () => {
   const { isLogin, setIsLogin } = useLoginStore();
   const [isOpen, setIsOpen] = useState(true);
@@ -23,11 +21,11 @@ const Header = () => {
         Swal.fire({
           title: "정말 로그아웃하시겠습니까?",
           icon: "question",
-          showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-          confirmButtonColor: "var(--green-010)", // confrim 버튼 색깔 지정
-          cancelButtonColor: "var(--red-010)", // cancel 버튼 색깔 지정
-          confirmButtonText: "확인", // confirm 버튼 텍스트 지정
-          cancelButtonText: "취소", // cancel 버튼 텍스트 지정
+          showCancelButton: true,
+          confirmButtonColor: "var(--green-010)",
+          cancelButtonColor: "var(--red-010)",
+          confirmButtonText: "확인",
+          cancelButtonText: "취소",
         }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
@@ -112,7 +110,6 @@ const HeaderWrapper = styled.header`
   align-items: center;
   height: 75px;
   width: 100%;
-  //border-bottom: 1px solid var(--gray-030);
   box-shadow: 4px 4px 10px var(--gray-030);
   padding: 10px 40px;
   background-color: var(--white-010);
@@ -142,7 +139,6 @@ const NavItem = styled.li`
 `;
 
 const DropBox = styled.div`
-  // ?? a 태그를 여기서 해주어야지만 Link가 스타일이 적용되지 않는다.
   a {
     text-decoration: none;
     color: var(--black--010);
@@ -159,8 +155,6 @@ const DropBox = styled.div`
     font-size: 15px;
     transition: 0.3s;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
-    // 투명도조절로 보이지 않게
     opacity: 0;
   }
 
@@ -175,12 +169,10 @@ const DropBox = styled.div`
     transition: 0.3s;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     background-color: var(--white-010);
-    // 투명도조절로 보이게
     opacity: 1;
   }
 `;
 
-// 유저이미지
 const UserProfile = styled.img`
   display: inline-block;
   position: absolute;
@@ -193,7 +185,6 @@ const UserProfile = styled.img`
   border: none;
 `;
 
-// 드롭 메뉴
 const DropMenu = styled.ul`
   .active &.menu > li {
     text-decoration: none;
@@ -206,7 +197,6 @@ const DropMenu = styled.ul`
   }
 `;
 
-//드롭 메뉴속 아이템
 const DropItem = styled.li`
   padding: 5px;
   &:hover {

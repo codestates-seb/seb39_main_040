@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Button from "../common/Button";
 import NewTagForm from "./ReviewTag";
 import StarRating from "./ReviewStarRating";
+import Swal from "sweetalert2";
 
 const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
   const navigate = useNavigate();
   const [description, setDescription] = useState();
   const [score, setScore] = useState(0);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState();
   const [img, setImg] = useState("");
   const [imgSrc, setImgSrc] = useState();
   const [imgInfo, setImgInfo] = useState(null);
@@ -37,21 +38,49 @@ const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
         )
         .then((res) => {
           console.log(res.data);
-          console.log("리뷰수정완료");
-          alert("리뷰가 수정되었습니다.");
-          // navigate(`/cafe/${cafeId}`);
+          Swal.fire({
+            title: "리뷰가 수정되었습니다.",
+            text: "수정된 리뷰를 확인해보세요.",
+            confirmButtonColor: "var(--green-010)",
+            icon: "success",
+          });
+          navigate(`/user/review`);
         })
         .catch((err) => {
           console.log("err", err);
+          if (err.response.status === 412 || 400) {
+            Swal.fire({
+              title: "다시 시도해주세요",
+              text: "리뷰가 정상적으로 수정되지 않았습니다.",
+              confirmButtonColor: "var(--green-010)",
+              icon: "error",
+            });
+          }
         });
     } else if (!tags) {
-      alert("태그를 두개 이상 선택해주세요.");
+      Swal.fire({
+        title: "태그를 두개 이상 선택해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     } else if (!score) {
-      alert("별점평가를 해주세요.");
+      Swal.fire({
+        title: "별점을 선택해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     } else if (!description) {
-      alert("한줄평을 작성해주세요.");
+      Swal.fire({
+        title: "한줄평을 작성해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     } else if (!img) {
-      alert("사진을 등록해주세요.");
+      Swal.fire({
+        title: "사진을 등록해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     }
   };
 
@@ -63,7 +92,6 @@ const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
     setTags(newTags);
   };
 
-  // imgInfo가 바뀔 때(마다) 이미지 post 요청 실행
   useEffect(() => {
     const formData = new FormData();
     formData.append("images", imgInfo);
@@ -79,19 +107,22 @@ const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
       .then((res) => {
         console.log(res.data);
         setImg(res.data.id);
-        alert("사진추가 완료");
+        Swal.fire({
+          title: "사진이 추가되었습니다.",
+          text: "추가된 사진을 확인해보세요.",
+          confirmButtonColor: "var(--green-010)",
+          icon: "success",
+        });
       })
       .catch((err) => {
         console.log("err", err);
       });
   }, [imgInfo]);
 
-  // input 사진 첨부 onchange 핸들러
   const uploadImg = (e) => {
     e.preventDefault();
     setImgInfo(e.target.files[0]);
 
-    // 이미지 미리보기
     const reader = new FileReader();
 
     reader.readAsDataURL(e.target.files[0]);
@@ -115,6 +146,7 @@ const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
             <span>태그</span>
           </TagTitle>
           <TagBox>
+            <p>태그를 두개 이상 선택해 주세요. </p>
             <NewTagForm value={tags} onChange={onChangeTagHandler} />
           </TagBox>
         </TagContainer>
@@ -149,13 +181,7 @@ const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
           <div className="preview">
             {imgInfo && <img src={imgSrc} alt="이미지 미리보기" />}
           </div>
-          <input
-            type="file"
-            accept="image/*"
-            // ref={imgRef}
-            onChange={uploadImg}
-          />
-          <button>이미지 등록하기</button>
+          <input type="file" accept="image/*" onChange={uploadImg} />
         </form>
       </ImgContainer>
     </MainContainer>
@@ -166,7 +192,6 @@ export default ReviewForm;
 
 const MainContainer = styled.div`
   display: flex;
-  /* align-items: center; */
   flex-direction: column;
   width: 1360px;
   height: 1360px;
@@ -249,7 +274,7 @@ const TagContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 110px;
-  margin: 30px 0 0 10px;
+  margin: 40px 0 0 10px;
 `;
 
 const TagTitle = styled.div`
@@ -271,6 +296,12 @@ const TagBox = styled.div`
   width: 600px;
   height: 110px;
   margin-top: 20px;
+  p {
+    width: 600px;
+    margin: 10px 0 20px 0;
+    color: var(--gray-020);
+    font-size: 19px;
+  }
 `;
 
 const StarContainer = styled.div`
@@ -280,7 +311,7 @@ const StarContainer = styled.div`
   justify-content: center;
   width: 600px;
   height: 110px;
-  margin: 30px 0 0 10px;
+  margin: 40px 0 0 10px;
 `;
 
 const StarTitle = styled.div`

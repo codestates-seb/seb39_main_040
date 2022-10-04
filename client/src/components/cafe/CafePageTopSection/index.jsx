@@ -13,6 +13,87 @@ import React from "react";
 import axios from "axios";
 import ManagerBadge from "../../../assets/badge.svg";
 
+const CafePageTopSection = ({ cafeIdInfo }) => {
+  const addWishHandler = () => {
+    let token = localStorage.getItem("access_token") || "";
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
+    axios
+      .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
+        headers: { AccessToken: localStorage.getItem("access_token") },
+      })
+      .then(() => {
+        window.alert("위시리스트 추가완료");
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === 404) {
+          window.alert("이미 찜한 카페입니다.");
+        }
+      });
+  };
+
+  return (
+    <CafeTopSection>
+      <CafeTopInfo>
+        <ImgBox>
+          <img src={`${cafeIdInfo.main_img}`} alt="카페사진" />
+        </ImgBox>
+        <Cafedetail>
+          <CafedetailContent>
+            <TitleBox>
+              <p>{cafeIdInfo.name}</p>
+              <ToolTip>
+                <button onClick={addWishHandler}>
+                  <FontAwesomeIcon className="icon" icon={faHeart} />
+                </button>
+                <span className="tooltip-text">위시리스트 추가하기</span>
+              </ToolTip>
+              <Badge>
+                {cafeIdInfo.badge === true ? (
+                  <span>
+                    <img src={ManagerBadge} alt="관리자뱃지" />
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </Badge>
+            </TitleBox>
+            <Tagbox>
+              <Tag>#{cafeIdInfo.tags}</Tag>
+            </Tagbox>
+            <CafeInfoBox>
+              <div>
+                <p>{cafeIdInfo.description}</p>
+              </div>
+              <div>
+                <FontAwesomeIcon className="icon" icon={faClock} />
+                <li>{cafeIdInfo.running_time}</li>
+              </div>
+              <div>
+                <FontAwesomeIcon className="icon" icon={faPhone} />
+                <li>0503-3445-8573</li>
+              </div>
+              <div>
+                <FontAwesomeIcon className="icon" icon={faSquareInstagram} />
+                <li>cafe_Maison_ete</li>
+              </div>
+              <div>
+                <FontAwesomeIcon className="icon" icon={faLocationDot} />
+                <li>{cafeIdInfo.address}</li>
+              </div>
+            </CafeInfoBox>
+            <CafeMapbox>
+              <CafeInfoMap place={cafeIdInfo.address} />
+            </CafeMapbox>
+          </CafedetailContent>
+        </Cafedetail>
+      </CafeTopInfo>
+    </CafeTopSection>
+  );
+};
+
+export default CafePageTopSection;
+
 const CafeTopSection = styled.div`
   display: flex;
   justify-content: center;
@@ -28,7 +109,6 @@ const CafeTopInfo = styled.div`
   align-items: center;
   height: 600px;
   width: 1520px;
-  /* border: 1px solid black; */
 `;
 
 const ImgBox = styled.div`
@@ -51,7 +131,6 @@ const Cafedetail = styled.div`
   position: relative;
   width: 450px;
   height: 500px;
-  /* border: 1px solid black; */
 `;
 const CafedetailContent = styled.div`
   position: absolute;
@@ -142,84 +221,3 @@ const CafeMapbox = styled.div`
   height: 220px;
   margin: 20px 0 20px 0;
 `;
-
-const CafePageTopSection = ({ cafeIdInfo }) => {
-  const addWishHandler = () => {
-    let token = localStorage.getItem("access_token") || "";
-    axios.defaults.headers.common["AccessToken"] = `${token}`;
-    axios
-      .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
-        headers: { AccessToken: localStorage.getItem("access_token") },
-      })
-      .then(() => {
-        window.alert("위시리스트 추가완료");
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.status === 404) {
-          window.alert("이미 찜한 카페입니다.");
-        }
-      });
-  };
-
-  return (
-    <CafeTopSection>
-      <CafeTopInfo>
-        <ImgBox>
-          <img src={`${cafeIdInfo.main_img}`} alt="카페사진" />
-        </ImgBox>
-        <Cafedetail>
-          <CafedetailContent>
-            <TitleBox>
-              <p>{cafeIdInfo.name}</p>
-              <ToolTip>
-                <button onClick={addWishHandler}>
-                  <FontAwesomeIcon className="icon" icon={faHeart} />
-                </button>
-                <span className="tooltip-text">위시리스트 추가하기</span>
-              </ToolTip>
-              <Badge>
-                {cafeIdInfo.badge === true ? (
-                  <span>
-                    <img src={ManagerBadge} alt="관리자뱃지" />
-                  </span>
-                ) : (
-                  <></>
-                )}
-              </Badge>
-            </TitleBox>
-            <Tagbox>
-              <Tag>#{cafeIdInfo.tags}</Tag>
-            </Tagbox>
-            <CafeInfoBox>
-              <div>
-                <p>{cafeIdInfo.description}</p>
-              </div>
-              <div>
-                <FontAwesomeIcon className="icon" icon={faClock} />
-                <li>{cafeIdInfo.running_time}</li>
-              </div>
-              <div>
-                <FontAwesomeIcon className="icon" icon={faPhone} />
-                <li>0503-3445-8573</li>
-              </div>
-              <div>
-                <FontAwesomeIcon className="icon" icon={faSquareInstagram} />
-                <li>cafe_Maison_ete</li>
-              </div>
-              <div>
-                <FontAwesomeIcon className="icon" icon={faLocationDot} />
-                <li>{cafeIdInfo.address}</li>
-              </div>
-            </CafeInfoBox>
-            <CafeMapbox>
-              <CafeInfoMap place={cafeIdInfo.address} />
-            </CafeMapbox>
-          </CafedetailContent>
-        </Cafedetail>
-      </CafeTopInfo>
-    </CafeTopSection>
-  );
-};
-
-export default CafePageTopSection;

@@ -3,6 +3,26 @@ import styled from "styled-components";
 import Tag from "../common/Tag";
 import React from "react";
 
+const CafeCard = ({ id, title, tags, image }) => {
+  return (
+    <CafeItemWrapper>
+      <Link to={`/cafe/${id}`}>
+        <CafeImg src={`${image}`} />
+        <CafeInfoContent>
+          <CafeTitle>{title}</CafeTitle>
+          <CafeText>크로플이 맛있는 카페</CafeText>
+          <CafeTag>
+            <Tag className="tag">#{tags[0]}</Tag>
+            <Tag className="tag">#디저트맛집</Tag>
+          </CafeTag>
+        </CafeInfoContent>
+      </Link>
+    </CafeItemWrapper>
+  );
+};
+
+export default CafeCard;
+
 const CafeItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -11,10 +31,8 @@ const CafeItemWrapper = styled.div`
   background-color: var(--white-010);
   position: relative;
   padding: 0 10px;
-  /* border: 1px solid black; */
 `;
 
-// 이미지 (img)
 const CafeImg = styled.img`
   width: 300px;
   height: 300px;
@@ -36,7 +54,6 @@ const CafeInfoContent = styled.div`
   justify-content: center;
 `;
 
-// 이름 (title)
 const CafeTitle = styled.h2`
   width: 300px;
   font-weight: bold;
@@ -47,7 +64,6 @@ const CafeTitle = styled.h2`
   color: var(--black-010);
 `;
 
-// 카페텍스트
 const CafeText = styled.p`
   width: 300px;
   font-size: 1.1rem;
@@ -55,7 +71,6 @@ const CafeText = styled.p`
   margin-top: 18px;
 `;
 
-// 카페태그 (cafeTag)
 const CafeTag = styled.div`
   width: 300px;
   display: flex;
@@ -70,23 +85,3 @@ const CafeTag = styled.div`
     margin-right: 10px;
   }
 `;
-
-const CafeCard = ({ id, title, tags, image }) => {
-  return (
-    <CafeItemWrapper>
-      <Link to={`/cafe/${id}`}>
-        <CafeImg src={`${image}`} />
-        <CafeInfoContent>
-          <CafeTitle>{title}</CafeTitle>
-          <CafeText>크로플이 맛있는 카페</CafeText>
-          <CafeTag>
-            <Tag className="tag">#{tags[0]}</Tag>
-            <Tag className="tag">#디저트맛집</Tag>
-          </CafeTag>
-        </CafeInfoContent>
-      </Link>
-    </CafeItemWrapper>
-  );
-};
-
-export default CafeCard;

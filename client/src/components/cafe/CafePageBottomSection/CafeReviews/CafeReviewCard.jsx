@@ -5,6 +5,42 @@ import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import React from "react";
 
+const CafeReviewCard = ({ text, tag, user, image, star }) => {
+  return (
+    <MainWrapper>
+      <ImgBox>
+        <img src={`${image}`} alt="리뷰이미지" />
+      </ImgBox>
+      <ContentBox>
+        <p>{text}</p>
+        <TagBox>
+          {tag.map((el) => (
+            <Tag className="tag-1">#{el}</Tag>
+          ))}
+        </TagBox>
+        <Infobox>
+          <Star>
+            <Box sx={{ "& > legend": { mt: 2 } }}>
+              <Typography component="legend"></Typography>
+              <Rating
+                className="star-icon"
+                name="read-only"
+                value={star}
+                readOnly
+              />
+            </Box>
+          </Star>
+          <Username>
+            <span>{user.name}</span>
+          </Username>
+        </Infobox>
+      </ContentBox>
+    </MainWrapper>
+  );
+};
+
+export default CafeReviewCard;
+
 const MainWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -14,7 +50,6 @@ const MainWrapper = styled.div`
   background-color: var(--white-010);
   margin-bottom: 50px;
   position: relative;
-  /* border: 1px solid black; */
 `;
 
 const ImgBox = styled.div`
@@ -84,39 +119,3 @@ const Username = styled.div`
   margin-top: 10px;
   font-size: 14px;
 `;
-
-const CafeReviewCard = ({ text, tag, user, image, star }) => {
-  return (
-    <MainWrapper>
-      <ImgBox>
-        <img src={`${image}`} alt="리뷰이미지" />
-      </ImgBox>
-      <ContentBox>
-        <p>{text}</p>
-        <TagBox>
-          {tag.map((el) => (
-            <Tag className="tag-1">#{el}</Tag>
-          ))}
-        </TagBox>
-        <Infobox>
-          <Star>
-            <Box sx={{ "& > legend": { mt: 2 } }}>
-              <Typography component="legend"></Typography>
-              <Rating
-                className="star-icon"
-                name="read-only"
-                value={star}
-                readOnly
-              />
-            </Box>
-          </Star>
-          <Username>
-            <span>{user.name}</span>
-          </Username>
-        </Infobox>
-      </ContentBox>
-    </MainWrapper>
-  );
-};
-
-export default CafeReviewCard;

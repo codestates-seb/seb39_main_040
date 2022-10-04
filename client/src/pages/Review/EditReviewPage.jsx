@@ -10,7 +10,6 @@ import instance from "../../api/core";
 
 const EditReviewPage = () => {
   const location = useLocation();
-  // const cafe_id = location.state.cafe_id;
   const cafeId = location.state.cafe_id;
   const reviewId = location.state.review_id;
   const cafe_name = location.state.cafe_name;
@@ -20,25 +19,15 @@ const EditReviewPage = () => {
   const [originImg, setOriginImg] = useState("");
 
   useEffect(() => {
-    // let token = localStorage.getItem("access_token");
-    // axios.defaults.headers.common["AccessToken"] = `${token}`;
-    // axios
-    //   .get(`${process.env.REACT_APP_API}/cafe/${cafeId}/reviews/${reviewId}`)
-    //   .then((res) => {
-    //     setOriginReview(res.data);
-    //   });
     async function fetchData() {
       const response = await instance.get(
         `${process.env.REACT_APP_API}/cafe/${cafeId}/reviews/${reviewId}`
       );
-      // console.log(response.review_img);
       setOriginReview(response);
       setOriginDescription(response.description);
       setOriginImg(response.review_img);
     }
     fetchData();
-    // console.log(originReview);
-    // console.log(cafe_name);
   }, []);
 
   return (

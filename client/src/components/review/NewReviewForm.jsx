@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Button from "../common/Button";
 import NewTagForm from "./ReviewTag";
 import StarRating from "./ReviewStarRating";
-import ErrorAlert from "../common/ErrorAlert";
-import SuccessAlert from "../common/SuccessAlert";
+import Swal from "sweetalert2";
 
 const ReviewForm = () => {
   const { id } = useParams();
@@ -19,18 +18,15 @@ const ReviewForm = () => {
   const [imgInfo, setImgInfo] = useState(null);
   const [cafeTitle, setCafeTitle] = useState("");
 
-  // 카페 상세 정보 불러오기
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}`)
       .then((res) => {
-        // console.log(res.data);
         setCafeTitle(res.data.name);
       })
       .catch((e) => console.err("error:", e));
   }, []);
 
-  // 리뷰작성 핸들러
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const content = {
@@ -49,24 +45,49 @@ const ReviewForm = () => {
         .post(`${process.env.REACT_APP_API}/cafe/${id}/reviews`, content)
         .then((res) => {
           console.log(res.data);
-          console.log("리뷰작성완료");
-          alert("리뷰가 성공적으로 작성되었습니다.");
+          Swal.fire({
+            title: "리뷰가 작성되었습니다.",
+            text: "작성된 리뷰를 확인해보세요.",
+            confirmButtonColor: "var(--green-010)",
+            icon: "success",
+          });
           navigate(`/cafe/${id}`);
         })
         .catch((err) => {
           console.log("err", err);
           if (err.response.status === 412 || 400) {
-            window.alert("!! 리뷰가 정상적으로 작성되지 않았습니다.");
+            Swal.fire({
+              title: "다시 시도해주세요",
+              text: "리뷰가 정상적으로 등록되지 않았습니다.",
+              confirmButtonColor: "var(--green-010)",
+              icon: "error",
+            });
           }
         });
     } else if (!tags) {
-      alert("태그를 두개 이상 선택해주세요.");
+      Swal.fire({
+        title: "태그를 두개 이상 선택해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     } else if (!score) {
-      alert("별점평가를 해주세요.");
+      Swal.fire({
+        title: "별점을 선택해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     } else if (!description) {
-      alert("한줄평을 작성해주세요.");
+      Swal.fire({
+        title: "한줄평을 작성해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     } else if (!img) {
-      alert("사진을 등록해주세요.");
+      Swal.fire({
+        title: "사진을 등록해주세요.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     }
   };
 
@@ -78,7 +99,6 @@ const ReviewForm = () => {
     setTags(newTags);
   };
 
-  // imgInfo가 바뀔 때(마다) 이미지 post 요청 실행
   useEffect(() => {
     const formData = new FormData();
     formData.append("images", imgInfo);
@@ -94,19 +114,22 @@ const ReviewForm = () => {
       .then((res) => {
         console.log(res.data);
         setImg(res.data.id);
-        alert("사진추가 완료");
+        Swal.fire({
+          title: "사진이 추가되었습니다.",
+          text: "추가된 사진을 확인해보세요.",
+          confirmButtonColor: "var(--green-010)",
+          icon: "success",
+        });
       })
       .catch((err) => {
         console.log("err", err);
       });
   }, [imgInfo]);
 
-  // input 사진 첨부 onchange 핸들러
   const uploadImg = (e) => {
     e.preventDefault();
     setImgInfo(e.target.files[0]);
 
-    // 이미지 미리보기
     const reader = new FileReader();
 
     reader.readAsDataURL(e.target.files[0]);
@@ -166,12 +189,7 @@ const ReviewForm = () => {
             {imgInfo && <img src={imgSrc} alt="이미지 미리보기" />}
           </div>
           <div className="filebox">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={uploadImg}
-              placeholder="사진 파일"
-            />
+            <input type="file" accept="image/*" onChange={uploadImg} />
           </div>
         </form>
       </ImgContainer>
