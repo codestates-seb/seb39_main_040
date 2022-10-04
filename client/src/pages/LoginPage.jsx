@@ -30,19 +30,22 @@ const LoginPage = () => {
         localStorage.setItem("refresh_token", res.headers.refreshtoken);
         setIsLogin();
         Swal.fire({
-          title: "로그인에 성공했습니다 ☕️",
+          title: "로그인 되었습니다 ☕️",
+          text: "좋은 하루 보내세요 ☀️",
+          confirmButtonColor: "var(--green-010)",
           imageUrl:
             "https://cdn.pixabay.com/photo/2016/03/24/13/45/coffee-1276778_960_720.jpg",
           imageWidth: 500,
           imageHeight: 300,
-          imageAlt: "Login image",
+          imageAlt: "로그인이미지",
         });
         navigate("/");
       })
-      .catch((error) => {
+      .catch(() => {
         Swal.fire({
-          title: "로그인에 실패했습니다 🥲",
-          text: "다시 로그인을 시도해주세요!",
+          title: "로그인에 실패했습니다.",
+          text: "아이디 혹은 비밀번호를 확인해주세요.",
+          confirmButtonColor: "var(--green-010)",
           icon: "error",
         });
       });

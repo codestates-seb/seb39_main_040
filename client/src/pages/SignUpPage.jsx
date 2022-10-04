@@ -17,7 +17,6 @@ import Swal from "sweetalert2";
 const SignUpPage = () => {
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onChange" });
@@ -29,8 +28,9 @@ const SignUpPage = () => {
       .post(`${process.env.REACT_APP_API}/users/signup`, data)
       .then(() => {
         Swal.fire({
-          title: "회원가입에 성공했습니다!",
+          title: "회원가입에 성공했습니다.",
           text: "로그인을 시도해주세요.",
+          confirmButtonColor: "var(--green-010)",
         });
         navigate("/login");
       })

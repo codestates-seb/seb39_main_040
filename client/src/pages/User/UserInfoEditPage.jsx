@@ -1,46 +1,22 @@
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import Header from "../../components/common/Header";
-import useAuthStore from "../../store/useAuth";
+import Swal from "sweetalert2";
 import instance from "../../api/core";
-import { HiPhotograph } from "react-icons/hi";
 
 const UserInfoEditPage = () => {
-  const [imgSrc, setImgSrc] = useState("");
+  const [imgSrc, setImgSrc] = useState();
   const [userName, setUserName] = useState("");
   const [mobile, setMobile] = useState("");
   const [img, setImg] = useState("");
   const [imgInfo, setImgInfo] = useState(null);
   const [userInfo, setUserInfo] = useState([]);
-  // const { userInfo, setUserInfo } = useAuthStore();
-  // console.log(userInfo);
+  const [userPreProfile, setUserPreProfile] = useState("");
 
   const navigate = useNavigate();
-
-  const onUploadImg = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("images", imgInfo);
-
-    axios
-      .post(`${process.env.REACT_APP_API}/images/upload`, formData, {
-        headers: {
-          "Content-type": "multipart/form-data",
-          AccessToken: localStorage.getItem("access_token"),
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setImg(res.data.id);
-        alert("사진추가 완료");
-        console.log("사진추가완료");
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  };
 
   const uploadImg = (e) => {
     e.preventDefault();
@@ -59,24 +35,43 @@ const UserInfoEditPage = () => {
   const onChangeInfo = (e) => {
     e.preventDefault();
     const newInfo = { userName: userName, mobile: mobile, profilePhoto: img };
-    instance
-      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
-      .then(() => {
-        console.log("정보수정완료");
-        e.preventDefault();
-        // console.log(newInfo);
-        setUserInfo(userInfo);
-        // console.log(userInfo);
-        navigate("/userinfo");
-      })
-      .catch((err) => console.log(err));
+    if (userName && mobile && img) {
+      instance
+        .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
+        .then(() => {
+          e.preventDefault();
+          setUserInfo(userInfo);
+          Swal.fire({
+            title: "정보가 수정되었습니다.",
+            confirmButtonColor: "var(--green-010)",
+          });
+          navigate("/userinfo");
+        })
+        .catch((err) => console.log(err));
+    } else if (!img) {
+      Swal.fire({
+        title: "사진이 등록되지 않았습니다.",
+        icon: "error",
+        confirmButtonColor: "var(--green-010)",
+      });
+    } else if (!userName) {
+      Swal.fire({
+        title: "이름이 작성되지 않았습니다.",
+        icon: "error",
+        confirmButtonColor: "var(--green-010)",
+      });
+    } else if (!mobile) {
+      Swal.fire({
+        title: "전화번호가 작성되지 않았습니다.",
+        icon: "error",
+        confirmButtonColor: "var(--green-010)",
+      });
+    }
   };
 
-  // imgInfo가 바뀔 때(마다) 이미지 post 요청 실행
   useEffect(() => {
     const formData = new FormData();
     formData.append("images", imgInfo);
-    console.log(formData);
     let token = localStorage.getItem("access_token");
     axios.defaults.headers.common["AccessToken"] = `${token}`;
     axios
@@ -86,9 +81,7 @@ const UserInfoEditPage = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setImg(res.data.id);
-        alert("사진추가 완료");
       })
       .catch((err) => {
         console.log("err", err);
@@ -96,12 +89,12 @@ const UserInfoEditPage = () => {
   }, [imgInfo]);
 
   useEffect(() => {
-    // setUserInfo();
     let token = localStorage.getItem("access_token") || "";
     axios.defaults.headers.common["AccessToken"] = `${token}`;
-    axios
-      .get(`${process.env.REACT_APP_API}/users/information`)
-      .then((res) => setUserInfo(res.data));
+    axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
+      setUserInfo(res.data);
+      setUserPreProfile(res.data.profilePhoto.path);
+    });
   }, []);
 
   return (
@@ -109,20 +102,19 @@ const UserInfoEditPage = () => {
       <Header />
       <EditWrapper>
         <UserImgUpdate>
-          {!imgSrc ? (
-            <HiPhotograph className="icon" />
+          {!img ? (
+            <Img src={userPreProfile} alt="이전이미지" />
           ) : (
             <Img src={imgSrc} alt="이미지확인" />
           )}
           <ImgUpdateButton>
+            사진 수정
             <input
               className="profile"
               type="file"
               accept="image/*"
               onChange={uploadImg}
-              // ref={imgInput}
             />
-            <button type="submit">이미지 등록하기</button>
           </ImgUpdateButton>
         </UserImgUpdate>
         <InfoWrapper onSubmit={onChangeInfo}>
@@ -136,11 +128,11 @@ const UserInfoEditPage = () => {
           <InfoDataBox>
             <InputData>전화번호</InputData>
             <input
-              placeholder="변경할 전화번호를 적어주세요"
+              placeholder={userInfo.mobile}
               onChange={(e) => setMobile(e.target.value)}
             ></input>
           </InfoDataBox>
-          <UpdateButton>수정 완료</UpdateButton>
+          <UpdateButton>수정하기</UpdateButton>
         </InfoWrapper>
       </EditWrapper>
     </>
@@ -165,11 +157,6 @@ const UserImgUpdate = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  .icon {
-    //background-color: var(--gray-020);
-    width: 70%;
-    height: 70%;
-  }
 `;
 
 const Img = styled.img`
@@ -181,35 +168,18 @@ const Img = styled.img`
   border-radius: 50%;
 `;
 
-const ImgUpdateButton = styled.div`
+const ImgUpdateButton = styled.label`
   border: none;
   background: none;
   cursor: pointer;
-
-  > form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: none;
-    background: none;
-    cursor: pointer;
-    > input {
-      margin-top: 10px;
-      font-weight: 600;
-      font-size: 1.2rem;
-    }
-    > input .profile {
-      display: none;
-    }
-  }
+  margin: 15px;
 
   > input {
     margin-top: 10px;
     font-weight: 600;
     font-size: 1.2rem;
-  }
-  form > input.profile {
-    border: 1px solid red;
+    text-align: center;
+    display: none;
   }
 `;
 
