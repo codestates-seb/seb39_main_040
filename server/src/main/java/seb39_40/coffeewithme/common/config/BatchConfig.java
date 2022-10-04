@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.image.repository.ImageRepository;
 import seb39_40.coffeewithme.image.service.ImageService;
+import seb39_40.coffeewithme.review.domain.Review;
 
 import java.util.List;
 
@@ -37,13 +38,14 @@ public class BatchConfig {
     public Job job(){
         Job job = jobBuilderFactory.get("job")
                 .start(deleteTempImages())
+//                .next(deleteTempReview())
                 .build();
         return job;
     }
 
     @Bean
     public Step deleteTempImages(){
-        return stepBuilderFactory.get("step")
+        return stepBuilderFactory.get("deleteTempImages")
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("Step!");
                     List<Image> tempImages = imageService.findTempImages();
@@ -56,4 +58,20 @@ public class BatchConfig {
                     return RepeatStatus.FINISHED;
                 })).build();
     }
+
+//    @Bean
+//    public Step deleteTempReview(){
+//        return stepBuilderFactory.get("deleteTempReview")
+//                .tasklet(((contribution, chunkContext) -> {
+//                    log.info("Step!");
+//                    List<Image> tempReviews = reviewService.findTempReviews();
+//
+//                    if (tempReviews.size() > 0 && tempReviews != null){
+//                        for (Review review : tempReviews){
+//                            reviewService.delete(review);
+//                        }
+//                    }
+//                    return RepeatStatus.FINISHED;
+//                })).build();
+//    }
 }

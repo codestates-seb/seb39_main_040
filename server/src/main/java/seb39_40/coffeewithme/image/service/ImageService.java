@@ -2,6 +2,7 @@ package seb39_40.coffeewithme.image.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import seb39_40.coffeewithme.common.domain.Status;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.image.domain.Image;
@@ -18,7 +19,7 @@ public class ImageService {
 
     public Long save(String url){
         Image image = imageRepository.save(Image.builder()
-                .path(url).status(Image.ImgStatus.TEMP).build());
+                .path(url).status(Status.TEMP).build());
         return image.getId();
     }
 
@@ -34,6 +35,6 @@ public class ImageService {
     public List<Image> findTempImages() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tenDaysAgo = now.minusDays(10);
-        return imageRepository.findByStatusAndCreatedAtLessThan(Image.ImgStatus.TEMP, tenDaysAgo);
+        return imageRepository.findByStatusAndModifiedAtLessThan(Status.TEMP, tenDaysAgo);
     }
 }

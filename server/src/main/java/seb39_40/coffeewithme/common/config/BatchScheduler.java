@@ -24,8 +24,8 @@ public class BatchScheduler {
     @Autowired
     private BatchConfig batchConfig;
 
-    //    @Scheduled(cron = "0 0/5 * * * *")
-    @Scheduled(cron = "0 0 6 * * *") //매일 오전 6시에 실행 -> 가장 접속이 적은 시간?
+    //    @Scheduled(cron = "0 0/5 * * * *") 테스트용
+    @Scheduled(cron = "0 0 6 * * SAT") //매주 토요일 오전 6시에 실행
     public void runJob(){
         Map<String, JobParameter> confMap = new HashMap<>();
         confMap.put("time", new JobParameter(System.currentTimeMillis()));
