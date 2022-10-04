@@ -51,11 +51,14 @@ const Header = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await instance.get(
-        `${process.env.REACT_APP_API}/users/information`
-      );
-      setUserProfile(response.profilePhoto.path);
+      if (isLogin) {
+        const response = await instance.get(
+          `${process.env.REACT_APP_API}/users/information`
+        );
+        setUserProfile(response.profilePhoto.path);
+      }
     }
+
     fetchData();
   }, []);
 
