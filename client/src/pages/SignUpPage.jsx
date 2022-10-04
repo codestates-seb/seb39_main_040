@@ -1,8 +1,8 @@
 import React from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 // 사용된 이모티콘
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -163,7 +163,6 @@ const InputBox = styled.div`
     font-weight: 700;
   }
 
-  // 이름, 이메일, 비밀번호, 전화번호 각각의 input 칸
   .input {
     margin-bottom: 10px;
     color: var(--green-010);
@@ -173,7 +172,6 @@ const InputBox = styled.div`
     font-size: 20px;
     padding: 5px 90px 10px 0px;
 
-    // 요소 자체 구성 요소 숨기는 css, safari&chrome에 해당
     -webkit-appearance: none;
 
     display: block;
@@ -183,7 +181,7 @@ const InputBox = styled.div`
     border-bottom: 1px solid var(--gray-030);
     color: var(--green-010);
   }
-  // input 박스 클릭 시 강조되는 표현 제거
+
   input:focus {
     outline: none;
     border-bottom: 1px solid var(--gray-020);
@@ -195,7 +193,6 @@ const InputBox = styled.div`
     opacity: 0.5;
   }
 
-  // 유효성 검사 후 적절하지 않을 시 나오는 안내 문구
   & label > p {
     color: var(--red-010);
     margin-top: 5px;

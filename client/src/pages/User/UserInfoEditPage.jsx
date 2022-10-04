@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
+import instance from "../../api/core";
 
 import Header from "../../components/common/Header";
 import Swal from "sweetalert2";
-import instance from "../../api/core";
 
 const UserInfoEditPage = () => {
   const [imgSrc, setImgSrc] = useState();
