@@ -94,6 +94,7 @@ const UserInfoEditPage = () => {
     axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
       setUserInfo(res.data);
       setUserPreProfile(res.data.profilePhoto.path);
+      setUserName(userInfo.userName);
     });
   }, []);
 
@@ -121,6 +122,8 @@ const UserInfoEditPage = () => {
           <InfoDataBox>
             <InputData>이름</InputData>
             <input
+              type="text"
+              value={userName}
               placeholder={userInfo.userName}
               onChange={(e) => setUserName(e.target.value)}
             ></input>
@@ -128,11 +131,13 @@ const UserInfoEditPage = () => {
           <InfoDataBox>
             <InputData>전화번호</InputData>
             <input
+              value={mobile}
               placeholder={userInfo.mobile}
               onChange={(e) => setMobile(e.target.value)}
             ></input>
           </InfoDataBox>
-          <UpdateButton>수정하기</UpdateButton>
+          <Button>수정하기</Button>
+          <Button onClick={() => navigate("/userinfo")}>뒤로가기</Button>
         </InfoWrapper>
       </EditWrapper>
     </>
@@ -215,7 +220,7 @@ const InputData = styled.div`
   padding: 10px;
 `;
 
-const UpdateButton = styled.button`
+const Button = styled.button`
   border: 1px solid var(--green-010);
   border-radius: 5px;
   background: var(--white-010);
