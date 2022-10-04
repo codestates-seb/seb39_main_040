@@ -18,12 +18,14 @@ const SignUpPage = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
+    console.log(data);
     axios
       .post(`${process.env.REACT_APP_API}/users/signup`, data)
       .then(() => {
@@ -34,7 +36,17 @@ const SignUpPage = () => {
         });
         navigate("/login");
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.response.data.status);
+        if (err.response.data.status === 409) {
+          Swal.fire({
+            title: "이미 사용중인 이메일입니다.",
+            text: "다른 이메일을 입력해주세요",
+            icon: "warning",
+            confirmButtonColor: "var(--green-010)",
+          });
+        }
+      });
   };
 
   return (
@@ -103,6 +115,25 @@ const SignUpPage = () => {
                 {errors.password && errors.password.type === "required" && (
                   <p>비밀번호를 입력해주세요.</p>
                 )}
+              </label>
+            </div>
+            <div className="input">
+              <label htmlFor="password_check">
+                <FontAwesomeIcon icon={faLock} />
+                <input
+                  id="password_check"
+                  type="password"
+                  placeholder="PasswordCheck"
+                  required
+                  {...register("password_check", {
+                    required: true,
+                    validate: (value) => value === watch("password"),
+                  })}
+                ></input>
+                {errors.password_check &&
+                  errors.password_check.type === "validate" && (
+                    <p>비밀번호가 일치하지 않습니다.</p>
+                  )}
               </label>
             </div>
             <div className="input">

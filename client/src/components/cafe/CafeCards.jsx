@@ -9,6 +9,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   const [page, setPage] = useState(0);
   const target = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [throttle, setThrottle] = useState(false);
 
   const searchGet = async (param) => {
     const response = await axios.get(
@@ -29,7 +30,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
 
   const CafeGet = async () => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     await axios
       .get(`${process.env.REACT_APP_API}/cafe/?page=${page}`)
@@ -43,9 +44,14 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        setPage((page) => page + 1);
-        console.log(page);
-        observer.observe(entry.target);
+        if (!throttle) {
+          setThrottle(true);
+          setTimeout(async () => {
+            setPage((page) => page + 1);
+            observer.observe(entry.target);
+            setThrottle(false);
+          }, 300);
+        }
       }
     });
   };
@@ -56,7 +62,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
 
   const options = {
     rootMargin: "30px",
-    threshold: 0.7,
+    threshold: 0.3,
   };
 
   useEffect(() => {
@@ -69,7 +75,13 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   }, [target]);
 
   useEffect(() => {
-    searchGet(searchInput);
+    // setTimeout 설정
+    const debounce = setTimeout(() => {
+      searchGet(searchInput);
+    }, 400);
+    // 타이머 제거
+    return () => clearTimeout(debounce);
+    // searchGet(searchInput);
   }, [searchInput]);
 
   useEffect(() => {

@@ -12,8 +12,9 @@ const CafeCard = ({ id, title, tags, image }) => {
           <CafeTitle>{title}</CafeTitle>
           <CafeText>크로플이 맛있는 카페</CafeText>
           <CafeTag>
-            <Tag className="tag">#{tags[0]}</Tag>
-            <Tag className="tag">#디저트맛집</Tag>
+            {tags.map((el) => (
+              <Tag className="tag">#{el}</Tag>
+            ))}
           </CafeTag>
         </CafeInfoContent>
       </Link>
