@@ -81,11 +81,6 @@ const UserReviewCard = ({
         </StarBox>
       </ContentBox>
       <ButtonBox>
-        {/* <button
-          onClick={() => navigate(`/cafe/${cafe_id}/reviews/${review_id}`)}
-        >
-          수정
-        </button> */}
         <Link
           to={`/cafe/${cafe_id}/reviews/${review_id}`}
           state={{
