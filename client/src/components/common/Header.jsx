@@ -24,17 +24,18 @@ const Header = () => {
           title: "정말 로그아웃하시겠습니까?",
           icon: "question",
           showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-          confirmButtonColor: "#3085d6", // confrim 버튼 색깔 지정
+          confirmButtonColor: "var(--green-010)", // confrim 버튼 색깔 지정
           cancelButtonColor: "var(--red-010)", // cancel 버튼 색깔 지정
           confirmButtonText: "확인", // confirm 버튼 텍스트 지정
           cancelButtonText: "취소", // cancel 버튼 텍스트 지정
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire(
-              "로그아웃 되었습니다.",
-              "다음에 다시 만나요😁",
-              "success"
-            );
+            Swal.fire({
+              title: "로그아웃 되었습니다.",
+              text: "다음에 다시 만나요 😁",
+              icon: "success",
+              confirmButtonColor: "var(--green-010)",
+            });
           }
         });
         setIsLogin();
