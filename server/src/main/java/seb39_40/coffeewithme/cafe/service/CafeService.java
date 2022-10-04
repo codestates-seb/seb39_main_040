@@ -41,7 +41,7 @@ public class CafeService {
 
     public Page<Cafe> findByCtg(String category, Integer page, String sort){
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(SortType.findType(sort, true)).descending());
-        return cafeRepository.findByCategory(category.toUpperCase(), pageRequest);
+        return cafeRepository.findByCategory(category, pageRequest);
     }
 
     @Transactional(readOnly = true)
