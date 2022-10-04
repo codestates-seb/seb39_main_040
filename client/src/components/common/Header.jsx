@@ -15,33 +15,38 @@ const Header = () => {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    instance
-      .post(`${process.env.REACT_APP_API}/users/logout`)
-      .then(() => {
-        Swal.fire({
-          title: "정말 로그아웃하시겠습니까?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "var(--green-010)",
-          cancelButtonColor: "var(--red-010)",
-          confirmButtonText: "확인",
-          cancelButtonText: "취소",
-        }).then((result) => {
-          if (result.isConfirmed) {
+    Swal.fire({
+      title: "로그아웃 하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green-010)",
+      cancelButtonColor: "var(--red-010)",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        instance
+          .post(`${process.env.REACT_APP_API}/users/logout`)
+          .then(() => {
             Swal.fire({
               title: "로그아웃 되었습니다.",
               text: "다음에 다시 만나요 😁",
               icon: "success",
               confirmButtonColor: "var(--green-010)",
             });
-          }
-        });
-        setIsLogin();
-        window.localStorage.clear();
-        window.sessionStorage.clear();
-        navigate("/");
-      })
-      .catch((err) => console.log(err.response.status));
+            navigate("/");
+            setIsLogin();
+          })
+          .catch(() =>
+            Swal.fire({
+              title: "로그아웃에 실패했습니다",
+              text: "다시 시도해주세요",
+              icon: "error",
+              confirmButtonColor: "var(--green-010)",
+            })
+          );
+      }
+    });
   };
 
   useEffect(() => {
