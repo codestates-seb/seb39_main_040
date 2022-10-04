@@ -98,9 +98,6 @@ const LoginPage = () => {
               <StyledLink to="/signup">
                 <div>회원이 아니십니까?</div>
               </StyledLink>
-              <span>아이디찾기</span>
-              <span> | </span>
-              <span>비밀번호찾기</span>
             </SignUpBox>
             <LoginButton>로그인</LoginButton>
           </form>
