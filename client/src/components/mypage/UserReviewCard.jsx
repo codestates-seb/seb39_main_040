@@ -1,11 +1,13 @@
-import Tag from "../common/Tag";
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import axios from "axios";
+
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
-import styled from "styled-components";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import Tag from "../common/Tag";
+import Swal from "sweetalert2";
 
 const UserReviewCard = ({
   review_id,
@@ -16,22 +18,41 @@ const UserReviewCard = ({
   review_img,
   tags,
 }) => {
-  const navigate = useNavigate();
   const reviewDelete = (e) => {
-    let token = localStorage.getItem("access_token") || "";
-    axios.defaults.headers.common["AccessToken"] = `${token}`;
-    axios
-      .delete(
-        `${process.env.REACT_APP_API}/cafe/${cafe_id}/reviews/${review_id}`
-      )
-      .then((res) => {
-        window.alert("리뷰가 삭제되었습니다.");
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        window.alert("리뷰 삭제를 실패했습니다.");
-      });
+    Swal.fire({
+      title: "리뷰를 삭제하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green-010)",
+      cancelButtonColor: "var(--red-010)",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let token = localStorage.getItem("access_token") || "";
+        axios.defaults.headers.common["AccessToken"] = `${token}`;
+        axios
+          .delete(
+            `${process.env.REACT_APP_API}/cafe/${cafe_id}/reviews/${review_id}`
+          )
+          .then(() => {
+            Swal.fire({
+              title: "리뷰가 삭제되었습니다.",
+              icon: "success",
+              confirmButtonColor: "var(--green-010)",
+            });
+            window.location.reload();
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "리뷰 삭제를 실패했습니다",
+              text: "다시 시도해주세요",
+              icon: "error",
+              confirmButtonColor: "var(--green-010)",
+            });
+          });
+      }
+    });
   };
 
   return (
@@ -145,7 +166,6 @@ const ButtonBox = styled.div`
   display: flex;
   width: 19%;
   align-items: flex-end;
-  /* margin-left: 20px; */
   padding: 30px;
   button:hover {
     color: var(--green-010);

@@ -1,8 +1,8 @@
 import React from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
@@ -30,7 +30,7 @@ const LoginPage = () => {
         localStorage.setItem("refresh_token", res.headers.refreshtoken);
         setIsLogin();
         Swal.fire({
-          title: "로그인 되었습니다 ☕️",
+          title: "로그인 되었습니다.",
           text: "좋은 하루 보내세요 ☀️",
           confirmButtonColor: "var(--green-010)",
           imageUrl:
@@ -139,7 +139,6 @@ const InputBox = styled.div`
     font-weight: 700;
   }
 
-  // 이름, 이메일, 비밀번호, 전화번호 각각의 input 칸
   .input {
     margin-bottom: 20px;
     color: var(--green-010);
@@ -149,7 +148,6 @@ const InputBox = styled.div`
     font-size: 20px;
     padding: 5px 90px 10px 0px;
 
-    // 요소 자체 구성 요소 숨기는 css, safari&chrome에 해당
     -webkit-appearance: none;
 
     display: block;
@@ -160,7 +158,6 @@ const InputBox = styled.div`
     color: var(--green-010);
   }
 
-  // input 박스 클릭 시 강조되는 표현 제거
   input:focus {
     outline: none;
     border-bottom: 1px solid var(--gray-020);
@@ -172,7 +169,6 @@ const InputBox = styled.div`
     opacity: 0.5;
   }
 
-  // 유효성 검사 후 적절하지 않을 시 나오는 안내 문구
   & label > p {
     color: var(--red-010);
     margin-top: 10px;
@@ -194,7 +190,6 @@ const SignUpBox = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  // Link로 연결된 스타일링 제거
   & > div {
     color: var(--gray-020);
     margin-bottom: 30px;

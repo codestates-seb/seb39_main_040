@@ -1,66 +1,63 @@
-import axios from "axios";
-import { Link } from "react-router-dom";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Header from "../../components/common/Header";
-import MiddleTitle from "../../components/common/MiddleTitle";
-// import useAuthStore from "../../store/useAuth";
 import instance from "../../api/core";
 
+import Header from "../../components/common/Header";
+import MiddleTitle from "../../components/common/MiddleTitle";
+import useLoginStore from "../../store/useLoginStore";
+import Swal from "sweetalert2";
+
 const UserInfoPage = () => {
-  // const { userInfo, setUserInfo } = useAuthStore();
   const [userInfo, setUserInfo] = useState([]);
   const [userProfile, setUserProfile] = useState();
-
-  const imgInput = useRef();
+  const navigate = useNavigate();
+  const { setIsLogin } = useLoginStore();
 
   const withDrawHandler = () => {
-    instance
-      .post(`${process.env.REACT_APP_API}/users/withdraw`, {
-        headers: { AccessToken: localStorage.getItem("access_token") },
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.response.status));
+    Swal.fire({
+      title: "정말 탈퇴하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green-010)",
+      cancelButtonColor: "var(--red-010)",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        instance
+          .post(`${process.env.REACT_APP_API}/users/withdraw`)
+          .then(() => {
+            Swal.fire({
+              title: "회원이 탈퇴되었습니다.",
+              text: "다음에 꼭 다시 만나요 😁",
+              icon: "success",
+              confirmButtonColor: "var(--green-010)",
+            });
+            navigate("/");
+            setIsLogin();
+          })
+          .catch(() =>
+            Swal.fire({
+              title: "회원 탈퇴에 실패했습니다",
+              text: "다시 시도해주세요",
+              icon: "error",
+              confirmButtonColor: "var(--green-010)",
+            })
+          );
+      }
+    });
   };
 
   useEffect(() => {
-    // setUserInfo();
-    // let token = localStorage.getItem("access_token") || "";
-    // axios.defaults.headers.common["AccessToken"] = `${token}`;
-    // axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
-    //   setUserInfo(res.data);
-    //   setUserProfile(res.data.profilePhoto.path);
-    // });
-    // ------------------------------------------
     async function fetchData() {
       const response = await instance.get(
         `${process.env.REACT_APP_API}/users/information`
       );
-      // console.log(response);
       setUserInfo(response);
       setUserProfile(response.profilePhoto.path);
     }
     fetchData();
-    // let token = localStorage.getItem("access_token") || "";
-    // instance.defaults.headers.common["AccessToken"] = `${token}`;
-    //1) 실패
-    // instance({
-    //   method: "GET",
-    //   url: `${process.env.REACT_APP_API}/users/information`,
-    // })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setUserInfo(res.data);
-    //   })
-    //   .catch((err) => console.log(err));
-    // setUserInfo(userData);
-    // console.log(userInfo);
-    // 2)
-    // const response = instance.get(
-    //   `${process.env.REACT_APP_API}/users/information`
-    // );
-    // setUserInfo(response.data);
-    // console.log(response);
   }, []);
 
   return (
@@ -97,7 +94,6 @@ const UserInfoPage = () => {
 export default UserInfoPage;
 
 const UserPageWrapper = styled.div`
-  border: 1px solid var(--gray-030);
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -117,26 +113,11 @@ const UserImgBox = styled.div`
 `;
 
 const UserImg = styled.img`
-  //margin-top: 30px;
   width: 250px;
   height: 250px;
 
   object-fit: cover;
   border-radius: 50%;
-`;
-
-const UserImgUpload = styled.div`
-  border: none;
-  background: none;
-  cursor: pointer;
-  > button {
-    margin-top: 15px;
-    font-weight: 600;
-    font-size: 1.2rem;
-  }
-  > input.profile {
-    display: none;
-  }
 `;
 
 const UserInfoWrapper = styled.div`
