@@ -12,24 +12,49 @@ import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
 import axios from "axios";
 import ManagerBadge from "../../../assets/badge.svg";
+import Swal from "sweetalert2";
 
 const CafePageTopSection = ({ cafeIdInfo }) => {
   const addWishHandler = () => {
-    let token = localStorage.getItem("access_token") || "";
-    axios.defaults.headers.common["AccessToken"] = `${token}`;
-    axios
-      .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
-        headers: { AccessToken: localStorage.getItem("access_token") },
-      })
-      .then(() => {
-        window.alert("위시리스트 추가완료");
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.status === 404) {
-          window.alert("이미 찜한 카페입니다.");
-        }
-      });
+    Swal.fire({
+      title: "위시리스트에 추가하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green-010)",
+      cancelButtonColor: "var(--red-010)",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then(() => {
+      let token = localStorage.getItem("access_token") || "";
+      axios.defaults.headers.common["AccessToken"] = `${token}`;
+      axios
+        .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
+          headers: { AccessToken: localStorage.getItem("access_token") },
+        })
+        .then(() => {
+          Swal.fire({
+            title: "위시리스트에 추가되었습니다.",
+            icon: "success",
+            confirmButtonColor: "var(--green-010)",
+          });
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            Swal.fire({
+              title: "이미 위시리스트에 등록된 카페입니다.",
+              icon: "warning",
+              confirmButtonColor: "var(--green-010)",
+            });
+          } else {
+            Swal.fire({
+              title: "위시리스트 등록에 실패했습니다.",
+              text: "다시 시도해주세요",
+              icon: "error",
+              confirmButtonColor: "var(--green-010)",
+            });
+          }
+        });
+    });
   };
 
   return (
