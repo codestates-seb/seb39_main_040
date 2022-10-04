@@ -1,11 +1,9 @@
-// // /*global kakao */
+// /*global kakao */
 import React, { useEffect } from "react";
 
 const { kakao } = window;
 
 const MapContainer = ({ place }) => {
-  // place (주소정보) 가 바뀔 때마다 지도 주소를 검색해서 좌표로 바꾸는 코드를 실행
-  // 그 코드로 지도에 마커로 표시
   useEffect(() => {
     const container = document.getElementById("myMap");
     const options = {
@@ -31,7 +29,6 @@ const MapContainer = ({ place }) => {
       }
     }
 
-    // 지도에 새로운 좌표로 위치를 마커로 표시
     function displayMarker(place) {
       new kakao.maps.Marker({
         map: map,

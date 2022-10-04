@@ -6,32 +6,6 @@ import SearchBar from "../components/common/SearchBar";
 import FilterBar from "../components/common/FilterBar";
 import React, { useState } from "react";
 
-const MainWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  .nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 1600px;
-    height: 80px;
-  }
-`;
-
-const CarouselContainer = styled.div`
-  width: 1700px;
-  height: 800px;
-`;
-
-const FilterBarContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 1370px;
-`;
-
 const MainPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [targetFilter, setTargetFilter] = useState(`all`);
@@ -60,3 +34,29 @@ const MainPage = () => {
 };
 
 export default MainPage;
+
+const MainWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1600px;
+    height: 80px;
+  }
+`;
+
+const CarouselContainer = styled.div`
+  width: 1700px;
+  height: 800px;
+`;
+
+const FilterBarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 1370px;
+`;

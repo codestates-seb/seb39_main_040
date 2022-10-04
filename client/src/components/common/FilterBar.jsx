@@ -1,30 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 
-const TagContainer = styled.div`
-  width: 400px;
-  button {
-    font-size: 18px;
-    padding: 0 15px;
-    cursor: pointer;
-    width: 100px;
-  }
-  button:hover {
-    text-decoration: underline;
-    font-weight: 600;
-  }
-  button:nth-child(1) {
-    border-right: 1px solid var(--gray-020);
-    width: 80px;
-  }
-  button:nth-child(2) {
-    border-right: 1px solid var(--gray-020);
-  }
-  button:nth-child(3) {
-    border-right: 1px solid var(--gray-020);
-  }
-`;
-
 const FilterBar = ({ setTargetFilter }) => {
   const [currentClick, setCurrentClick] = useState(`all`);
   const [prevClick, setPrevClick] = useState(null);
@@ -70,3 +46,27 @@ const FilterBar = ({ setTargetFilter }) => {
 };
 
 export default FilterBar;
+
+const TagContainer = styled.div`
+  width: 400px;
+  button {
+    font-size: 18px;
+    padding: 0 15px;
+    cursor: pointer;
+    width: 100px;
+  }
+  button:hover {
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  button:nth-child(1) {
+    border-right: 1px solid var(--gray-020);
+    width: 80px;
+  }
+  button:nth-child(2) {
+    border-right: 1px solid var(--gray-020);
+  }
+  button:nth-child(3) {
+    border-right: 1px solid var(--gray-020);
+  }
+`;

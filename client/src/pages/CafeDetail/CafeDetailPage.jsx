@@ -11,7 +11,6 @@ const CafeDetailPage = () => {
   const [cafeImages, setCafeImages] = useState([]);
   const { id } = useParams();
 
-  // 카페 상세 정보 불러오기
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}`)
@@ -21,7 +20,6 @@ const CafeDetailPage = () => {
       .catch((e) => console.err("error:", e));
   }, []);
 
-  // 카페 사진 정보 불러오기
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}/reviews/images`)

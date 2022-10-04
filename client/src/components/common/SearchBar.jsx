@@ -5,7 +5,6 @@ import {
   faLocationDot,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-// import useStore from "../../store/search";
 
 const SearchBar = ({ setSearchInput }) => {
   return (
@@ -52,10 +51,10 @@ const BarBox = styled.div`
     font-size: 20px;
     border-radius: 30px;
     border: 1px solid var(--green-010);
-    -webkit-appearance: none; // 기본 search 디자인을 없앰
+    -webkit-appearance: none;
     margin-left: 10px;
     padding: 0 20px 0 80px;
-    overflow: auto; //검색어가 길어졌을때 오른쪽으로 자연스럽게 검색되도록 하기 위해
+    overflow: auto;
     z-index: -1;
     :focus {
       outline: none;

@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import React from "react";
 
+const MiddleTitle = ({ children }) => {
+  return <TitleArea>{children}</TitleArea>;
+};
+
+export default MiddleTitle;
+
 const TitleArea = styled.div`
   display: flex;
   justify-content: center;
@@ -14,9 +20,3 @@ const TitleArea = styled.div`
   color: var(--black-010);
   opacity: 0.7;
 `;
-
-const MiddleTitle = ({ children }) => {
-  return <TitleArea>{children}</TitleArea>;
-};
-
-export default MiddleTitle;

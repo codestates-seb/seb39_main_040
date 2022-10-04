@@ -9,13 +9,11 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   const [page, setPage] = useState(0);
   const target = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  // const { searchInput } = useStore();
 
   const searchGet = async (param) => {
     const response = await axios.get(
       `${process.env.REACT_APP_API}/cafe/search?keyword=${param}`
     );
-    // console.log(response.data.data);
     setCafeInfo(response.data.data);
   };
 
@@ -23,18 +21,14 @@ const CafeCards = ({ searchInput, targetFilter }) => {
     const response = await axios.get(
       `${process.env.REACT_APP_API}/cafe?category=${targetId}`
     );
-    // console.log(response.data.data);
     setCafeInfo(response.data.data);
     if (response.data.data.length === 0) {
       alert("해당하는 카페가 없습니다.");
     }
   };
 
-  // 카페 전체 리스트 불러오기
   const CafeGet = async () => {
-    // 로딩상태를 true로 변경해준다.
     setIsLoading(true);
-    // 로딩 스피너를 약 3초간 보여준다.
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     await axios
@@ -51,8 +45,6 @@ const CafeCards = ({ searchInput, targetFilter }) => {
       if (entry.isIntersecting) {
         setPage((page) => page + 1);
         console.log(page);
-
-        // 현재 타켓 observe
         observer.observe(entry.target);
       }
     });
@@ -71,7 +63,6 @@ const CafeCards = ({ searchInput, targetFilter }) => {
     let observer;
     if (target) {
       observer = new IntersectionObserver(onIntersect, options);
-      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
       observer.observe(target.current);
     }
     return () => observer && observer.disconnect();
