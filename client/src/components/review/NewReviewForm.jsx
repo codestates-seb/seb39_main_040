@@ -188,9 +188,10 @@ const ReviewForm = () => {
           <div className="preview">
             {imgInfo && <img src={imgSrc} alt="이미지 미리보기" />}
           </div>
-          <div className="filebox">
+          <ImgUpdateButton>
+            사진 추가
             <input type="file" accept="image/*" onChange={uploadImg} />
-          </div>
+          </ImgUpdateButton>
         </form>
       </ImgContainer>
     </MainContainer>
@@ -203,7 +204,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 1360px;
-  height: 1360px;
+  height: 1560px;
   margin-bottom: 150px;
   border-radius: 4px;
   border: 1px solid var(--gray-030);
@@ -238,6 +239,8 @@ const TitleContainer = styled.div`
 const ImgContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 600px;
   margin-top: 30px;
   p {
@@ -258,15 +261,6 @@ const ImgContainer = styled.div`
         height: 450px;
       }
     }
-    .filebox .upload-name {
-      display: inline-block;
-      height: 40px;
-      padding: 0 10px;
-      vertical-align: middle;
-      border: 1px solid #dddddd;
-      width: 58%;
-      color: #999999;
-    }
   }
 `;
 
@@ -282,6 +276,30 @@ const ImgTitle = styled.div`
     left: 0;
     font-size: 23px;
     font-weight: 700;
+  }
+`;
+
+const ImgUpdateButton = styled.label`
+  background: none;
+  cursor: pointer;
+  margin-top: 25px;
+  border: 1px solid var(--green-010);
+  border-radius: 5px;
+  color: var(--green-010);
+  font-weight: 600;
+  padding: 10px 194px;
+
+  :hover {
+    background: var(--green-010);
+    color: var(--white-010);
+  }
+
+  > input {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+    display: none;
   }
 `;
 
@@ -398,5 +416,5 @@ const BtnContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 1100px;
-  margin: 450px 0 0 560px;
+  margin: 650px 0 0 560px;
 `;
