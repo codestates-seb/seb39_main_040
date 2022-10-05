@@ -22,6 +22,8 @@ const CafeCards = ({ searchInput, targetFilter }) => {
         title: "해당하는 카페가 없습니다.",
         confirmButtonColor: "var(--green-010)",
         icon: "error",
+      }).then(() => {
+        window.location.reload();
       });
     }
   };
@@ -36,6 +38,8 @@ const CafeCards = ({ searchInput, targetFilter }) => {
         title: "해당하는 카페가 없습니다.",
         confirmButtonColor: "var(--green-010)",
         icon: "error",
+      }).then(() => {
+        window.location.reload();
       });
     }
   };
@@ -55,7 +59,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
 
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && !isLoading) {
         if (!throttle) {
           setThrottle(true);
           setTimeout(async () => {
@@ -63,7 +67,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
             observer.observe(entry.target);
             setThrottle(false);
             setIsLoading(false);
-          }, 300);
+          }, 400);
         }
       }
     });
@@ -88,11 +92,6 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   }, [target]);
 
   useEffect(() => {
-    if (searchInput === "") {
-      setTimeout(() => {
-        setPage(1);
-      }, 300);
-    }
     const debounce = setTimeout(() => {
       searchGet(searchInput);
     }, 400);
