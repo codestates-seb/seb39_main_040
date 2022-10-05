@@ -16,6 +16,7 @@ public class CafeResponseDto {
         Long id;
         String name;
         List<String> tags;
+        String description;
         String mainImg;
 
         public void setCafeTags(List<CafeTag> cafeTags){
