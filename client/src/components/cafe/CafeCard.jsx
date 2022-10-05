@@ -3,14 +3,14 @@ import styled from "styled-components";
 import Tag from "../common/Tag";
 import React from "react";
 
-const CafeCard = ({ id, title, tags, image }) => {
+const CafeCard = ({ id, title, tags, image, text }) => {
   return (
     <CafeItemWrapper>
       <Link to={`/cafe/${id}`}>
         <CafeImg src={`${image}`} />
         <CafeInfoContent>
           <CafeTitle>{title}</CafeTitle>
-          <CafeText>크로플이 맛있는 카페</CafeText>
+          <CafeText>{text}</CafeText>
           <CafeTag>
             {tags.map((el) => (
               <Tag className="tag">#{el}</Tag>
@@ -70,6 +70,7 @@ const CafeText = styled.p`
   font-size: 1.1rem;
   color: var(--black-010);
   margin-top: 18px;
+  line-height: 30px;
 `;
 
 const CafeTag = styled.div`

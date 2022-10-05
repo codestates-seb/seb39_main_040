@@ -41,7 +41,7 @@ const MapContainer = ({ place }) => {
     <div
       id="myMap"
       style={{
-        width: "400px",
+        width: "550px",
         height: "250px",
       }}
     ></div>

@@ -14,7 +14,7 @@ import axios from "axios";
 import ManagerBadge from "../../../assets/badge.svg";
 import Swal from "sweetalert2";
 
-const CafePageTopSection = ({ cafeIdInfo }) => {
+const CafePageTopSection = ({ cafeIdInfo, tags }) => {
   const addWishHandler = () => {
     Swal.fire({
       title: "위시리스트에 추가하시겠습니까?",
@@ -84,7 +84,7 @@ const CafePageTopSection = ({ cafeIdInfo }) => {
               </Badge>
             </TitleBox>
             <Tagbox>
-              <Tag>#{cafeIdInfo.tags}</Tag>
+              {tags && tags.map((el) => <Tag className="tag-item">#{el}</Tag>)}
             </Tagbox>
             <CafeInfoBox>
               <div>
@@ -154,7 +154,7 @@ const Cafedetail = styled.div`
   justify-content: center;
   flex-direction: column;
   position: relative;
-  width: 450px;
+  width: 550px;
   height: 500px;
 `;
 const CafedetailContent = styled.div`
@@ -214,6 +214,9 @@ const Tagbox = styled.div`
   margin-bottom: 5px;
   span {
     font-size: 15px;
+  }
+  .tag-item {
+    margin-right: 5px;
   }
 `;
 

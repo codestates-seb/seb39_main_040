@@ -32,7 +32,7 @@ const CafeDetailPage = () => {
   return (
     <>
       <Header />
-      <CafePageTopSection cafeIdInfo={cafeIdInfo} />
+      <CafePageTopSection cafeIdInfo={cafeIdInfo} tags={cafeIdInfo.tags} />
       <TabBar cafeIdInfo={cafeIdInfo} cafeImages={cafeImages} />
     </>
   );

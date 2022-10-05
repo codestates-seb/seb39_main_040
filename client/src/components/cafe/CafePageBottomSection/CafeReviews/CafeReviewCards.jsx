@@ -82,6 +82,7 @@ const ReviewCardsWrapper = styled.div`
   .no-review {
     color: var(--gray-020);
     font-size: 25px;
+    height: 500px;
   }
 `;
 

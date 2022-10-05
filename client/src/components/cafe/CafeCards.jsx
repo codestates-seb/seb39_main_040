@@ -41,7 +41,6 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   };
 
   const CafeGet = async () => {
-    setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     await axios
@@ -87,13 +86,10 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   }, [target]);
 
   useEffect(() => {
-    // setTimeout 설정
     const debounce = setTimeout(() => {
       searchGet(searchInput);
     }, 400);
-    // 타이머 제거
     return () => clearTimeout(debounce);
-    // searchGet(searchInput);
   }, [searchInput]);
 
   useEffect(() => {
@@ -111,6 +107,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
               title={el.name}
               tags={el.tags}
               image={el.main_img}
+              text={el.description}
             />
           </div>
         ))}
@@ -128,6 +125,7 @@ const MainWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 1000px;
 `;
 const CafeCardWrapper = styled.div`
   display: flex;
