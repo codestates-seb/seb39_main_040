@@ -99,6 +99,8 @@ const CafeInfoContent = styled.div`
 `;
 
 const CafeTitle = styled.h2`
+  display: flex;
+  flex-direction: row;
   width: 300px;
   font-weight: bold;
   font-size: 1.5rem;
@@ -108,7 +110,6 @@ const CafeTitle = styled.h2`
   color: var(--black-010);
 
   button {
-    position: absolute;
     color: var(--green-010);
     font-size: 20px;
     top: 71%;
