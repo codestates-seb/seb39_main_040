@@ -23,12 +23,13 @@ public interface UserMapper {
     UserResponseDto.UserInfo userToUserInfo(User user);
 
     default User userUpdateDtoToUser(UserRequestDto.UserUpdate update){
-        User user=new User();
-        user.setUserName(update.getUserName());
-        user.setMobile(update.getMobile());
         Image img = new Image();
         img.setId(update.getProfilePhoto());
-        user.setProfilePhoto(img);
+        User user= User.builder()
+                .userName(update.getUserName())
+                .mobile(update.getMobile())
+                .profilePhoto(img)
+                .build();
         return user;
     }
 

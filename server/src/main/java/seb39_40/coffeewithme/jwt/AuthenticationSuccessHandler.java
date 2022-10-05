@@ -1,6 +1,7 @@
 package seb39_40.coffeewithme.jwt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class AuthenticationSuccessHandler implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {
@@ -26,5 +28,7 @@ public class AuthenticationSuccessHandler implements org.springframework.securit
         jwtProvider.saveRefreshToken(user.getUser().getEmail(),rt);
         response.setHeader("AccessToken",TYPE+at);
         response.setHeader("RefreshToken",TYPE+rt);
+        log.info("** Success Login [{}]",user.getUsername());
+
     }
 }

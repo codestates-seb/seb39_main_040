@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.lettuce.core.dynamic.annotation.Key;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import seb39_40.coffeewithme.user.service.UserService;
@@ -16,15 +17,8 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
-    //액세스 토큰 만료 시간
     private int ACCESS_EXPIRATION= 1000 * 60 * 10;
-    //리프레시 토큰 만료 시간
-    private int REFRESH_EXPIRATION= 1000 * 60 * 120;
-    //secret키 관련 정보
     private String SECRET_KEY="cwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkey";
-
-
-    private final UserService userService;
     private final RedisRepository redisRepository;
 
     public String createAccessToken(Long id,String email){
@@ -32,7 +26,7 @@ public class JwtProvider {
 
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject("cwm_access_token")
+                .setSubject("Access Token")
                 .claim("id",id)
                 .claim("email",email)
                 .setExpiration(new Date(System.currentTimeMillis()+ACCESS_EXPIRATION))
@@ -43,14 +37,13 @@ public class JwtProvider {
 
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject("cwm_refresh_token")
-                .setExpiration(new Date(System.currentTimeMillis()+REFRESH_EXPIRATION))
+                .setSubject("Refresh Token")
+                //.setExpiration(new Date(System.currentTimeMillis()+REFRESH_EXPIRATION))
                 .claim("email",email)
                 .compact();
     }
 
     public void saveRefreshToken(String email,String token){
-        //userService.saveRefreshToken(email,token);
         redisRepository.save(token, email);
     }
 
@@ -63,12 +56,10 @@ public class JwtProvider {
                 .getBody();
     }
 
-    public boolean validationTheSameToken(String email,String token){
-        //return token.equals(userService.findVerifiedUserWithEmail(email).getRefresh());
+    public void validationTheSameToken(String email,String token){
         String result = redisRepository.findByEmail(email);
-        if(result.equals("false"))
-            throw new JwtException("refresh 토큰을 찾을 수 없슴둥 다시 로그인 하시라요");
-        return token.equals(result);
+        if(!result.equals(token))
+            throw new JwtException("유효하지 않은 Refresh Token 입니다.");
     }
 
     public String substringToken(String token){
@@ -76,16 +67,6 @@ public class JwtProvider {
             throw new JwtException("JWT 토큰 형식이 올바르지 않습니다.");
         else return token.replace("Bearer ", "");
     }
-
-    /*
-    public boolean validationTimeToken(Claims claims){
-        System.out.println("Date : "+claims.getExpiration());
-        System.out.println(new Date());
-        return !claims
-                .getExpiration()
-                .before(new Date());
-    }
-     */
 
     public String getEmailToClaims(Claims claims){
         return claims.get("email").toString();

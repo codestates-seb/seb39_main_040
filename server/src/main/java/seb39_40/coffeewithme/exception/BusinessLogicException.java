@@ -1,15 +1,17 @@
 package seb39_40.coffeewithme.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 public class BusinessLogicException extends RuntimeException {
     @Getter
-    private ErrorResponse errorResponse;
+    private HttpStatus status;
     @Getter
     private ExceptionCode exceptionCode;
 
-    public BusinessLogicException(ErrorResponse errorResponse) {
-        this.errorResponse = errorResponse;
+    public BusinessLogicException(HttpStatus status,String message) {
+        super(message);
+        this.status=status;
     }
     public BusinessLogicException(ExceptionCode exceptionCode){
         super(exceptionCode.getMessage());

@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
-import seb39_40.coffeewithme.exception.ErrorResponse;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
@@ -28,48 +27,35 @@ public class UserService {
 
     public void createUser(User user) {
         verifyEmail(user.getEmail());
-
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles("ROLE_USER");
-        user.setStatus(User.UserStatus.USER_SIGNUP);
-        user.setRegisterDate(LocalDate.now());
-
-        //이미지 처리 - 처음엔 기본 이미지로 처리
-        user.setProfilePhoto(imageService.findById(Long.valueOf(1)));
-
-        userRepository.save(user);
+        User result = User.builder()
+                .userName(user.getUserName())
+                .mobile(user.getMobile())
+                .email(user.getEmail())
+                .password(bCryptPasswordEncoder.encode(user.getPassword()))
+                .roles("ROLE_USER")
+                .status(User.UserStatus.USER_SIGNUP)
+                .registerDate(LocalDate.now())
+                .profilePhoto(imageService.findById(Long.valueOf(1)))
+                .build();
+        userRepository.save(result);
     }
 
     public void withdrawUser(String email){
-        User user = findVerifiedUserWithEmail(email);
-        user.setStatus(User.UserStatus.USER_WITHDRAW);
+        User user = findByEmail(email);
+        user.updateStatus(User.UserStatus.USER_WITHDRAW);
         userRepository.save(user);
-    }
-    public boolean logoutUser(String email){
-        User user = findVerifiedUserWithEmail(email);
-        userRepository.save(user);
-        return true;
     }
 
     public User getInformation(String email) {
-        User user = findVerifiedUserWithEmail(email);
+        User user = findByEmail(email);
         return user;
     }
 
     public User updateInformation(String email,User temp){
-        User result = findVerifiedUserWithEmail(email);
-        if(!temp.getUserName().isEmpty())
-            result.setUserName(temp.getUserName());
-        if(!temp.getMobile().isEmpty())
-            result.setMobile(temp.getMobile());
-        if(temp.getProfilePhoto().getId()!= result.getProfilePhoto().getId())
-            result.setProfilePhoto(imageService.findById(temp.getProfilePhoto().getId()));
+        User result = findByEmail(email);
+        result.updateInformation(temp.getUserName(), temp.getMobile(),
+                imageService.findById(temp.getProfilePhoto().getId()));
         return userRepository.save(result);
-    }
-
-    public User findVerifiedUserWithEmail(String email){
-        User user = findByEmail(email);
-        return user;
     }
 
     public List<Review> getReview(Long userId) {
@@ -83,30 +69,26 @@ public class UserService {
     public void verifyUser(String email){
         User user=userRepository.findByEmail(email).get();
         if(user.getStatus().equals(User.UserStatus.USER_WITHDRAW)) {
-            ErrorResponse errorResponse=new ErrorResponse(HttpStatus.FORBIDDEN,"이미 탈퇴한 회원입니다.");
-            throw new BusinessLogicException(errorResponse);
+            throw new BusinessLogicException(HttpStatus.FORBIDDEN,"이미 탈퇴한 회원입니다.");
         }
     }
 
     private void verifyEmail(String email){
         Optional<User> user=userRepository.findByEmail(email);
         if(user.isPresent()) {
-            ErrorResponse errorResponse=new ErrorResponse(HttpStatus.CONFLICT, "이미 사용중인 이메일 입니다.");
-            throw new BusinessLogicException(errorResponse);
+            throw new BusinessLogicException(HttpStatus.CONFLICT, "이미 사용중인 이메일 입니다.");
         }
     }
 
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> {
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, "존재하지 않는 회원 ID입니다.");
-            throw new BusinessLogicException(errorResponse);
+            throw new BusinessLogicException(HttpStatus.NOT_FOUND, "존재하지 않는 회원 ID입니다.");
         });
     }
 
     public User findByEmail(String username) {
         return userRepository.findByEmail(username).orElseThrow(() -> {
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, "존재하지 않는 회원 EMAIL입니다.");
-            throw new BusinessLogicException(errorResponse);
+            throw new BusinessLogicException(HttpStatus.NOT_FOUND, "존재하지 않는 회원 EMAIL입니다.");
         });
     }
 }

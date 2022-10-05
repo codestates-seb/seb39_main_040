@@ -1,17 +1,13 @@
 package seb39_40.coffeewithme.user.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 
 import javax.persistence.*;
 
-//@Entity
 @Entity
-@Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Wishlist{
@@ -21,10 +17,10 @@ public class Wishlist{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user; //외래
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
-    private Cafe cafe; //외래
+    private Cafe cafe;
 
 }
