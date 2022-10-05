@@ -1,6 +1,13 @@
+import React from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import Tag from "../../common/Tag";
 import CafeInfoMap from "./CafeInfoMap";
-import styled from "styled-components";
+import Swal from "sweetalert2";
+import useLoginStore from "../../../store/useLoginStore";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClock,
@@ -9,52 +16,72 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
-import React from "react";
-import axios from "axios";
 import ManagerBadge from "../../../assets/badge.svg";
-import Swal from "sweetalert2";
 
 const CafePageTopSection = ({ cafeIdInfo, tags }) => {
+  const { isLogin } = useLoginStore;
+  const navigate = useNavigate();
+
   const addWishHandler = () => {
-    Swal.fire({
-      title: "위시리스트에 추가하시겠습니까?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "var(--green-010)",
-      cancelButtonColor: "var(--red-010)",
-      confirmButtonText: "확인",
-      cancelButtonText: "취소",
-    }).then(() => {
-      let token = localStorage.getItem("access_token") || "";
-      axios.defaults.headers.common["AccessToken"] = `${token}`;
-      axios
-        .post(`${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`, {
-          headers: { AccessToken: localStorage.getItem("access_token") },
-        })
-        .then(() => {
-          Swal.fire({
-            title: "위시리스트에 추가되었습니다.",
-            icon: "success",
-            confirmButtonColor: "var(--green-010)",
+    if (!isLogin) {
+      Swal.fire({
+        title: "로그인 후 이용할 수 있습니다.",
+        text: "로그인 하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonColor: "var(--green-010)",
+        cancelButtonColor: "var(--red-010)",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    }
+    if (isLogin) {
+      Swal.fire({
+        title: "위시리스트에 추가하시겠습니까?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "var(--green-010)",
+        cancelButtonColor: "var(--red-010)",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+      }).then(() => {
+        let token = localStorage.getItem("access_token") || "";
+        axios.defaults.headers.common["AccessToken"] = `${token}`;
+        axios
+          .post(
+            `${process.env.REACT_APP_API}/users/wishlist/${cafeIdInfo.id}`,
+            {
+              headers: { AccessToken: localStorage.getItem("access_token") },
+            }
+          )
+          .then(() => {
+            Swal.fire({
+              title: "위시리스트에 추가되었습니다.",
+              icon: "success",
+              confirmButtonColor: "var(--green-010)",
+            });
+          })
+          .catch((err) => {
+            if (err.response.status === 404) {
+              Swal.fire({
+                title: "이미 위시리스트에 등록된 카페입니다.",
+                icon: "warning",
+                confirmButtonColor: "var(--green-010)",
+              });
+            } else {
+              Swal.fire({
+                title: "위시리스트 등록에 실패했습니다.",
+                text: "다시 시도해주세요",
+                icon: "error",
+                confirmButtonColor: "var(--green-010)",
+              });
+            }
           });
-        })
-        .catch((err) => {
-          if (err.response.status === 404) {
-            Swal.fire({
-              title: "이미 위시리스트에 등록된 카페입니다.",
-              icon: "warning",
-              confirmButtonColor: "var(--green-010)",
-            });
-          } else {
-            Swal.fire({
-              title: "위시리스트 등록에 실패했습니다.",
-              text: "다시 시도해주세요",
-              icon: "error",
-              confirmButtonColor: "var(--green-010)",
-            });
-          }
-        });
-    });
+      });
+    }
   };
 
   return (
