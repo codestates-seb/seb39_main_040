@@ -5,12 +5,14 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
   *, *::before, *::after {
     box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
   }
 
   body {
     height: 100%;
     width: 100%;
     background-color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
   }
 
   ul, li {
