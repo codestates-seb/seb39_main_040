@@ -125,7 +125,7 @@ const MainWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 1000px;
+  height: 80%;
 `;
 const CafeCardWrapper = styled.div`
   display: flex;
