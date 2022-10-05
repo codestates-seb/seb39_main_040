@@ -38,6 +38,8 @@ public class CafeResponseDto {
         String menuImg;
         Boolean badge;
         String runningTime;
+        String homepage;
+        String phone;
 
         public void setCafeTags(List<CafeTag> cafeTags){
             this.tags = cafeTags.stream().map(cafeTag -> cafeTag.getTag().getName()).collect(Collectors.toList());
