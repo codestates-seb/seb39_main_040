@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 const CafeCards = ({ searchInput, targetFilter }) => {
   const [cafeInfo, setCafeInfo] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const target = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [throttle, setThrottle] = useState(false);
@@ -42,7 +42,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
 
   const CafeGet = async () => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     await axios
       .get(`${process.env.REACT_APP_API}/cafe/?page=${page}`)
