@@ -77,13 +77,15 @@ const CafeTag = styled.div`
   width: 300px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 
   font-size: 1rem;
-  margin-top: 18px;
+  margin-top: 10px;
   margin-left: 50px;
   position: relative;
   .tag {
     width: auto;
     margin-right: 10px;
+    margin-bottom: 8px;
   }
 `;

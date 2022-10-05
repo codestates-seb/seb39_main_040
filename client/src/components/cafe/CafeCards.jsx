@@ -40,7 +40,8 @@ const CafeCards = ({ searchInput, targetFilter }) => {
     }
   };
 
-  const CafeGet = async () => {
+  const CafeGet = async (page) => {
+    setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     await axios
@@ -61,6 +62,7 @@ const CafeCards = ({ searchInput, targetFilter }) => {
             setPage((page) => page + 1);
             observer.observe(entry.target);
             setThrottle(false);
+            setIsLoading(false);
           }, 300);
         }
       }
@@ -68,12 +70,12 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   };
 
   useEffect(() => {
-    CafeGet();
+    CafeGet(page);
   }, [page]);
 
   const options = {
     rootMargin: "30px",
-    threshold: 0.3,
+    threshold: 1,
   };
 
   useEffect(() => {
@@ -86,6 +88,11 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   }, [target]);
 
   useEffect(() => {
+    if (searchInput === "") {
+      setTimeout(() => {
+        setPage(1);
+      }, 300);
+    }
     const debounce = setTimeout(() => {
       searchGet(searchInput);
     }, 400);
@@ -112,8 +119,8 @@ const CafeCards = ({ searchInput, targetFilter }) => {
           </div>
         ))}
         <LoadingWrapper>{isLoading ? <Loading /> : null}</LoadingWrapper>
+        <div ref={target}></div>
       </CafeCardWrapper>
-      <div ref={target}></div>
     </MainWrapper>
   );
 };

@@ -2,10 +2,10 @@ import create from "zustand";
 import axios from "axios";
 
 const useCafe = create((set) => ({
-  cafeInfo: [],
-  fetch: async (url) => {
-    const res = await axios.get(url);
-    set({ cafeInfo: await res.data.data });
+  totalPage: "",
+  fetch: async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API}/cafe`);
+    set({ totalPage: res.data.pageInfo.total_page });
   },
 }));
 
