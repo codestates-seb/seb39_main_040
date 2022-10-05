@@ -119,8 +119,8 @@ const CafeCards = ({ searchInput, targetFilter }) => {
           </div>
         ))}
         <LoadingWrapper>{isLoading ? <Loading /> : null}</LoadingWrapper>
-        <div ref={target}></div>
       </CafeCardWrapper>
+      <div ref={target}></div>
     </MainWrapper>
   );
 };
