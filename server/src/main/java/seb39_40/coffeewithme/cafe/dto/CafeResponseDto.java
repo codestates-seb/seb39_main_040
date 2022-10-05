@@ -16,6 +16,7 @@ public class CafeResponseDto {
         Long id;
         String name;
         List<String> tags;
+        String description;
         String mainImg;
 
         public void setCafeTags(List<CafeTag> cafeTags){
@@ -37,6 +38,8 @@ public class CafeResponseDto {
         String menuImg;
         Boolean badge;
         String runningTime;
+        String homepage;
+        String phone;
 
         public void setCafeTags(List<CafeTag> cafeTags){
             this.tags = cafeTags.stream().map(cafeTag -> cafeTag.getTag().getName()).collect(Collectors.toList());
