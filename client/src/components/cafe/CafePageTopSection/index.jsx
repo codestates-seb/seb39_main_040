@@ -123,11 +123,11 @@ const CafePageTopSection = ({ cafeIdInfo, tags }) => {
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faPhone} />
-                <li>0503-3445-8573</li>
+                <li>{cafeIdInfo.phone}</li>
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faSquareInstagram} />
-                <li>cafe_Maison_ete</li>
+                <a href={cafeIdInfo.homepage}>_{cafeIdInfo.name}_</a>
               </div>
               <div>
                 <FontAwesomeIcon className="icon" icon={faLocationDot} />
@@ -256,6 +256,11 @@ const CafeInfoBox = styled.div`
     align-items: center;
     height: 35px;
     font-size: 15px;
+    a {
+      text-decoration: none;
+      color: var(--black-010);
+      font-weight: 500;
+    }
   }
   div:nth-child(1) {
     font-size: 16px;
