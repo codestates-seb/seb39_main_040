@@ -6,7 +6,6 @@ import axios from "axios";
 import Tag from "../../common/Tag";
 import CafeInfoMap from "./CafeInfoMap";
 import Swal from "sweetalert2";
-import useLoginStore from "../../../store/useLoginStore";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,11 +18,11 @@ import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
 import ManagerBadge from "../../../assets/badge.svg";
 
 const CafePageTopSection = ({ cafeIdInfo, tags }) => {
-  const { isLogin } = useLoginStore;
   const navigate = useNavigate();
+  const isLogin = localStorage.getItem("isLogin");
 
   const addWishHandler = () => {
-    if (!isLogin) {
+    if (!localStorage.getItem("access_token")) {
       Swal.fire({
         title: "로그인 후 이용할 수 있습니다.",
         text: "로그인 하시겠습니까?",
