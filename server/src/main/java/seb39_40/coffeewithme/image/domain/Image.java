@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import seb39_40.coffeewithme.common.domain.BasicEntity;
+import seb39_40.coffeewithme.common.domain.Status;
 
 import javax.persistence.*;
 
@@ -21,32 +22,19 @@ public class Image extends BasicEntity {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private ImgStatus status;
+    private Status status;
 
     @Builder
-    public Image(String path, ImgStatus status) {
+    public Image(String path, Status status) {
         this.path = path;
         this.status = status;
     }
 
-    public enum ImgStatus {
-        // 임시이미지는 저장한 기간이 일주일 지나면 삭제
-        TEMP("임시이미지"),
-        SAVED("저장이미지");
-
-        @Getter
-        private String status;
-
-        ImgStatus(String status) {
-            this.status = status;
-        }
-    }
-
     public void deleteImg(){
-        this.status = ImgStatus.TEMP;
+        this.status = Status.TEMP;
     }
 
     public void saveImg(){
-        this.status = ImgStatus.SAVED;
+        this.status = Status.SAVED;
     }
 }

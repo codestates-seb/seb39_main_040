@@ -14,6 +14,7 @@ import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
 import seb39_40.coffeewithme.tag.service.TagService;
+import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.service.UserService;
 
 import java.util.ArrayList;
@@ -33,10 +34,13 @@ public class ReviewService {
     public Long save(String email, Long cafeId, Review review, List<String> tags){
         Cafe cafe = cafeService.findById(cafeId);
         cafe.updateReviewCount(1);
-        // 여기 리팩토링 해야 함.
         review.setCafe(cafe);
 
-        review.setUser(userService.findByEmail(email));
+        User user = userService.findByEmail(email);
+        if (user.getRoles().equals("ROLE_ADMIN") && review.getScore() >= 4 && !cafe.getBadge())
+            cafe.updateBadge(true);
+        review.setUser(user);
+
         review.setReviewTags(tagService.createReviewTag(review, tags));
         review.getReviewImg().saveImg();
         return reviewRepository.save(review).getId();
