@@ -2,14 +2,14 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import FirstImage from "../../assets/Carousel1.jpg";
+import FirstImage from "../../assets/Carousel3.jpg";
 import SecondImage from "../../assets/Carousel2.jpg";
-import ThirdImage from "../../assets/Carousel3.jpg";
+import ThirdImage from "../../assets/Carousel1.jpg";
 
 const images = [
   {
     photo: FirstImage,
-    label: "image1",
+    label: "image3",
   },
   {
     photo: SecondImage,
@@ -17,7 +17,7 @@ const images = [
   },
   {
     photo: ThirdImage,
-    label: "image3",
+    label: "image1",
   },
 ];
 
@@ -29,9 +29,10 @@ export default function SimpleSlider() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 2000,
     slickNext: true,
     slickPrevious: true,
+    pauseOnHover: false,
   };
   return (
     <Slider {...settings}>
