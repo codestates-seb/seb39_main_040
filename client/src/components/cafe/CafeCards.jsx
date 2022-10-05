@@ -3,6 +3,7 @@ import CafeCard from "./CafeCard";
 import styled from "styled-components";
 import axios from "axios";
 import Loading from "../common/Loading";
+import Swal from "sweetalert2";
 
 const CafeCards = ({ searchInput, targetFilter }) => {
   const [cafeInfo, setCafeInfo] = useState([]);
@@ -16,6 +17,13 @@ const CafeCards = ({ searchInput, targetFilter }) => {
       `${process.env.REACT_APP_API}/cafe/search?keyword=${param}`
     );
     setCafeInfo(response.data.data);
+    if (response.data.data.length === 0) {
+      Swal.fire({
+        title: "해당하는 카페가 없습니다.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
+    }
   };
 
   const filterGet = async (targetId) => {
@@ -24,7 +32,11 @@ const CafeCards = ({ searchInput, targetFilter }) => {
     );
     setCafeInfo(response.data.data);
     if (response.data.data.length === 0) {
-      alert("해당하는 카페가 없습니다.");
+      Swal.fire({
+        title: "해당하는 카페가 없습니다.",
+        confirmButtonColor: "var(--green-010)",
+        icon: "error",
+      });
     }
   };
 
