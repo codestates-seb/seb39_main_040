@@ -11,17 +11,22 @@ spring:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
       ddl-auto: update
     show-sql: true
-    #defer-datasource-initialization: true
-
-  #sql:
-  # init:
-  #  mode: always
+#    defer-datasource-initialization: true
+#
+#  sql:
+#   init:
+#    mode: always
 
   batch:
     jdbc:
       initialize-schema: always
     job:
       enabled: false
+
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 
   profiles:
     include:
