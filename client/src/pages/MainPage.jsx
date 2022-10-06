@@ -6,6 +6,7 @@ import SearchBar from "../components/common/SearchBar";
 import FilterBar from "../components/common/FilterBar";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Footer from "../components/common/Footer";
 
 const MainPage = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -39,6 +40,9 @@ const MainPage = () => {
         targetFilter={targetFilter}
         setTargetFilter={setTargetFilter}
       />
+      <FooterContainer>
+        <Footer />
+      </FooterContainer>
     </MainWrapper>
   );
 };
@@ -50,6 +54,7 @@ const MainWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 
   .nav {
     display: flex;
@@ -69,4 +74,11 @@ const FilterBarContainer = styled.div`
   display: flex;
   align-items: center;
   width: 1370px;
+`;
+
+const FooterContainer = styled.div`
+  /* position: absolute; */
+  /* bottom: 0; */
+  margin-top: 600px;
+  width: 100%;
 `;

@@ -126,6 +126,7 @@ const MainWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 80%;
+  /* height: 1500px; */
   flex-wrap: wrap;
 `;
 const CafeCardWrapper = styled.div`
