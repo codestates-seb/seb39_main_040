@@ -4,11 +4,20 @@ import Header from "../components/common/Header";
 import CafeCards from "../components/cafe/CafeCards";
 import SearchBar from "../components/common/SearchBar";
 import FilterBar from "../components/common/FilterBar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const MainPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [targetFilter, setTargetFilter] = useState(`all`);
+  const [totalPage, setTotalPage] = useState(0);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API}/cafe`).then((res) => {
+      console.log(res.data.pageInfo.total_page);
+      setTotalPage(res.data.pageInfo.total_page);
+    });
+  }, []);
 
   return (
     <MainWrapper>
@@ -24,6 +33,7 @@ const MainPage = () => {
         />
       </FilterBarContainer>
       <CafeCards
+        totalPage={totalPage}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         targetFilter={targetFilter}

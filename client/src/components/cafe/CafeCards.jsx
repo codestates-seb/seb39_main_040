@@ -5,12 +5,11 @@ import axios from "axios";
 import Loading from "../common/Loading";
 import Swal from "sweetalert2";
 
-const CafeCards = ({ searchInput, targetFilter }) => {
+const CafeCards = ({ totalPage, searchInput, targetFilter }) => {
   const [cafeInfo, setCafeInfo] = useState([]);
   const [page, setPage] = useState(1);
   const target = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [throttle, setThrottle] = useState(false);
 
   const searchGet = async (param) => {
     const response = await axios.get(
@@ -58,34 +57,26 @@ const CafeCards = ({ searchInput, targetFilter }) => {
   };
 
   const onIntersect = (entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && !isLoading) {
-        if (!throttle) {
-          setThrottle(true);
-          setTimeout(async () => {
-            setPage((page) => page + 1);
-            observer.observe(entry.target);
-            setThrottle(false);
-            setIsLoading(false);
-          }, 400);
-        }
-      }
-    });
+    const entry = entries[0];
+    if (entry.isIntersecting && !isLoading) {
+      setTimeout(async () => {
+        setPage((page) => page + 1);
+        // observer.observe(entry.target);
+        setIsLoading(false);
+      }, 300);
+    }
   };
 
   useEffect(() => {
-    CafeGet(page);
+    if (page !== 1 && totalPage >= page) {
+      CafeGet(page);
+    }
   }, [page]);
-
-  const options = {
-    rootMargin: "30px",
-    threshold: 1,
-  };
 
   useEffect(() => {
     let observer;
     if (target) {
-      observer = new IntersectionObserver(onIntersect, options);
+      observer = new IntersectionObserver(onIntersect, { threshold: 1.0 });
       observer.observe(target.current);
     }
     return () => observer && observer.disconnect();
@@ -117,9 +108,12 @@ const CafeCards = ({ searchInput, targetFilter }) => {
             />
           </div>
         ))}
-        <LoadingWrapper>{isLoading ? <Loading /> : null}</LoadingWrapper>
       </CafeCardWrapper>
-      <div ref={target}></div>
+      <TargetWrapper>
+        <div className="target" ref={target}>
+          <LoadingWrapper>{isLoading ? <Loading /> : null}</LoadingWrapper>
+        </div>
+      </TargetWrapper>
     </MainWrapper>
   );
 };
@@ -132,6 +126,7 @@ const MainWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 80%;
+  flex-wrap: wrap;
 `;
 const CafeCardWrapper = styled.div`
   display: flex;
@@ -147,5 +142,9 @@ const CafeCardWrapper = styled.div`
   }
 `;
 const LoadingWrapper = styled.div`
+  width: 100%;
+`;
+
+const TargetWrapper = styled.div`
   width: 100%;
 `;
