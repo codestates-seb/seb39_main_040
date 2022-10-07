@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByCafeId(Long id, PageRequest pageRequest);
+    List<Review> findByCafeId(Long id);
 
     Page<Review> findByUserId(Long id, PageRequest pageRequest);
 

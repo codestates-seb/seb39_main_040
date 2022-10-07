@@ -19,6 +19,17 @@ spring:
    #init:
     #mode: always
 
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
+
   profiles:
     include:
       - db

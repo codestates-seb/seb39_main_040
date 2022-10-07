@@ -4,11 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import seb39_40.coffeewithme.cafe.domain.CafeTag;
+import seb39_40.coffeewithme.cafe.domain.SortType;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static seb39_40.coffeewithme.exception.ExceptionCode.INVALID_INPUT_VALUE;
 
 @Entity @Getter @Setter
 @NoArgsConstructor
@@ -24,10 +28,10 @@ public class Tag {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag")
     private List<CafeTag> cafeTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag")
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
 
@@ -46,16 +50,25 @@ public class Tag {
     }
 
     public enum Category {
-        MOOD("분위기"),
-        TASTY("맛집"),
-        STUDY("스터디"),
-        NONE("없음"),
-        ETC("기타");
+        MOOD("mood"),
+        TASTY("tasty"),
+        STUDY("study"),
+        NONE("none"),
+        ETC("etc");
 
-        String category;
+        @Getter
+        String text;
 
-        Category(String category) {
-            this.category = category;
+        Category(String text) {
+            this.text = text;
         }
+    }
+
+    public static Category findCategory(String text) {
+        for (Category category :Category.values())
+            if (category.text.equals(text)) {
+                return category;
+            }
+        throw new BusinessLogicException(INVALID_INPUT_VALUE);
     }
 }
