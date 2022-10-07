@@ -1,20 +1,80 @@
 import React from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import axios from "axios";
+
 import Tag from "../common/Tag";
 import { BsSuitHeartFill } from "react-icons/bs";
-import axios from "axios";
+import Swal from "sweetalert2";
+
+const UserWishCard = ({ id, name, tags, img }) => {
+  console.log(tags);
+  const deleteWishHandler = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      title: "위시리스트를 삭제하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green-010)",
+      cancelButtonColor: "var(--red-010)",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${process.env.REACT_APP_API}/users/wishlist/${id}`)
+          .then(() => {
+            Swal.fire({
+              title: "위시리스트가 삭제되었습니다.",
+              icon: "success",
+              confirmButtonColor: "var(--green-010)",
+            });
+            window.location.reload();
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "위시리스트 삭제를 실패했습니다",
+              text: "다시 시도해주세요",
+              icon: "error",
+              confirmButtonColor: "var(--green-010)",
+            });
+          });
+      }
+    });
+  };
+
+  return (
+    <WishCardWrapper>
+      <Link to={`/cafe/${id}`}>
+        <CafeImg src={`${img}`} />
+        <CafeInfoContent>
+          <CafeTitle>
+            {name}
+            <button onClick={deleteWishHandler}>
+              <BsSuitHeartFill className="fill" />
+            </button>
+          </CafeTitle>
+          <CafeTag>
+            {tags.map((el) => (
+              <Tag className="tag">#{el}</Tag>
+            ))}
+          </CafeTag>
+        </CafeInfoContent>
+      </Link>
+    </WishCardWrapper>
+  );
+};
+
+export default UserWishCard;
 
 const WishCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 450px;
   margin-top: 50px;
-  /* margin-bottom: 20px; */
   background-color: var(--white-010);
   position: relative;
   padding: 0 10px;
-  //border: 1px solid blue;
 `;
 
 const CafeImg = styled.img`
@@ -39,6 +99,8 @@ const CafeInfoContent = styled.div`
 `;
 
 const CafeTitle = styled.h2`
+  display: flex;
+  flex-direction: row;
   width: 300px;
   font-weight: bold;
   font-size: 1.5rem;
@@ -48,21 +110,12 @@ const CafeTitle = styled.h2`
   color: var(--black-010);
 
   button {
-    position: absolute;
     color: var(--green-010);
     font-size: 20px;
     top: 71%;
     right: 64%;
     cursor: pointer;
   }
-`;
-
-const CafeText = styled.p`
-  width: 300px;
-  font-size: 1.1rem;
-  color: var(--black-010);
-  margin-top: 18px;
-  margin-left: 5px;
 `;
 
 const CafeTag = styled.div`
@@ -79,41 +132,3 @@ const CafeTag = styled.div`
     margin-right: 10px;
   }
 `;
-
-const UserWishCard = ({ id, name, tags, img }) => {
-  console.log(tags);
-  const deleteWishHandler = (e) => {
-    e.preventDefault();
-    axios
-      .delete(`${process.env.REACT_APP_API}/users/wishlist/${id}`)
-      .then(() => {
-        window.alert("위시리스트 삭제완료");
-        window.location.reload();
-      })
-      .catch((err) => console.log(err.response.status));
-  };
-
-  return (
-    <WishCardWrapper>
-      <Link to={`/cafe/${id}`}>
-        <CafeImg src={`${img}`} />
-        <CafeInfoContent>
-          <CafeTitle>
-            {name}
-            <button onClick={deleteWishHandler}>
-              <BsSuitHeartFill className="fill" />
-            </button>
-          </CafeTitle>
-          {/* <CafeText>{name}</CafeText> */}
-          <CafeTag>
-            {tags.map((el) => (
-              <Tag className="tag">#{el}</Tag>
-            ))}
-          </CafeTag>
-        </CafeInfoContent>
-      </Link>
-    </WishCardWrapper>
-  );
-};
-
-export default UserWishCard;

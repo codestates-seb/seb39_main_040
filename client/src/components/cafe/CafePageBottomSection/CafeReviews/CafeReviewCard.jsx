@@ -5,6 +5,42 @@ import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import React from "react";
 
+const CafeReviewCard = ({ text, tag, user, image, star }) => {
+  return (
+    <MainWrapper>
+      <ImgBox>
+        <img src={`${image}`} alt="리뷰이미지" />
+      </ImgBox>
+      <ContentBox>
+        <p>{text}</p>
+        <TagBox>
+          {tag.map((el) => (
+            <Tag className="tag-1">#{el}</Tag>
+          ))}
+        </TagBox>
+        <Infobox>
+          <Star>
+            <Box sx={{ "& > legend": { mt: 2 } }}>
+              <Typography component="legend"></Typography>
+              <Rating
+                className="star-icon"
+                name="read-only"
+                value={star}
+                readOnly
+              />
+            </Box>
+          </Star>
+          <Username>
+            <span>{user.name}</span>
+          </Username>
+        </Infobox>
+      </ContentBox>
+    </MainWrapper>
+  );
+};
+
+export default CafeReviewCard;
+
 const MainWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -14,7 +50,6 @@ const MainWrapper = styled.div`
   background-color: var(--white-010);
   margin-bottom: 50px;
   position: relative;
-  /* border: 1px solid black; */
 `;
 
 const ImgBox = styled.div`
@@ -38,6 +73,11 @@ const ContentBox = styled.div`
   p {
     line-height: 30px;
     margin-bottom: 20px;
+    width: 500px;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -46,7 +86,7 @@ const TagBox = styled.div`
   align-items: center;
   margin-top: 8px;
   font-size: 17px;
-  width: 200px;
+  width: auto;
   .tag-1 {
     margin-right: 10px;
   }
@@ -79,38 +119,3 @@ const Username = styled.div`
   margin-top: 10px;
   font-size: 14px;
 `;
-
-const CafeReviewCard = ({ text, tag, user, image, star }) => {
-  return (
-    <MainWrapper>
-      <ImgBox>
-        <img src={`${image}`} alt="리뷰이미지" />
-      </ImgBox>
-      <ContentBox>
-        <p>{text}</p>
-        <TagBox>
-          <Tag className="tag-1">#{tag[0]}</Tag>
-          <Tag className="tag-2">#{tag[1]}</Tag>
-        </TagBox>
-        <Infobox>
-          <Star>
-            <Box sx={{ "& > legend": { mt: 2 } }}>
-              <Typography component="legend"></Typography>
-              <Rating
-                className="star-icon"
-                name="read-only"
-                value={star}
-                readOnly
-              />
-            </Box>
-          </Star>
-          <Username>
-            <span>{user.name}</span>
-          </Username>
-        </Infobox>
-      </ContentBox>
-    </MainWrapper>
-  );
-};
-
-export default CafeReviewCard;

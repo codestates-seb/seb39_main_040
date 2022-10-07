@@ -3,6 +3,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
+const CafeMenu = ({ menuImg }) => {
+  return (
+    <MenuWrapper>
+      <TextBox>
+        <FontAwesomeIcon className="icon" icon={faCircleInfo} />
+        <span>메뉴를 확인해보세요.</span>
+      </TextBox>
+      <ImgBox>
+        <img src={`${menuImg}`} alt="메뉴이미지" />
+      </ImgBox>
+    </MenuWrapper>
+  );
+};
+
+export default CafeMenu;
+
 const MenuWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,19 +53,3 @@ const ImgBox = styled.div`
     height: 600px;
   }
 `;
-
-const CafeMenu = ({ menuImg }) => {
-  return (
-    <MenuWrapper>
-      <TextBox>
-        <FontAwesomeIcon className="icon" icon={faCircleInfo} />
-        <span>메뉴를 확인해보세요.</span>
-      </TextBox>
-      <ImgBox>
-        <img src={`${menuImg}`} alt="너비가 긴 메뉴이미지" />
-      </ImgBox>
-    </MenuWrapper>
-  );
-};
-
-export default CafeMenu;

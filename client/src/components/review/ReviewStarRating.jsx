@@ -4,17 +4,6 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 
-const StarWrapper = styled.div`
-  .text {
-    font-size: 20px;
-  }
-  .star {
-    margin-top: 10px;
-    font-size: 38px;
-    color: var(--green-010);
-  }
-`;
-
 const ReviewStarRating = ({ onChange }) => {
   const [value, setValue] = React.useState(3);
 
@@ -39,3 +28,14 @@ const ReviewStarRating = ({ onChange }) => {
 };
 
 export default ReviewStarRating;
+
+const StarWrapper = styled.div`
+  .text {
+    font-size: 20px;
+  }
+  .star {
+    margin-top: 10px;
+    font-size: 38px;
+    color: var(--green-010);
+  }
+`;

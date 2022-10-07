@@ -1,143 +1,66 @@
-import axios from "axios";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Logo from "../../assets/CoffeeWithMe.svg";
-import useAuthStore from "../../store/useAuth";
-import useLoginStore from "../../store/useLoginStore";
-import React from "react";
 import instance from "../../api/core";
+import styled from "styled-components";
 
-const HeaderWrapper = styled.header`
-  z-index: 999;
-  position: sticky;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 75px;
-  width: 100%;
-  //border-bottom: 1px solid var(--gray-030);
-  box-shadow: 4px 4px 10px var(--gray-030);
-  padding: 10px 40px;
-  background-color: var(--white-010);
-`;
-
-const HeaderTitle = styled.img`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const NavList = styled.ul`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: 0;
-  margin-right: 44px;
-`;
-
-const NavItem = styled.li`
-  padding-top: 10px;
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--black-010);
-  opacity: 0.3;
-  margin-left: 60px;
-`;
-
-const DropBox = styled.div`
-  // ?? a 태그를 여기서 해주어야지만 Link가 스타일이 적용되지 않는다.
-  a {
-    text-decoration: none;
-    color: var(--black--010);
-    opacity: 0.7;
-  }
-
-  .hidden {
-    position: absolute;
-    top: 100%;
-    right: 2%;
-    width: 110px;
-    text-align: center;
-    padding: 10px;
-    font-size: 15px;
-    transition: 0.3s;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
-    // 투명도조절로 보이지 않게
-    opacity: 0;
-  }
-
-  .activate {
-    position: absolute;
-    top: 100%;
-    right: 2%;
-    width: 110px;
-    text-align: center;
-    padding: 10px;
-    font-size: 15px;
-    transition: 0.3s;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    background-color: var(--white-010);
-    // 투명도조절로 보이게
-    opacity: 1;
-  }
-`;
-
-// 유저이미지
-const UserProfile = styled.img`
-  display: inline-block;
-  position: absolute;
-  top: 10%;
-  right: 2%;
-  margin-right: 24px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-`;
-
-// 드롭 메뉴
-const DropMenu = styled.ul`
-  .active &.menu > li {
-    text-decoration: none;
-    color: var(--black--010);
-  }
-  button {
-    font-size: 14px;
-    color: var(--black--010);
-    opacity: 0.7;
-  }
-`;
-
-//드롭 메뉴속 아이템
-const DropItem = styled.li`
-  padding: 5px;
-  &:hover {
-    color: var(--green-010);
-  }
-`;
+import Logo from "../../assets/CoffeeWithMe.svg";
+import useLoginStore from "../../store/useLoginStore";
+import Swal from "sweetalert2";
 
 const Header = () => {
-  // const { isLogin, setIsLogin } = useAuthStore();
   const { isLogin, setIsLogin } = useLoginStore();
   const [isOpen, setIsOpen] = useState(true);
+  const [userProfile, setUserProfile] = useState();
 
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    instance
-      .post(`${process.env.REACT_APP_API}/users/logout`)
-      .then((res) => {
-        console.log("로그아웃완료");
-        setIsLogin();
-        window.localStorage.clear();
-        window.sessionStorage.clear();
-        navigate("/");
-      })
-      .catch((err) => console.log(err.response.status)); // 에러코드값 이걸 통해서 토큰 재발급 유무를 확인...하나..
+    Swal.fire({
+      title: "로그아웃 하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green-010)",
+      cancelButtonColor: "var(--red-010)",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        instance
+          .post(`${process.env.REACT_APP_API}/users/logout`)
+          .then(() => {
+            Swal.fire({
+              title: "로그아웃 되었습니다.",
+              text: "다음에 다시 만나요 😁",
+              icon: "success",
+              confirmButtonColor: "var(--green-010)",
+            });
+            navigate("/");
+            setIsLogin();
+          })
+          .catch(() =>
+            Swal.fire({
+              title: "로그아웃에 실패했습니다",
+              text: "다시 시도해주세요",
+              icon: "error",
+              confirmButtonColor: "var(--green-010)",
+            })
+          );
+      }
+    });
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (isLogin) {
+        const response = await instance.get(
+          `${process.env.REACT_APP_API}/users/information`
+        );
+        setUserProfile(response.profilePhoto.path);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <HeaderWrapper>
@@ -148,7 +71,7 @@ const Header = () => {
       {isLogin === true ? (
         <DropBox>
           <UserProfile
-            src="https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg"
+            src={`${userProfile}`}
             alt="profile"
             onClick={() => setIsOpen(!isOpen)}
           />
@@ -185,3 +108,106 @@ const Header = () => {
 };
 
 export default Header;
+
+const HeaderWrapper = styled.header`
+  z-index: 999;
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75px;
+  width: 100%;
+  box-shadow: 4px 4px 10px var(--gray-030);
+  padding: 10px 40px;
+  background-color: var(--white-010);
+`;
+
+const HeaderTitle = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const NavList = styled.ul`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  margin-right: 44px;
+`;
+
+const NavItem = styled.li`
+  padding-top: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--black-010);
+  opacity: 0.3;
+  margin-left: 60px;
+`;
+
+const DropBox = styled.div`
+  a {
+    text-decoration: none;
+    color: var(--black--010);
+    opacity: 0.7;
+  }
+
+  .hidden {
+    position: absolute;
+    top: 100%;
+    right: 2%;
+    width: 110px;
+    text-align: center;
+    padding: 10px;
+    font-size: 15px;
+    transition: 0.3s;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+  }
+
+  .activate {
+    position: absolute;
+    top: 100%;
+    right: 2%;
+    width: 110px;
+    text-align: center;
+    padding: 10px;
+    font-size: 15px;
+    transition: 0.3s;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: var(--white-010);
+    opacity: 1;
+  }
+`;
+
+const UserProfile = styled.img`
+  display: inline-block;
+  position: absolute;
+  top: 10%;
+  right: 2%;
+  margin-right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+`;
+
+const DropMenu = styled.ul`
+  .active &.menu > li {
+    text-decoration: none;
+    color: var(--black--010);
+  }
+  button {
+    font-size: 14px;
+    color: var(--black--010);
+    opacity: 0.7;
+  }
+`;
+
+const DropItem = styled.li`
+  padding: 5px;
+  &:hover {
+    color: var(--green-010);
+  }
+`;

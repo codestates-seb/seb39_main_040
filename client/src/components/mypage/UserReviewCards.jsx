@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UserReviewCard from "./UserReviewCard";
 
-const ReviewCardWrapper = styled.div``;
-
 const UserReviewCards = () => {
   const [reviewInfos, setReviewInfos] = useState([]);
 
@@ -19,6 +17,7 @@ const UserReviewCards = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
   return (
     <ReviewCardWrapper>
       {reviewInfos.length === 0 ? (
@@ -45,6 +44,8 @@ const UserReviewCards = () => {
 
 export default UserReviewCards;
 
+const ReviewCardWrapper = styled.div``;
+
 const MessageBox = styled.div`
   display: flex;
   justify-content: center;
@@ -57,7 +58,6 @@ const MessageBox = styled.div`
     margin-bottom: 50px;
     color: var(--gray-020);
     font-size: 3rem;
-    //opacity: 0.6;
   }
   a {
     text-decoration: none;

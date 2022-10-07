@@ -11,6 +11,8 @@ import UserInfoEditPage from "./pages/User/UserInfoEditPage";
 import UserReviewPage from "./pages/User/UserReviewPage";
 import UserWishPage from "./pages/User/UserWishPage";
 import ScrollToTop from "./components/common/ScrollToTop";
+import NotFoundPage from "./pages/NotFoundPage";
+
 function App() {
   return (
     <>
@@ -18,7 +20,6 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<MainPage />} />
-
           <Route path="/cafe/:id" element={<CafeDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
@@ -31,6 +32,7 @@ function App() {
           <Route path="/userinfoedit" element={<UserInfoEditPage />} />
           <Route path="/user/review" element={<UserReviewPage />} />
           <Route path="/user/wish" element={<UserWishPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </>

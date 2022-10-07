@@ -23,8 +23,11 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.0",
     "react-scripts": "^2.1.3",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.5",
     "styled-reset": "^4.4.2",
+    "sweetalert2": "^11.4.37",
     "web-vitals": "^2.1.4",
     "zustand": "^4.1.1"
   },

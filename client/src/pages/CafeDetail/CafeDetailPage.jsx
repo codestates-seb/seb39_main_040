@@ -8,15 +8,23 @@ import React from "react";
 
 const CafeDetailPage = () => {
   const [cafeIdInfo, setCafeIdInfo] = useState([]);
+  const [cafeImages, setCafeImages] = useState([]);
   const { id } = useParams();
 
-  // 카페 상세 정보 불러오기
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/cafe/${id}`)
       .then((res) => {
-        // console.log(res.data);
         setCafeIdInfo(res.data);
+      })
+      .catch((e) => console.err("error:", e));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API}/cafe/${id}/reviews/images`)
+      .then((res) => {
+        setCafeImages(res.data);
       })
       .catch((e) => console.err("error:", e));
   }, []);
@@ -24,8 +32,8 @@ const CafeDetailPage = () => {
   return (
     <>
       <Header />
-      <CafePageTopSection cafeIdInfo={cafeIdInfo} />
-      <TabBar cafeIdInfo={cafeIdInfo} />
+      <CafePageTopSection cafeIdInfo={cafeIdInfo} tags={cafeIdInfo.tags} />
+      <TabBar cafeIdInfo={cafeIdInfo} cafeImages={cafeImages} />
     </>
   );
 };

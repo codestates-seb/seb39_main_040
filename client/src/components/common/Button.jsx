@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import React from "react";
 
+const Button = ({ children }) => {
+  return <Btn>{children}</Btn>;
+};
+
+export default Button;
+
 const Btn = styled.button`
   width: auto;
   padding: 18px;
@@ -18,9 +24,3 @@ const Btn = styled.button`
     color: var(--white-010);
   }
 `;
-
-const Button = ({ children }) => {
-  return <Btn>{children}</Btn>;
-};
-
-export default Button;

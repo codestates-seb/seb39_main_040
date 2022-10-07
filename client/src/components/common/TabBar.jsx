@@ -41,35 +41,7 @@ function a11yProps(index) {
   };
 }
 
-const TabWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-    width: 100px;
-    height: 50px;
-    color: var(--green-010);
-    font-weight: 800;
-    font-size: 20px;
-  }
-  .css-1aquho2-MuiTabs-indicator {
-    background-color: var(--green-010);
-  }
-  .tab {
-    font-weight: 600;
-    width: 100px;
-    height: 50px;
-    font-size: 18px;
-  }
-`;
-
-const TabContentWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const TabBar = ({ cafeIdInfo, reviewInfo }) => {
+const TabBar = ({ cafeIdInfo, cafeImages }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -103,7 +75,7 @@ const TabBar = ({ cafeIdInfo, reviewInfo }) => {
           <CafeMenu menuImg={cafeIdInfo.menu_img} />
         </TabBarPanel>
         <TabBarPanel value={value} index={2}>
-          <CafePhotoCards />
+          <CafePhotoCards cafeImages={cafeImages} />
         </TabBarPanel>
       </TabContentWrapper>
     </Box>
@@ -111,3 +83,31 @@ const TabBar = ({ cafeIdInfo, reviewInfo }) => {
 };
 
 export default TabBar;
+
+const TabWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    width: 100px;
+    height: 50px;
+    color: var(--green-010);
+    font-weight: 800;
+    font-size: 20px;
+  }
+  .css-1aquho2-MuiTabs-indicator {
+    background-color: var(--green-010);
+  }
+  .tab {
+    font-weight: 600;
+    width: 100px;
+    height: 50px;
+    font-size: 18px;
+  }
+`;
+
+const TabContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

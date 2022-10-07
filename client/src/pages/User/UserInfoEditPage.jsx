@@ -1,10 +1,150 @@
-import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
+import instance from "../../api/core";
+
 import Header from "../../components/common/Header";
-import useAuthStore from "../../store/useAuth";
-import useLoginStore from "../../store/useLoginStore";
+import Swal from "sweetalert2";
+
+const UserInfoEditPage = () => {
+  const [imgSrc, setImgSrc] = useState();
+  const [userName, setUserName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [img, setImg] = useState("");
+  const [imgInfo, setImgInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState([]);
+  const [userPreProfile, setUserPreProfile] = useState("");
+
+  const navigate = useNavigate();
+
+  const uploadImg = (e) => {
+    e.preventDefault();
+    setImgInfo(e.target.files[0]);
+    const reader = new FileReader();
+
+    reader.readAsDataURL(e.target.files[0]);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImgSrc(reader.result);
+        resolve();
+      };
+    });
+  };
+
+  const onChangeInfo = (e) => {
+    e.preventDefault();
+    const newInfo = { userName: userName, mobile: mobile, profilePhoto: img };
+    if (userName && mobile && img) {
+      instance
+        .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
+        .then(() => {
+          e.preventDefault();
+          setUserInfo(userInfo);
+          Swal.fire({
+            title: "정보가 수정되었습니다.",
+            confirmButtonColor: "var(--green-010)",
+          });
+          navigate("/userinfo");
+        })
+        .catch((err) => console.log(err));
+    } else if (!img) {
+      Swal.fire({
+        title: "사진이 등록되지 않았습니다.",
+        icon: "error",
+        confirmButtonColor: "var(--green-010)",
+      });
+    } else if (!userName) {
+      Swal.fire({
+        title: "이름이 작성되지 않았습니다.",
+        icon: "error",
+        confirmButtonColor: "var(--green-010)",
+      });
+    } else if (!mobile) {
+      Swal.fire({
+        title: "전화번호가 작성되지 않았습니다.",
+        icon: "error",
+        confirmButtonColor: "var(--green-010)",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const formData = new FormData();
+    formData.append("images", imgInfo);
+    let token = localStorage.getItem("access_token");
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
+    axios
+      .post(`${process.env.REACT_APP_API}/images/upload`, formData, {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setImg(res.data.id);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [imgInfo]);
+
+  useEffect(() => {
+    let token = localStorage.getItem("access_token") || "";
+    axios.defaults.headers.common["AccessToken"] = `${token}`;
+    axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
+      setUserInfo(res.data);
+      setUserPreProfile(res.data.profilePhoto.path);
+      setUserName(userInfo.userName);
+    });
+  }, []);
+
+  return (
+    <>
+      <Header />
+      <EditWrapper>
+        <UserImgUpdate>
+          {!img ? (
+            <Img src={userPreProfile} alt="이전이미지" />
+          ) : (
+            <Img src={imgSrc} alt="이미지확인" />
+          )}
+          <ImgUpdateButton>
+            사진 수정
+            <input
+              className="profile"
+              type="file"
+              accept="image/*"
+              onChange={uploadImg}
+            />
+          </ImgUpdateButton>
+        </UserImgUpdate>
+        <InfoWrapper onSubmit={onChangeInfo}>
+          <InfoDataBox>
+            <InputData>이름</InputData>
+            <input
+              type="text"
+              value={userName}
+              placeholder={userInfo.userName}
+              onChange={(e) => setUserName(e.target.value)}
+            ></input>
+          </InfoDataBox>
+          <InfoDataBox>
+            <InputData>전화번호</InputData>
+            <input
+              value={mobile}
+              placeholder={userInfo.mobile}
+              onChange={(e) => setMobile(e.target.value)}
+            ></input>
+          </InfoDataBox>
+          <Button>수정하기</Button>
+          <Button onClick={() => navigate("/userinfo")}>뒤로가기</Button>
+        </InfoWrapper>
+      </EditWrapper>
+    </>
+  );
+};
+
+export default UserInfoEditPage;
 
 const EditWrapper = styled.div`
   display: flex;
@@ -33,16 +173,17 @@ const Img = styled.img`
   border-radius: 50%;
 `;
 
-const ImgUpdateButton = styled.div`
+const ImgUpdateButton = styled.label`
   border: none;
   background: none;
   cursor: pointer;
-  > button {
+  margin: 15px;
+
+  > input {
     margin-top: 10px;
     font-weight: 600;
     font-size: 1.2rem;
-  }
-  > input.profile {
+    text-align: center;
     display: none;
   }
 `;
@@ -79,7 +220,7 @@ const InputData = styled.div`
   padding: 10px;
 `;
 
-const UpdateButton = styled.button`
+const Button = styled.button`
   border: 1px solid var(--green-010);
   border-radius: 5px;
   background: var(--white-010);
@@ -94,87 +235,3 @@ const UpdateButton = styled.button`
     background: var(--green-010);
   }
 `;
-
-const UserInfoEditPage = () => {
-  const [imgSrc, setImgSrc] = useState("");
-  const [userName, setUserName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const { userInfo, setUserInfo } = useAuthStore();
-  const { isLogin, setIsLogin } = useLoginStore();
-
-  const imgInput = useRef();
-
-  const navigate = useNavigate();
-  const onSubmitImg = (e) => {
-    e.preventDefault();
-    imgInput.current.click();
-  };
-
-  const onImgChange = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImgSrc(reader.result);
-        resolve();
-        // 우리가 입력한 파일정보
-        console.log(fileBlob);
-        // base64로 인코딩한 파일정보
-        // console.log(reader.result);
-      };
-    });
-  };
-
-  const onChangeInfo = (e) => {
-    e.preventDefault();
-    const newInfo = { userName: userName, mobile: mobile };
-    axios
-      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
-      .then(() => {
-        console.log("정보수정완료");
-        e.preventDefault();
-        navigate("/userinfo");
-      })
-      .catch((err) => console.log(err));
-  };
-
-  return (
-    <>
-      <Header />
-      <EditWrapper>
-        <UserImgUpdate>
-          <Img src={imgSrc} alt="이미지확인" />
-          <ImgUpdateButton>
-            <button onClick={onSubmitImg}>프로필 사진 선택</button>
-            <input
-              className="profile"
-              type="file"
-              ref={imgInput}
-              accept="image/*"
-              onChange={(e) => onImgChange(e.target.files[0])}
-            />
-          </ImgUpdateButton>
-        </UserImgUpdate>
-        <InfoWrapper onSubmit={onChangeInfo}>
-          <InfoDataBox>
-            <InputData>이름</InputData>
-            <input
-              placeholder={userInfo.userName}
-              onChange={(e) => setUserName(e.target.value)}
-            ></input>
-          </InfoDataBox>
-          <InfoDataBox>
-            <InputData>전화번호</InputData>
-            <input
-              placeholder="변경할 전화번호를 적어주세요"
-              onChange={(e) => setMobile(e.target.value)}
-            ></input>
-          </InfoDataBox>
-          <UpdateButton>수정 완료</UpdateButton>
-        </InfoWrapper>
-      </EditWrapper>
-    </>
-  );
-};
-
-export default UserInfoEditPage;
