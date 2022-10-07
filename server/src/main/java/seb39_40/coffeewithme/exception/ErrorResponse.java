@@ -33,8 +33,8 @@ public class ErrorResponse {
     public static ErrorResponse of(Set<ConstraintViolation<?>> violations, HttpStatus httpStatus) {
         return new ErrorResponse(null, ConstraintViolationError.of(violations), httpStatus.value(), httpStatus.getReasonPhrase());
     }
-    public static ErrorResponse of(ExceptionCode exceptionCode){
-        return new ErrorResponse(null,null,exceptionCode.getStatus(), exceptionCode.getMessage());
+    public static ErrorResponse of(HttpStatus status,String message){
+        return new ErrorResponse(null,null,status.value(), message);
     }
 
     public static ErrorResponse of(HttpStatus httpStatus){

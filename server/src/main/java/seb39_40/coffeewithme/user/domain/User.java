@@ -1,9 +1,6 @@
 package seb39_40.coffeewithme.user.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 
@@ -14,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-@Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -35,9 +32,6 @@ public class User {
     private UserStatus status;
     @Column(nullable = false, length = 50, name="reg_dt")
     private LocalDate registerDate;
-    //테스트용
-    @Column
-    private String refresh;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="prf_pt")
@@ -46,7 +40,7 @@ public class User {
     @Transient
     private List<Wishlist> likes=new ArrayList<>();
 
-    @Transient //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Transient
     private List<Review> reviews=new ArrayList<>();
 
     public List<String> getRoleList(){
@@ -71,16 +65,18 @@ public class User {
 
     public void addReview(Review review) {
         this.reviews.add(review);
-        if (review.getUser() != this){
+        if (review.getUser() != this) {
             review.setUser(this);
         }
     }
 
-    public void addLike(Wishlist like) {
-        this.likes.add(like);
-        if (like.getUser() != this){
-            like.setUser(this);
-        }
+    public void updateStatus(UserStatus status){
+        this.status=status;
     }
 
+    public void updateInformation(String userName, String mobile, Image profilePhoto){
+        this.userName = userName;
+        this.mobile=mobile;
+        this.profilePhoto=profilePhoto;
+    }
 }

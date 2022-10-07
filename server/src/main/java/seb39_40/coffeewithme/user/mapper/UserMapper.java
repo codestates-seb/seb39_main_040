@@ -1,7 +1,6 @@
 package seb39_40.coffeewithme.user.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import seb39_40.coffeewithme.cafe.dto.CafeResponseDto;
 import seb39_40.coffeewithme.image.domain.Image;
@@ -17,18 +16,17 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mapping(target = "name", source = "userName")
-    UserResponseDto.SimpleUserInfo userToUserSimpleInfoDto(User user);
     User userJoinToUser(UserRequestDto.UserJoin userJoin);
     UserResponseDto.UserInfo userToUserInfo(User user);
 
     default User userUpdateDtoToUser(UserRequestDto.UserUpdate update){
-        User user=new User();
-        user.setUserName(update.getUserName());
-        user.setMobile(update.getMobile());
         Image img = new Image();
         img.setId(update.getProfilePhoto());
-        user.setProfilePhoto(img);
+        User user= User.builder()
+                .userName(update.getUserName())
+                .mobile(update.getMobile())
+                .profilePhoto(img)
+                .build();
         return user;
     }
 

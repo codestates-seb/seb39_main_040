@@ -1,27 +1,20 @@
 package seb39_40.coffeewithme.user.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
-import seb39_40.coffeewithme.cafe.dto.CafeResponseDto;
-import seb39_40.coffeewithme.common.dto.PageInfo;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@NoArgsConstructor
 public class UserReviewResponseDto {
 
-    List<ReviewSimpleDto> reviews;
+   private List<ReviewSimpleDto> reviews;
 
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
-    @AllArgsConstructor
     public static class ReviewSimpleDto{
         Long id;
         ReviewSimpleCafeDto cafe;
