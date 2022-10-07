@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

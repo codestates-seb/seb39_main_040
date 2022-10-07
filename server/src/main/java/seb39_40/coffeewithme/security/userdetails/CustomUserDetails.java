@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.userdetails;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

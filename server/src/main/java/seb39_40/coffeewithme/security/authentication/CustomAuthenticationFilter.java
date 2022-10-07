@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import seb39_40.coffeewithme.security.userdetails.CustomUserDetails;
 import seb39_40.coffeewithme.user.domain.User;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,33 +1,28 @@
 package seb39_40.coffeewithme.user.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import seb39_40.coffeewithme.cafe.domain.Cafe;
-import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
-import seb39_40.coffeewithme.jwt.CustomUserDetails;
+import seb39_40.coffeewithme.security.userdetails.CustomUserDetails;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.dto.UserRequestDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
-import seb39_40.coffeewithme.user.service.WishlistService;
 import seb39_40.coffeewithme.user.service.UserService;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final WishlistService wishlistService;
     private final UserMapper userMapper;
-    private final CafeMapper cafeMapper;
 
     @PostMapping("/signup")
     public ResponseEntity joinUser(@RequestBody UserRequestDto.UserJoin join){
@@ -78,29 +73,6 @@ public class UserController {
         User user = userMapper.userUpdateDtoToUser(userRequestDto);
         User result = userService.updateInformation(userDetails.getUsername(), user);
         return new ResponseEntity<>(userMapper.userToUserInfo(result),HttpStatus.OK);
-    }
-
-    @PostMapping("/wishlist/{cafeId}")
-    public ResponseEntity setLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                  @PathVariable("cafeId") Long cafeId){
-        log.info("** Post Wishlist [user:{}, cafeId:{}]",userDetails.getUsername(),cafeId);
-        wishlistService.addLike(userDetails.getUser().getId(), cafeId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @GetMapping("/wishlist")
-    public ResponseEntity getLikes(@AuthenticationPrincipal CustomUserDetails userDetails){
-        List<Cafe> cafes = wishlistService.getLike(userDetails.getUser().getId());
-        log.info("** Get Wishlist [{}]" + userDetails.getUsername());
-        return new ResponseEntity<>(userMapper.cafesToWishlistDto(cafeMapper.cafeListToCafeSimpleDto(cafes)),HttpStatus.OK);
-    }
-
-    @DeleteMapping("/wishlist/{cafeId}")
-    public ResponseEntity deleteLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                     @PathVariable("cafeId") Long cafeId){
-        wishlistService.deleteLike(userDetails.getUser().getId(), cafeId);
-        log.info("** Delete Wishlist [user:{}, cafeId:{}]",userDetails.getUsername(), cafeId);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/reviews")

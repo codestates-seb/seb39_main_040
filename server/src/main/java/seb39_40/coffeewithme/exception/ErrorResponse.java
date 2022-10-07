@@ -90,25 +90,3 @@ public class ErrorResponse {
         }
     }
 }
-/*
-@Getter
-public class ErrorResponse {
-
-    private Integer status;
-    private String message;
-
-
-    public ErrorResponse(final HttpStatus status, final String message) {
-        this.status=status.value();
-        this.message=message;
-    }
-
-    //public static ErrorResponse of(HttpStatus httpStatus, String message){
-    //    return new ErrorResponse(httpStatus.value(), message);
-    //}
-
-    //public static ErrorResponse of(HttpStatus httpStatus){
-    //    return new ErrorResponse(null,null, httpStatus.value(), httpStatus.getReasonPhrase());
-    //}
-}
-*/

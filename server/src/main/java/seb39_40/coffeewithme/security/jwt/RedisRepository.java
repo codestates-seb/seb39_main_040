@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.jwt;
 
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;

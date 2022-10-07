@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-//@Setter
 @Getter
 @Builder
 @NoArgsConstructor

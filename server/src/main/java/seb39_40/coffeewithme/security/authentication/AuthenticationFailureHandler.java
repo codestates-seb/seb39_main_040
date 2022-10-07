@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 //import seb39_40.coffeewithme.common.exeption.ErrorResponse;
 import seb39_40.coffeewithme.exception.ErrorResponse;
-import seb39_40.coffeewithme.exception.ExceptionCode;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

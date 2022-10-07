@@ -1,10 +1,11 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.authentication;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import seb39_40.coffeewithme.security.userdetails.CustomUserDetails;
+import seb39_40.coffeewithme.security.jwt.JwtProvider;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

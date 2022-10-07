@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.authorization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -6,7 +6,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.MultipartStream;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import seb39_40.coffeewithme.exception.ErrorResponse;
-import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.security.jwt.JwtProvider;
+import seb39_40.coffeewithme.security.userdetails.CustomUserDetails;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 

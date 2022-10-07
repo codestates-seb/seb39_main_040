@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -6,10 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.lettuce.core.dynamic.annotation.Key;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import seb39_40.coffeewithme.user.service.UserService;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
