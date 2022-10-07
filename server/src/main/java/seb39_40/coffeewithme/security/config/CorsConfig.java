@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.jwt;
+package seb39_40.coffeewithme.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +13,10 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); //서버가 응답할 때 json을 자바스크립트에서 처리할 수 있도록 설정합니다 -> 무슨 의미?
-        config.addAllowedOriginPattern("*"); //모든 ip 응답허용
-        config.addAllowedHeader("*"); //모든 Header 응답허용
-        config.addAllowedMethod("*"); //모든 Http Request Method 응답허용
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
         config.addExposedHeader("AccessToken");
         config.addExposedHeader("RefreshToken");
         source.registerCorsConfiguration("/**", config);

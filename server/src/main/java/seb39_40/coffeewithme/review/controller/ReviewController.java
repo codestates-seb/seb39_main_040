@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.common.dto.MultiResponseDto;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.mapper.ReviewMapper;
@@ -18,7 +19,10 @@ import seb39_40.coffeewithme.review.service.ReviewService;
 import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +32,7 @@ public class ReviewController {
     private final ReviewMapper reviewMapper;
 
     @PostMapping("/{cafe_id}/reviews")
-    public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto postDto){
+    public ResponseEntity postReview(@PathVariable Long cafe_id, @RequestBody @Valid ReviewRequestDto postDto){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long id = reviewService.save(email, cafe_id, reviewMapper.reviewDtoToReview(postDto), postDto.getTags());
         return new ResponseEntity(id, HttpStatus.CREATED);
@@ -48,6 +52,14 @@ public class ReviewController {
         return new ResponseEntity(reviewMapper.reviewToReviewDto(review), HttpStatus.OK);
     }
 
+    @GetMapping("/{cafe_id}/reviews/images")
+    public ResponseEntity getImage(@PathVariable Long cafe_id){
+        List<Review> reviews = reviewService.findByCafeId(cafe_id);
+        List<Image> images = reviews.stream().map(review -> review.getReviewImg()).collect(Collectors.toList());
+        return new ResponseEntity(reviewMapper.reviewsToReviewImageDtos(images),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/{cafe_id}/reviews/{review_id}")
     public ResponseEntity deleteReview(@PathVariable Long cafe_id, @PathVariable Long review_id){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -56,9 +68,9 @@ public class ReviewController {
     }
 
     @PatchMapping("/{cafe_id}/reviews/{review_id}")
-    public ResponseEntity patchReview(@PathVariable Long cafe_id, @RequestBody ReviewRequestDto patchDto){
+    public ResponseEntity patchReview(@PathVariable Long review_id, @RequestBody ReviewRequestDto patchDto){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        reviewService.update(email, cafe_id, reviewMapper.reviewDtoToReview(patchDto));
+        reviewService.update(email, review_id, reviewMapper.reviewDtoToReview(patchDto), patchDto.getTags());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

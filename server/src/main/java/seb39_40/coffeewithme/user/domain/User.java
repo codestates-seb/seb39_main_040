@@ -1,9 +1,7 @@
 package seb39_40.coffeewithme.user.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
@@ -13,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-@Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -34,16 +32,15 @@ public class User {
     private UserStatus status;
     @Column(nullable = false, length = 50, name="reg_dt")
     private LocalDate registerDate;
-    //테스트용
-    @Column
-    private String refresh;
-    /*
-    @OneToOne
-    @JoinColumn(name ="user_id")
-    private Image profilePhoto; //외부에서 오는 키임둥, 객체를 받아와야할까용
-    */
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL) //  @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="prf_pt")
+    private Image profilePhoto;
+
+    @Transient
+    private List<Wishlist> likes=new ArrayList<>();
+
+    @Transient
     private List<Review> reviews=new ArrayList<>();
 
     public List<String> getRoleList(){
@@ -52,9 +49,6 @@ public class User {
         }
         return new ArrayList<>();
     }
-
-    @Transient
-    private List<Wishlist> likes=new ArrayList<>();
 
     public enum UserStatus {
         USER_SIGNUP("signup"),
@@ -71,15 +65,18 @@ public class User {
 
     public void addReview(Review review) {
         this.reviews.add(review);
-        if (review.getUser() != this){
+        if (review.getUser() != this) {
             review.setUser(this);
         }
     }
 
-    public void addLike(Wishlist like) {
-        this.likes.add(like);
-        if (like.getUser() != this){
-            like.setUser(this);
-        }
+    public void updateStatus(UserStatus status){
+        this.status=status;
+    }
+
+    public void updateInformation(String userName, String mobile, Image profilePhoto){
+        this.userName = userName;
+        this.mobile=mobile;
+        this.profilePhoto=profilePhoto;
     }
 }

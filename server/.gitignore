@@ -39,5 +39,7 @@ out/
 ### yml 파일 ###
 *.yml
 !application.yml
+!application-prod.yml
+!appspec.yml
 
 

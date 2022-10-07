@@ -1,0 +1,41 @@
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+
+spring:
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      ddl-auto: update
+    show-sql: true
+    # defer-datasource-initialization: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${ MYSQL_URL }
+    username: ${ MYSQL_USERNAME }
+    password: ${ MYSQL_PWD }
+  #   data: classpath:data.sql
+
+  # sql:
+  #   init:
+  #     mode: always
+
+server:
+  port : 8080
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${ AWS_ACCESS_KEY }      # AWS IAM AccessKey
+      secretKey: ${ SECRET_ACCESS_KEY }    # AWS IAM SecretKey
+    s3:
+      bucket: $ { BUCKET_NAME }
+      dir: /image
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
