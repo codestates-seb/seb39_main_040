@@ -8,10 +8,11 @@ import Header from "../../components/common/Header";
 import Swal from "sweetalert2";
 
 const UserInfoEditPage = () => {
-  const [imgSrc, setImgSrc] = useState();
   const [userName, setUserName] = useState("");
   const [mobile, setMobile] = useState("");
+
   const [img, setImg] = useState("");
+  const [imgSrc, setImgSrc] = useState();
   const [imgInfo, setImgInfo] = useState(null);
   const [userInfo, setUserInfo] = useState([]);
   const [userPreProfile, setUserPreProfile] = useState("");
@@ -35,38 +36,19 @@ const UserInfoEditPage = () => {
   const onChangeInfo = (e) => {
     e.preventDefault();
     const newInfo = { userName: userName, mobile: mobile, profilePhoto: img };
-    if (userName && mobile && img) {
-      instance
-        .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
-        .then(() => {
-          e.preventDefault();
-          setUserInfo(userInfo);
-          Swal.fire({
-            title: "정보가 수정되었습니다.",
-            confirmButtonColor: "var(--green-010)",
-          });
-          navigate("/userinfo");
-        })
-        .catch((err) => console.log(err));
-    } else if (!img) {
-      Swal.fire({
-        title: "사진이 등록되지 않았습니다.",
-        icon: "error",
-        confirmButtonColor: "var(--green-010)",
-      });
-    } else if (!userName) {
-      Swal.fire({
-        title: "이름이 작성되지 않았습니다.",
-        icon: "error",
-        confirmButtonColor: "var(--green-010)",
-      });
-    } else if (!mobile) {
-      Swal.fire({
-        title: "전화번호가 작성되지 않았습니다.",
-        icon: "error",
-        confirmButtonColor: "var(--green-010)",
-      });
-    }
+
+    instance
+      .patch(`${process.env.REACT_APP_API}/users/information`, newInfo)
+      .then(() => {
+        e.preventDefault();
+        setUserInfo(userInfo);
+        Swal.fire({
+          title: "정보가 수정되었습니다.",
+          confirmButtonColor: "var(--green-010)",
+        });
+        navigate("/userinfo");
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -94,7 +76,10 @@ const UserInfoEditPage = () => {
     axios.get(`${process.env.REACT_APP_API}/users/information`).then((res) => {
       setUserInfo(res.data);
       setUserPreProfile(res.data.profilePhoto.path);
-      setUserName(userInfo.userName);
+      setUserName(res.data.userName);
+      setMobile(res.data.mobile);
+      setImg(res.data.profilePhoto.id);
+      console.log(res.data);
     });
   }, []);
 
@@ -103,7 +88,7 @@ const UserInfoEditPage = () => {
       <Header />
       <EditWrapper>
         <UserImgUpdate>
-          {!img ? (
+          {!imgSrc ? (
             <Img src={userPreProfile} alt="이전이미지" />
           ) : (
             <Img src={imgSrc} alt="이미지확인" />
@@ -124,7 +109,7 @@ const UserInfoEditPage = () => {
             <input
               type="text"
               value={userName}
-              placeholder={userInfo.userName}
+              // placeholder={userInfo.userName}
               onChange={(e) => setUserName(e.target.value)}
             ></input>
           </InfoDataBox>
@@ -132,7 +117,7 @@ const UserInfoEditPage = () => {
             <InputData>전화번호</InputData>
             <input
               value={mobile}
-              placeholder={userInfo.mobile}
+              // placeholder={userInfo.mobile}
               onChange={(e) => setMobile(e.target.value)}
             ></input>
           </InfoDataBox>

@@ -36,6 +36,7 @@ const Header = () => {
             });
             navigate("/");
             setIsLogin();
+            localStorage.clear();
           })
           .catch(() =>
             Swal.fire({
