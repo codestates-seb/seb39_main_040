@@ -8,7 +8,7 @@ const ImageModal = ({ setModalOpen, image }) => {
 
   return (
     <ModalContainer>
-      <ModalBackdrop>
+      <ModalBackdrop onClick={closeModal}>
         <ModalView>
           <CloseButton onClick={closeModal}>&times;</CloseButton>
           <ImgContainer>
@@ -50,6 +50,9 @@ const ModalView = styled.div`
   align-items: center;
   flex-direction: column;
   position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 800px;
   height: 800px;
   border-radius: 1rem;
@@ -57,6 +60,7 @@ const ModalView = styled.div`
 `;
 
 const CloseButton = styled.button`
+  cursor: pointer;
   width: 40px;
   height: 40px;
   font-size: 40px;

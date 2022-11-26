@@ -70,6 +70,7 @@ const ImgBox = styled.div`
   img {
     width: 130px;
     height: 130px;
+    cursor: pointer;
   }
 `;
 
