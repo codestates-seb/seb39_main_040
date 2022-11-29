@@ -39,7 +39,7 @@ public class User {
     @Column
     private String refresh;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="prf_pt")
     private Image profilePhoto;
 

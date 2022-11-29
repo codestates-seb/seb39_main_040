@@ -17,19 +17,19 @@ public class Review extends BasicEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
     @Setter
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @OneToOne //여러장 -> 일대다로 변경
+    @OneToOne(fetch = FetchType.LAZY) //여러장 -> 일대다로 변경
     @JoinColumn(name = "image_id")
     private Image reviewImg;
 
@@ -39,7 +39,9 @@ public class Review extends BasicEntity {
     @Column(nullable = false)
     private Integer score;
 
-    @Builder
+    // status 추가 필요
+
+   @Builder
     public Review(Image reviewImg, String description, Integer score) {
         this.reviewImg = reviewImg;
         this.description = description;
