@@ -1,9 +1,19 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import React, { useEffect } from "react";
+import useCafeDetailinfoStore from "../../../../store/useCafeDetailinfoStore";
+import { useParams } from "react-router-dom";
 
-const CafeMenu = ({ menuImg }) => {
+const CafeMenu = () => {
+  const cafeIdInfo = useCafeDetailinfoStore((state) => state.cafeIdInfo);
+  const fetch = useCafeDetailinfoStore((state) => state.fetch);
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API}/cafe/${id}`);
+  }, []);
+
   return (
     <MenuWrapper>
       <TextBox>
@@ -11,7 +21,7 @@ const CafeMenu = ({ menuImg }) => {
         <span>메뉴를 확인해보세요.</span>
       </TextBox>
       <ImgBox>
-        <img src={`${menuImg}`} alt="메뉴이미지" />
+        <img src={`${cafeIdInfo.menu_img}`} alt="메뉴이미지" />
       </ImgBox>
     </MenuWrapper>
   );

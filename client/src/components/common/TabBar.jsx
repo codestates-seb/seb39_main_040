@@ -8,6 +8,9 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
+import useCafeDetailinfoStore from "../../store/useCafeDetailinfoStore";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 function TabBarPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -41,8 +44,17 @@ function a11yProps(index) {
   };
 }
 
-const TabBar = ({ cafeIdInfo, cafeImages }) => {
+const TabBar = () => {
   const [value, setValue] = React.useState(0);
+  const cafeIdInfo = useCafeDetailinfoStore((state) => state.cafeIdInfo);
+  const fetch = useCafeDetailinfoStore((state) => state.fetch);
+  const { id } = useParams();
+
+  // 카페 디테일 데이터 불러오기
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API}/cafe/${id}`);
+    console.log(cafeIdInfo);
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -72,10 +84,10 @@ const TabBar = ({ cafeIdInfo, cafeImages }) => {
           <CafeReviewCards />
         </TabBarPanel>
         <TabBarPanel value={value} index={1}>
-          <CafeMenu menuImg={cafeIdInfo.menu_img} />
+          <CafeMenu />
         </TabBarPanel>
         <TabBarPanel value={value} index={2}>
-          <CafePhotoCards cafeImages={cafeImages} />
+          <CafePhotoCards />
         </TabBarPanel>
       </TabContentWrapper>
     </Box>
