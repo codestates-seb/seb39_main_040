@@ -63,7 +63,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public Pagination getPagination(long cafeId, int page){
+    public Pagination getPagination(Long cafeId, Integer page){
         Long size = reviewRepository.countByCafeId(cafeId); // 카페기준으로 pagination 생성
         return new Pagination(size, 10, page);
     }

@@ -11,12 +11,12 @@ public interface CafeService {
     void delete(Cafe cafe);
     Cafe find(Long cafeId);
 
-    MultiResponseDto<?> findCafe(String category, Integer page, String sort);
+    MultiResponseDto<SimpleCafeInfo> findCafe(String category, Integer page, String sort);
     Page<Cafe> findAll(Integer page, String sort);
     Page<Cafe> findByCtg(String category, Integer page, String sort);
     DetailCafeInfo findById(Long id);
 
-    MultiResponseDto<?> searchCafe(String keyword, int page, String sort);
+    MultiResponseDto<SimpleCafeInfo> searchCafe(String keyword, int page, String sort);
     Page<Cafe> searchByTag(String keyword, int page, String sort);
     Page<Cafe> searchByName(String keyword, int page, String sort);
 

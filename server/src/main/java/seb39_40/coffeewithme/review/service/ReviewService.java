@@ -17,6 +17,7 @@ public interface ReviewService {
     ReviewInfo findByReviewId(Long id);
     List<ReviewInfo> findByCafeId(Long cafeId, Pagination pagination);
     Page<Review> findByUserId(Long userId, Integer page);
+    Pagination getPagination(Long cafeId, Integer page);
 
     List<ImageInfo> getReviewImages(Long cafeId);
 }
