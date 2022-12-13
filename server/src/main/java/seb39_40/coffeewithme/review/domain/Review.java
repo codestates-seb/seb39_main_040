@@ -29,6 +29,7 @@ public class Review extends BasicEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
+    @Setter
     @OneToOne(fetch = FetchType.LAZY) //여러장 -> 일대다로 변경
     @JoinColumn(name = "image_id")
     private Image reviewImg;

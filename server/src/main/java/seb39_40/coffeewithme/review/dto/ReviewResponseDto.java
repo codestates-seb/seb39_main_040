@@ -16,7 +16,7 @@ public class ReviewResponseDto {
     @Data @NoArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReviewInfo{
-        List<String> tags;
+        String[] tags;
         UserResponseDto.SimpleUserInfo user;
         Long id;
         String description;

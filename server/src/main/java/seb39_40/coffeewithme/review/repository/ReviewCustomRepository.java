@@ -12,4 +12,5 @@ import java.util.List;
 public interface ReviewCustomRepository {
 
      LinkedHashMap<Review, List<Tag>> findByCafeId(Long id, Pagination pagination);
+     Long countByCafeId(Long id);
 }

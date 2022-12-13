@@ -11,36 +11,47 @@ import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.dto.ReviewResponseDto;
 import seb39_40.coffeewithme.tag.domain.Tag;
+import seb39_40.coffeewithme.user.domain.User;
+import seb39_40.coffeewithme.user.dto.UserResponseDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static seb39_40.coffeewithme.review.dto.ReviewResponseDto.*;
+import static seb39_40.coffeewithme.user.dto.UserResponseDto.*;
 
-@RequiredArgsConstructor
-@Mapper(componentModel = "spring", uses = UserMapper.class)
-public abstract class ReviewMapper {
-    @Autowired
-    protected ImageService imageService;
-
-    @Mapping(target = "reviewImg", expression = "java(imageService.findById(postDto.getReviewImg()))")
-    public abstract Review reviewDtoToReview(ReviewRequestDto postDto);
-//    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getPath())")
+@Mapper(componentModel = "spring", uses = {UserMapper.class, Collections.class})
+public interface ReviewMapper {
     @Mapping(target = "reviewImg", ignore = true)
-    public abstract ReviewInfo reviewToReviewDto(Review review);
-    public abstract ImageInfo reviewToReviewImageDto(Image image);
-    public abstract List<ReviewInfo> reviewsToReviewDtos(List<Review> reviews);
-    public abstract List<ImageInfo> reviewsToReviewImageDtos(List<Image> images);
+    Review reviewDtoToReview(ReviewRequestDto postDto);
 
-    public List<ReviewInfo> reviewToReviewDtos(LinkedHashMap<Review, List<Tag>> map){
+    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getPath())")
+    @Mapping(target = "tags", expression = "java(review.getReviewTags().stream().map(o -> o.getTag().getName()).toArray(String[]::new))")
+    ReviewInfo reviewToReviewDto(Review review);
+
+    ImageInfo reviewToReviewImageDto(Image image);
+    List<ImageInfo> reviewsToReviewImageDtos(List<Image> images);
+
+    default List<ReviewInfo> reviewToReviewDtos(LinkedHashMap<Review, List<Tag>> map){
         List<ReviewInfo> reviewInfos = new ArrayList<>();
 
         for (Review review : map.keySet()){
-            ReviewInfo reviewInfo = reviewToReviewDto(review);
-            List<String> tags = map.get(review).stream().map(o -> o.getName()).collect(Collectors.toList());
+            ReviewInfo reviewInfo = new ReviewResponseDto.ReviewInfo();
+
+            SimpleUserInfo userInfo = new SimpleUserInfo();
+            userInfo.setId(review.getUser().getId());
+            userInfo.setName(review.getUser().getUserName());
+            reviewInfo.setUser( userInfo );
+
+            reviewInfo.setId( review.getId() );
+            reviewInfo.setDescription( review.getDescription() );
+            reviewInfo.setScore( review.getScore() );
+
+            String[] tags = map.get(review).stream().map(o -> o.getName()).toArray(String[]::new);
             reviewInfo.setTags(tags);
             reviewInfo.setReviewImg(review.getReviewImg().getPath());
             reviewInfos.add(reviewInfo);

@@ -2,7 +2,6 @@ package seb39_40.coffeewithme.review.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import seb39_40.coffeewithme.common.domain.Pagination;
 import seb39_40.coffeewithme.review.domain.Review;
@@ -59,5 +58,14 @@ public class ReviewCustomRepositoryImpl implements ReviewCustomRepository {
         }
 
         return map;
+    }
+
+    @Override
+    public Long countByCafeId(Long id) {
+        Long size = jpaQueryFactory.select(review.count())
+                .from(review)
+                .where(review.cafe.id.eq(id))
+                .fetchOne();
+        return size;
     }
 }
