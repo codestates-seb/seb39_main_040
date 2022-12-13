@@ -1,7 +1,7 @@
 package seb39_40.coffeewithme.review.service;
 
 import org.springframework.data.domain.Page;
-import seb39_40.coffeewithme.common.dto.MultiResponseDto;
+import seb39_40.coffeewithme.common.domain.Pagination;
 import seb39_40.coffeewithme.review.domain.Review;
 
 import java.util.List;
@@ -13,8 +13,10 @@ public interface ReviewService {
     void delete(Review review);
     Review find(Long id);
     void checkUser(String writer, String user);
+
     ReviewInfo findByReviewId(Long id);
-    MultiResponseDto<?> findByCafeId(Long cafeId, Integer page);
-    List<ImageInfo> findReviewImages(Long cafeId);
+    List<ReviewInfo> findByCafeId(Long cafeId, Pagination pagination);
     Page<Review> findByUserId(Long userId, Integer page);
+
+    List<ImageInfo> getReviewImages(Long cafeId);
 }

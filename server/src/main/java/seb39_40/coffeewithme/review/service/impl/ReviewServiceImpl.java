@@ -1,4 +1,4 @@
-package seb39_40.coffeewithme.review.service;
+package seb39_40.coffeewithme.review.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +14,7 @@ import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.mapper.ReviewMapper;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
+import seb39_40.coffeewithme.review.service.ReviewService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ import static seb39_40.coffeewithme.review.dto.ReviewResponseDto.*;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
 
@@ -54,18 +55,21 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Transactional(readOnly = true)
-    public MultiResponseDto<?> findByCafeId(Long cafeId, Integer page) {
-        Long size = reviewRepository.countByCafeId(cafeId);
-        Pagination pagination = new Pagination(size, 10, page);
-        if (size == 0) return new MultiResponseDto<Object>(null, pagination);
+    public List<ReviewInfo> findByCafeId(Long cafeId, Pagination pagination) {
+        if (pagination.getTotalPageCount() == 0) return null;
 
         List<ReviewInfo> reviews = reviewMapper.reviewToReviewDtos(reviewRepository.findByCafeId(cafeId, pagination));
-        return new MultiResponseDto<>(reviews, pagination);
+        return reviews;
     }
 
     @Transactional(readOnly = true)
-    public List<ImageInfo> findReviewImages(Long cafeId){
-        // 해당하는 리뷰 읽어오기
+    public Pagination getPagination(long cafeId, int page){
+        Long size = reviewRepository.countByCafeId(cafeId); // 카페기준으로 pagination 생성
+        return new Pagination(size, 10, page);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ImageInfo> getReviewImages(Long cafeId){
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
         List<Image> images = reviews.stream().map(review -> review.getReviewImg()).collect(Collectors.toList());
         return reviewMapper.reviewsToReviewImageDtos(images);
