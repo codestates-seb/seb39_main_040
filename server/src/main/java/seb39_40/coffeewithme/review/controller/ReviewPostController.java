@@ -17,7 +17,7 @@ public class ReviewPostController {
 
     @PostMapping("/{cafe_id}/reviews")
     public ResponseEntity<?> postReview(@PathVariable Long cafe_id, @RequestBody @Valid ReviewRequestDto postDto){
-        Long id = reviewPostService.post(cafe_id, postDto, postDto.getTags());
+        Long id = reviewPostService.post(cafe_id, postDto);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 

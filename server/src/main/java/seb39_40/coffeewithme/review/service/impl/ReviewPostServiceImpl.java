@@ -5,13 +5,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
-import seb39_40.coffeewithme.cafe.service.impl.CafeServiceImpl;
+import seb39_40.coffeewithme.cafe.service.CafeService;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.mapper.ReviewMapper;
 import seb39_40.coffeewithme.review.service.ReviewPostService;
+import seb39_40.coffeewithme.review.service.ReviewService;
 import seb39_40.coffeewithme.tag.service.TagService;
 import seb39_40.coffeewithme.user.domain.User;
 import seb39_40.coffeewithme.user.service.UserService;
@@ -22,19 +23,19 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class ReviewPostServiceImpl implements ReviewPostService {
-    private final CafeServiceImpl cafeServiceImpl;
+    private final CafeService cafeService;
     private final UserService userService;
     private final TagService tagService;
     private final ImageService imageService;
-    private final ReviewServiceImpl reviewServiceImpl;
+    private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
 
     @Transactional
-    public Long post(Long cafeId, ReviewRequestDto reviewRequestDto, List<String> tags){
-        Review review = reviewMapper.reviewDtoToReview(reviewRequestDto);
-        review.setReviewImg(imageService.findById(reviewRequestDto.getReviewImg()));
+    public Long post(Long cafeId, ReviewRequestDto postDto){
+        Review review = reviewMapper.reviewDtoToReview(postDto);
+        review.setReviewImg(imageService.findById(postDto.getReviewImg()));
 
-        Cafe cafe = cafeServiceImpl.find(cafeId);
+        Cafe cafe = cafeService.find(cafeId);
         cafe.updateReviewCount(1);
         review.setCafe(cafe);
 
@@ -43,37 +44,37 @@ public class ReviewPostServiceImpl implements ReviewPostService {
             cafe.updateBadge(true);
         review.setUser(user);
 
-        review.setReviewTags(tagService.createReviewTag(review, tags));
+        review.setReviewTags(tagService.createReviewTag(review, postDto.getTags()));
         review.getReviewImg().saveImg();
-        return reviewServiceImpl.save(review);
+        return reviewService.save(review);
     }
 
     @Transactional
     public Long repost(Long id, ReviewRequestDto patchDto, List<String> tags){
-        Review origin = reviewServiceImpl.find(id);
+        Review origin = reviewService.find(id);
         Review target = reviewMapper.reviewDtoToReview(patchDto);
 
         if (!Objects.equals(origin.getReviewImg().getId(), target.getReviewImg().getId()))
             origin.getReviewImg().deleteImg();
-        reviewServiceImpl.checkUser(getUserId(), origin.getUser().getEmail());
+        reviewService.checkUser(getUserId(), origin.getUser().getEmail());
 
         tagService.deleteReviewTag(origin);
         List<ReviewTag> reviewTags = tagService.createReviewTag(origin, tags);
         origin.setReviewTags(reviewTags);
         origin.update(target);
-        return reviewServiceImpl.save(origin);
+        return reviewService.save(origin);
     }
 
     @Transactional
     public void delete(Long cafeId, Long reviewId){
-        Review review = reviewServiceImpl.find(reviewId);
+        Review review = reviewService.find(reviewId);
         review.getReviewImg().deleteImg();
 
-        reviewServiceImpl.checkUser(getUserId(), review.getUser().getEmail());
-        Cafe cafe = cafeServiceImpl.find(cafeId);
+        reviewService.checkUser(getUserId(), review.getUser().getEmail());
+        Cafe cafe = cafeService.find(cafeId);
         cafe.updateReviewCount(-1);
-        cafeServiceImpl.save(cafe);
-        reviewServiceImpl.delete(review);
+        cafeService.save(cafe);
+        reviewService.delete(review);
     }
 
     public String getUserId(){

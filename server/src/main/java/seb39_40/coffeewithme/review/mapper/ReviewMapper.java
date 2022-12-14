@@ -1,25 +1,18 @@
 package seb39_40.coffeewithme.review.mapper;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.beans.factory.annotation.Autowired;
 import seb39_40.coffeewithme.image.domain.Image;
-import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
-import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.dto.ReviewResponseDto;
 import seb39_40.coffeewithme.tag.domain.Tag;
-import seb39_40.coffeewithme.user.domain.User;
-import seb39_40.coffeewithme.user.dto.UserResponseDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static seb39_40.coffeewithme.review.dto.ReviewResponseDto.*;
 import static seb39_40.coffeewithme.user.dto.UserResponseDto.*;

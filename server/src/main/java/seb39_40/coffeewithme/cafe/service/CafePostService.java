@@ -1,8 +1,9 @@
 package seb39_40.coffeewithme.cafe.service;
 
-import seb39_40.coffeewithme.cafe.domain.Cafe;
+
+import static seb39_40.coffeewithme.cafe.dto.CafeRequestDto.*;
 
 public interface CafePostService {
-    Long register(Cafe cafe);
+    Long register(Post postDto);
     void delete(Long id);
 }

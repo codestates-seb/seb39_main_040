@@ -1,6 +1,7 @@
 package seb39_40.coffeewithme.cafe.domain;
 
 import lombok.*;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Cafe {
     @Column(nullable = false, length = 20, name="cafe_nm")
     private String name;
 
+    // 주소 임베디드 타입으로 변경 고려 -> 임베디드 타입으로 하는것이 좋은가?
     @Column(nullable = false, name = "cafe_addr")
     private String address;
 
@@ -32,17 +34,17 @@ public class Cafe {
     @Column(nullable = false, name="cafe_bdg")
     private Boolean badge = false;
 
+    // 오픈시간 임베디드 타입 고려
     @Column(nullable = false, name = "open_tm")
     private String openTime = "00:00";
 
     @Column(nullable = false, name = "close_tm")
     private String closeTime = "00:00";
+    
+    @OneToMany(mappedBy = "cafe")
+//    @Column(nullable = false, name = "cafe_img")
+    private List<Image> images = new ArrayList<>();
 
-    @Column(nullable = false, name = "mn_img_id")
-    private Long mainImg;
-
-    @Column(nullable = false, name = "mu_img_id")
-    private Long menuImg;
 
     @Column(name = "like_cnt")
     private Long likeCount = 0L;
@@ -57,7 +59,7 @@ public class Cafe {
     private List<CafeTag> cafeTags = new ArrayList<>();
 
     @Builder
-    public Cafe(String name, String address, String phone, String homepage, String description, String openTime, String closeTime, Long mainImg, Long menuImg) {
+    public Cafe(String name, String address, String phone, String homepage, String description, String openTime, String closeTime) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -65,8 +67,6 @@ public class Cafe {
         this.description = description;
         this.openTime = openTime;
         this.closeTime = closeTime;
-        this.mainImg = mainImg;
-        this.menuImg = menuImg;
     }
 
     public void addReviews(Review review) {
@@ -82,6 +82,13 @@ public class Cafe {
 
         if (cafeTag.getCafe() != this){
             cafeTag.setCafe(this);
+        }
+    }
+
+    public void addImages(Image image){
+        this.images.add(image);
+        if (image.getCafe() != this){
+            image.setCafe(this);
         }
     }
 

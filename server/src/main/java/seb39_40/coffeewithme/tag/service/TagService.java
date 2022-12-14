@@ -3,6 +3,8 @@ package seb39_40.coffeewithme.tag.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import seb39_40.coffeewithme.cafe.domain.Cafe;
+import seb39_40.coffeewithme.cafe.domain.CafeTag;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.review.domain.Review;
@@ -29,6 +31,7 @@ public class TagService {
         return tagRepository.findByName(name).orElseThrow(() -> new BusinessLogicException(ExceptionCode.TAG_NOT_FOUND));
     }
 
+    @Transactional
     public List<ReviewTag> createReviewTag(Review review, List<String> tags) {
         List<ReviewTag> reviewTags = tags.stream().map(tag -> {
             Tag t;
@@ -48,6 +51,28 @@ public class TagService {
             return reviewTag;
         }).collect(Collectors.toList());
         return reviewTags;
+    }
+
+    @Transactional
+    public List<CafeTag> createCafeTag(Cafe cafe, List<String> tags){
+        List<CafeTag> cafeTags = tags.stream().map(tag -> {
+            Tag t;
+            Optional<Tag> tempTag = tagRepository.findByName(tag);
+            if (tempTag.isEmpty()){
+                t = new Tag();
+                t.setName(tag);
+                t.setCategory(Tag.Category.NONE);
+                tagRepository.save(t);
+                t = tagRepository.findByName(tag).get();
+            }
+            else t = tempTag.get();
+
+            CafeTag cafeTag = new CafeTag();
+            cafeTag.setCafe(cafe);
+            cafeTag.setTag(t);
+            return cafeTag;
+        }).collect(Collectors.toList());
+        return cafeTags;
     }
 
     public List<ReviewTag> findByReviewId(Long id) {

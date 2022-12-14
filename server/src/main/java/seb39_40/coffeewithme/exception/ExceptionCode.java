@@ -33,7 +33,8 @@ public enum ExceptionCode {
     TOKEN_BAD_REQUEST(400, "JWT Token이 존재하지 않습니다."),
     TOKEN_PRECONDITION_FAILED(412,"토큰 타입이 일치하지 않습니다."),
     LIKE_ALREADY_EXISTS(409,"이미 찜한 카페입니다."),
-    LIKE_NOT_FOUND(404,"찜한 카페를 찾을 수 없습니다.");
+    LIKE_NOT_FOUND(404,"찜한 카페를 찾을 수 없습니다."),
+    ALREADY_USED_IMAGE(400,"이미 사용 중인 이미지입니다.");
     @Getter
     private int status;
 

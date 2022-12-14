@@ -4,8 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.common.domain.BasicEntity;
 import seb39_40.coffeewithme.common.domain.Status;
+import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.exception.ExceptionCode;
+import seb39_40.coffeewithme.review.domain.Review;
 
 import javax.persistence.*;
 
@@ -24,10 +28,38 @@ public class Image extends BasicEntity {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cafe_id")
+    private Cafe cafe;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id")
+    private Review review;
+
     @Builder
     public Image(String path, Status status) {
         this.path = path;
         this.status = status;
+    }
+
+    public void setCafe(Cafe cafe){
+        if (cafe == null) {
+            this.cafe = null;
+        } else if (this.cafe != cafe && (this.cafe != null || this.review != null)) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_USED_IMAGE);
+        } else {
+            this.cafe = cafe;
+        }
+    }
+
+    public void setReview(Review review){
+        if (review == null) {
+            this.review = null;
+        } else if (this.review != review && (this.cafe != null || this.review != null)) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_USED_IMAGE);
+        } else {
+            this.review = review;
+        }
     }
 
     public void deleteImg(){
