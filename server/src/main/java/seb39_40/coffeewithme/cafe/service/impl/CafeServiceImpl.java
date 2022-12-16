@@ -50,7 +50,7 @@ public class CafeServiceImpl implements CafeService {
 
     public Page<Cafe> findAll(Integer page, String sort){
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(SortType.findType(sort, false)).descending());
-        return cafeRepository.findAll(pageRequest);
+        return cafeRepository.findAllCafe(pageRequest);
     }
 
     public Page<Cafe> findByCtg(String category, Integer page, String sort){

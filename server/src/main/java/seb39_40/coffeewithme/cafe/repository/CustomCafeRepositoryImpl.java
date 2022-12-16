@@ -14,12 +14,24 @@ import java.util.List;
 
 import static seb39_40.coffeewithme.cafe.domain.QCafe.cafe;
 import static seb39_40.coffeewithme.cafe.domain.QCafeTag.cafeTag;
+import static seb39_40.coffeewithme.image.domain.QImage.image;
 import static seb39_40.coffeewithme.tag.domain.QTag.tag;
 
 @Repository
 @RequiredArgsConstructor
 public class CustomCafeRepositoryImpl implements CustomCafeRepository {
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public Page<Cafe> findAllCafe(Pageable pageable){
+        List<Cafe> result = jpaQueryFactory.selectFrom(cafe)
+                .leftJoin(cafe.images, image).fetchJoin()
+                .offset(pageable.getOffset())
+                .limit(10)
+                .fetch();
+        return new PageImpl<>(result, pageable, pageable.getOffset());
+    }
+
 
     @Override
     public Page<Cafe> findByCategory(String category, Pageable pageable) {
