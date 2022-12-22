@@ -29,9 +29,7 @@ public class Review extends BasicEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @Setter
-    @OneToOne(fetch = FetchType.LAZY) //여러장 -> 일대다로 변경
-    @JoinColumn(name = "image_id")
+    @OneToOne(mappedBy = "review") //여러장 -> 일대다로 변경
     private Image reviewImg;
 
     @Column(nullable = false, columnDefinition = "TEXT", name = "review_dsrp")
@@ -42,7 +40,7 @@ public class Review extends BasicEntity {
 
     // status 추가 필요
 
-   @Builder
+    @Builder
     public Review(Image reviewImg, String description, Integer score) {
         this.reviewImg = reviewImg;
         this.description = description;
@@ -61,6 +59,13 @@ public class Review extends BasicEntity {
         if (!user.getReviews().contains(this)){
             user.addReview(this);
         }
+    }
+
+    public void setReviewImg(Image image){
+       this.reviewImg = image;
+       if (image.getReview() != this){
+           image.setReview(this);
+       }
     }
 
     public void addReviewTags(ReviewTag reviewTag) {

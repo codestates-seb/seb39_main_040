@@ -6,8 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb39_40.coffeewithme.common.domain.Pagination;
-import seb39_40.coffeewithme.common.dto.MultiResponseDto;
+import seb39_40.coffeewithme.common.dto.PageInfo;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.image.domain.Image;
@@ -55,17 +54,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewInfo> findByCafeId(Long cafeId, Pagination pagination) {
-        if (pagination.getTotalPageCount() == 0) return null;
+    public List<ReviewInfo> findByCafeId(Long cafeId, PageInfo pageInfo) {
+        if (pageInfo.getTotalPage() == 0) return null;
 
-        List<ReviewInfo> reviews = reviewMapper.reviewToReviewDtos(reviewRepository.findByCafeId(cafeId, pagination));
+        List<ReviewInfo> reviews = reviewMapper.reviewToReviewDtos(reviewRepository.findByCafeId(cafeId, pageInfo));
         return reviews;
     }
 
     @Transactional(readOnly = true)
-    public Pagination getPagination(Long cafeId, Integer page){
+    public PageInfo getPagination(Long cafeId, Integer page){
         Long size = reviewRepository.countByCafeId(cafeId); // 카페기준으로 pagination 생성
-        return new Pagination(size, 10, page);
+        return new PageInfo(size, 10, page);
     }
 
     @Transactional(readOnly = true)

@@ -3,7 +3,7 @@ package seb39_40.coffeewithme.review.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import seb39_40.coffeewithme.common.domain.Pagination;
+import seb39_40.coffeewithme.common.dto.PageInfo;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.tag.domain.Tag;
@@ -23,13 +23,13 @@ public class ReviewCustomRepositoryImpl implements ReviewCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public LinkedHashMap<Review, List<Tag>> findByCafeId(Long id, Pagination pagination) {
+    public LinkedHashMap<Review, List<Tag>> findByCafeId(Long id, PageInfo pageInfo) {
         // toOne 관계부터 조회
         List<Review> result = jpaQueryFactory.selectFrom(review)
                 .where(review.cafe.id.eq(id))
                 .leftJoin(review.user, user).fetchJoin()
                 .leftJoin(review.reviewImg, image).fetchJoin()
-                .offset(pagination.getLimitStart())
+                .offset((long) (pageInfo.getPage() - 1) * pageInfo.getSize())
                 .limit(10)
                 .fetch();
 

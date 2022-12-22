@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import seb39_40.coffeewithme.common.domain.Pagination;
 import seb39_40.coffeewithme.common.dto.MultiResponseDto;
+import seb39_40.coffeewithme.common.dto.PageInfo;
 import seb39_40.coffeewithme.review.service.ReviewService;
 
 @RestController
@@ -17,9 +17,9 @@ public class ReviewController {
     @GetMapping("/{cafe_id}/reviews")
     public ResponseEntity<?> getReviews(@PathVariable Long cafe_id,
                                      @RequestParam(required = false, defaultValue = "1") Integer page){
-        Pagination pagination = reviewService.getPagination(cafe_id, page);
+        PageInfo pageInfo = reviewService.getPagination(cafe_id, page);
         return new ResponseEntity<>(
-                new MultiResponseDto<>(reviewService.findByCafeId(cafe_id, pagination), pagination), HttpStatus.OK);
+                new MultiResponseDto<>(reviewService.findByCafeId(cafe_id, pageInfo), pageInfo), HttpStatus.OK);
     }
 
     @GetMapping("/{cafe_id}/reviews/{review_id}")

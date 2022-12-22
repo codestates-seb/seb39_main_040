@@ -33,6 +33,8 @@ public class ReviewPostServiceImpl implements ReviewPostService {
     @Transactional
     public Long post(Long cafeId, ReviewRequestDto postDto){
         Review review = reviewMapper.reviewDtoToReview(postDto);
+        reviewService.save(review);
+        // 여기서 set하면 image 셋하고 -> image 측에서 리뷰를 세팅하는데
         review.setReviewImg(imageService.findById(postDto.getReviewImg()));
 
         Cafe cafe = cafeService.find(cafeId);
@@ -46,7 +48,7 @@ public class ReviewPostServiceImpl implements ReviewPostService {
 
         review.setReviewTags(tagService.createReviewTag(review, postDto.getTags()));
         review.getReviewImg().saveImg();
-        return reviewService.save(review);
+        return review.getId();
     }
 
     @Transactional

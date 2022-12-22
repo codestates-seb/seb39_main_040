@@ -13,8 +13,10 @@ import seb39_40.coffeewithme.tag.domain.Tag;
 import seb39_40.coffeewithme.tag.repository.ReviewTagRepository;
 import seb39_40.coffeewithme.tag.repository.TagRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +35,7 @@ public class TagService {
 
     @Transactional
     public List<ReviewTag> createReviewTag(Review review, List<String> tags) {
-        List<ReviewTag> reviewTags = tags.stream().map(tag -> {
+        List<ReviewTag> reviewTags = tags.stream().distinct().map(tag -> {
             Tag t;
             Optional<Tag> tempTag = tagRepository.findByName(tag);
             if (tempTag.isEmpty()){
@@ -55,7 +57,7 @@ public class TagService {
 
     @Transactional
     public List<CafeTag> createCafeTag(Cafe cafe, List<String> tags){
-        List<CafeTag> cafeTags = tags.stream().map(tag -> {
+        List<CafeTag> cafeTags = tags.stream().distinct().map(tag -> {
             Tag t;
             Optional<Tag> tempTag = tagRepository.findByName(tag);
             if (tempTag.isEmpty()){

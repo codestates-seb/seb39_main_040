@@ -20,9 +20,8 @@ public enum ExceptionCode {
     CAFE_NOT_FOUND(404, "카페를 찾을 수 없습니다."),
     REVIEW_NOT_FOUND(404, "리뷰를 찾을 수 없습니다."),
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
-    TAG_NOT_FOUND(404, "태그를 찾을 수 없습니다.");
+    TAG_NOT_FOUND(404, "태그를 찾을 수 없습니다."),
 
-<<<<<<< HEAD
     TOKEN_UNAUTHORIZED(401, "유효한 Refresh Token이 아닙니다."),
     TOKEN_EXPIRATION(401, "만료된 Token 입니다."),
     TOKEN_BAD_REQUEST(400, "JWT Token이 존재하지 않습니다."),
@@ -30,8 +29,7 @@ public enum ExceptionCode {
     LIKE_ALREADY_EXISTS(409,"이미 찜한 카페입니다."),
     LIKE_NOT_FOUND(404,"찜한 카페를 찾을 수 없습니다."),
     ALREADY_USED_IMAGE(400,"이미 사용 중인 이미지입니다.");
-=======
->>>>>>> 10a09d25df8229a565e64df2c85be86f9c57054d
+
     @Getter
     private int status;
 

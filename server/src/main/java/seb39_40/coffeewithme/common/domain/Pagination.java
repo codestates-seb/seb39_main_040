@@ -2,7 +2,7 @@ package seb39_40.coffeewithme.common.domain;
 
 import lombok.Getter;
 
-@Getter
+@Getter //임시(제거 예정)
 public class Pagination {
 
     private long totalRecordCount;   // 전체 데이터 수
