@@ -42,7 +42,6 @@ public class Cafe {
     private String closeTime = "00:00";
     
     @OneToMany(mappedBy = "cafe")
-//    @Column(nullable = false, name = "cafe_img")
     private List<Image> images = new ArrayList<>();
 
 

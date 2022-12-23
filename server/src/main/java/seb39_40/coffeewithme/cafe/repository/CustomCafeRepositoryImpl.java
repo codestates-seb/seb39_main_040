@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
-import seb39_40.coffeewithme.cafe.repository.CustomCafeRepository;
 import seb39_40.coffeewithme.tag.domain.Tag;
 
 import java.util.List;
@@ -29,6 +28,7 @@ public class CustomCafeRepositoryImpl implements CustomCafeRepository {
                 .offset(pageable.getOffset())
                 .limit(10)
                 .fetch();
+
         return new PageImpl<>(result, pageable, pageable.getOffset());
     }
 
