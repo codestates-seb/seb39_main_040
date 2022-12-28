@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.common.domain.BasicEntity;
 import seb39_40.coffeewithme.common.domain.Status;
@@ -22,7 +23,7 @@ public class Image extends BasicEntity {
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String path;
+    private String name;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -37,8 +38,8 @@ public class Image extends BasicEntity {
     private Review review;
 
     @Builder
-    public Image(String path, Status status) {
-        this.path = path;
+    public Image(String name, Status status) {
+        this.name = name;
         this.status = status;
     }
 
@@ -46,7 +47,7 @@ public class Image extends BasicEntity {
         if (cafe == null) {
             this.cafe = null;
         } else if (this.cafe != cafe && (this.cafe != null || this.review != null)) {
-            throw new BusinessLogicException(ExceptionCode.ALREADY_USED_IMAGE);
+            throw new BusinessLogicException(ExceptionCode.ALREADY_USED_IMAGE); //이미지 중복 사용 방지
         } else {
             this.cafe = cafe;
         }
@@ -68,5 +69,9 @@ public class Image extends BasicEntity {
 
     public void saveImg(){
         this.status = Status.SAVED;
+    }
+
+    public String getName(){
+        return "https://d20npnyv7efnut.cloudfront.net/" + this.name;
     }
 }
