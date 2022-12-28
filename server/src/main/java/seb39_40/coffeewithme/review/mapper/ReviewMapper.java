@@ -22,7 +22,7 @@ public interface ReviewMapper {
     @Mapping(target = "reviewImg", ignore = true)
     Review reviewDtoToReview(ReviewRequestDto postDto);
 
-    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getPath())")
+    @Mapping(target = "reviewImg", expression = "java(review.getReviewImg().getName())")
     @Mapping(target = "tags", expression = "java(review.getReviewTags().stream().map(o -> o.getTag().getName()).toArray(String[]::new))")
     ReviewInfo reviewToReviewDto(Review review);
 
@@ -46,7 +46,7 @@ public interface ReviewMapper {
 
             String[] tags = map.get(review).stream().map(o -> o.getName()).toArray(String[]::new);
             reviewInfo.setTags(tags);
-            reviewInfo.setReviewImg(review.getReviewImg().getPath());
+            reviewInfo.setReviewImg(review.getReviewImg().getName());
             reviewInfos.add(reviewInfo);
         }
 
