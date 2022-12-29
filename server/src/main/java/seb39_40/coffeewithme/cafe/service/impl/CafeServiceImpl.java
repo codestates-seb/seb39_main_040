@@ -45,7 +45,11 @@ public class CafeServiceImpl implements CafeService {
         else if (category.equals("all")) result = findAll(page, sort);
         else result = findByCtg(category, page, sort);
 
-        return new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(result.getContent()), result);
+        try {
+            return new MultiResponseDto<>(cafeMapper.cafeListToCafeSimpleDto(result.getContent()), result);}
+        catch (NullPointerException e) {
+            throw new BusinessLogicException(ExceptionCode.CAFE_NOT_FOUND);
+        }
     }
 
     public Page<Cafe> findAll(Integer page, String sort){

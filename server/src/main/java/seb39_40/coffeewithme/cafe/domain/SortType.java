@@ -9,9 +9,11 @@ public enum SortType {
     N("newest", false, "id"),
     L("likes", false, "likeCount"),
     R("reviews", false, "reviewCount"),
+    C("name", false, "name"),
     N_C("newest", true, "cafe_id"),
     L_C("likes", true,"like_cnt"),
-    R_C("reviews", true, "rvw_cnt");
+    R_C("reviews", true, "rvw_cnt"),
+    C_C("name", true, "cafe_nm");
 
     @Getter
     private String text;

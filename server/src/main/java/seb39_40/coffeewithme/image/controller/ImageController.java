@@ -20,12 +20,13 @@ public class ImageController {
     @PostMapping("/upload")
     public ResponseEntity uploadFile(@RequestParam("images") MultipartFile multipartFile) throws IOException {
         Long id = imageService.save(uploaderService.upload(multipartFile));
+//        Long id = imageService.save("test.com");
         return new ResponseEntity(imageService.findById(id), HttpStatus.CREATED);
     }
 
 
     @GetMapping("/{imageId}")
     public ResponseEntity getFile(@PathVariable Long imageId){
-        return new ResponseEntity(imageService.findById(imageId).getPath(), HttpStatus.OK);
+        return new ResponseEntity(imageService.findById(imageId).getName(), HttpStatus.OK);
     }
 }

@@ -35,20 +35,13 @@ public class CafePostServiceImpl implements CafePostService {
         if (Objects.equals(postDto.getMainImg(), postDto.getMenuImg())) throw new BusinessLogicException(ExceptionCode.INVALID_INPUT_VALUE);
         cafe.addImages(imageService.findById(postDto.getMainImg()));
         cafe.addImages(imageService.findById(postDto.getMenuImg()));
-
-        for (Image image : cafe.getImages()){
-            image.saveImg();
-        }
-
         return cafeService.save(cafe);
     }
 
     @Transactional
     public void delete(Long id){
         Cafe cafe = cafeService.find(id);
-        for (Image image : cafe.getImages()){
-            image.deleteImg();
-        }
+        for (Image image : cafe.getImages()) {image.setCafe(null);}
         cafeService.delete(cafe);
     }
 }

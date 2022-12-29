@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.service.CafeService;
+import seb39_40.coffeewithme.common.domain.Status;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
@@ -70,7 +71,7 @@ public class ReviewPostServiceImpl implements ReviewPostService {
     @Transactional
     public void delete(Long cafeId, Long reviewId){
         Review review = reviewService.find(reviewId);
-        review.getReviewImg().deleteImg();
+        review.getReviewImg().setReview(null);
 
         reviewService.checkUser(getUserId(), review.getUser().getEmail());
         Cafe cafe = cafeService.find(cafeId);

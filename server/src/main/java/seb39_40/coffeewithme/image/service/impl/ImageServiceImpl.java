@@ -25,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
         String[] split = url.split("/");
         String fileName = split[split.length - 1];
         Image image = imageRepository.save(Image.builder()
-                .name(fileName).status(Status.TEMP).build());
+                .name(fileName).build());
         return image.getId();
     }
 
@@ -41,6 +41,6 @@ public class ImageServiceImpl implements ImageService {
     public List<Image> findTempImages() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tenDaysAgo = now.minusDays(10);
-        return imageRepository.findByStatusAndModifiedAtLessThan(Status.TEMP, tenDaysAgo);
+        return imageRepository.findByCafeIdIsNullAndReviewIdIsNullAndUserIdIsNullAndLessThen(tenDaysAgo);
     }
 }

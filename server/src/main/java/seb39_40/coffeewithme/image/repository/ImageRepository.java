@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
-    List<Image> findByStatusAndModifiedAtLessThan(Status status, LocalDateTime TenDaysAgo);
+    List<Image> findByCafeIdIsNullAndReviewIdIsNullAndUserIdIsNullAndLessThen(LocalDateTime TenDaysAgo);
 }
