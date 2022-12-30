@@ -15,6 +15,7 @@ import seb39_40.coffeewithme.image.repository.ImageRepository;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -38,7 +39,6 @@ public class BatchConfig {
     public Job job(){
         Job job = jobBuilderFactory.get("job")
                 .start(deleteTempImages())
-//                .next(deleteTempReview())
                 .build();
         return job;
     }
@@ -49,29 +49,15 @@ public class BatchConfig {
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("Step!");
                     List<Image> tempImages = imageService.findTempImages();
+                    LocalDateTime now = LocalDateTime.now();
 
-                    if (tempImages.size() > 0 && tempImages != null){
+                    if (tempImages.size() > 0){
                         for (Image image : tempImages){
+                            if (now.minusDays(1).compareTo(image.getModifiedAt()) < 0) continue;
                             imageService.delete(image);
                         }
                     }
                     return RepeatStatus.FINISHED;
                 })).build();
     }
-
-//    @Bean
-//    public Step deleteTempReview(){
-//        return stepBuilderFactory.get("deleteTempReview")
-//                .tasklet(((contribution, chunkContext) -> {
-//                    log.info("Step!");
-//                    List<Image> tempReviews = reviewService.findTempReviews();
-//
-//                    if (tempReviews.size() > 0 && tempReviews != null){
-//                        for (Review review : tempReviews){
-//                            reviewService.delete(review);
-//                        }
-//                    }
-//                    return RepeatStatus.FINISHED;
-//                })).build();
-//    }
 }

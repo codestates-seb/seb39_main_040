@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
+import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
@@ -27,6 +28,7 @@ public class UserService {
 
     public void createUser(User user) {
         verifyEmail(user.getEmail());
+        Long profilePhotoId = imageService.save("basic-profile.jpg"); // 기본 프로필 저장
         User result = User.builder()
                 .userName(user.getUserName())
                 .mobile(user.getMobile())
@@ -35,14 +37,15 @@ public class UserService {
                 .roles("ROLE_USER")
                 .status(User.UserStatus.USER_SIGNUP)
                 .registerDate(LocalDate.now())
-                .profilePhoto(imageService.findById(Long.valueOf(1)))
                 .build();
+        result.setProfilePhoto(imageService.findById(profilePhotoId));
         userRepository.save(result);
     }
 
     public void withdrawUser(String email){
         User user = findByEmail(email);
         user.updateStatus(User.UserStatus.USER_WITHDRAW);
+        user.getProfilePhoto().setUser(null);
         userRepository.save(user);
     }
 

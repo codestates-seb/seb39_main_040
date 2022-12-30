@@ -30,7 +30,7 @@ public class Image extends BasicEntity {
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id")
     private Review review;
 

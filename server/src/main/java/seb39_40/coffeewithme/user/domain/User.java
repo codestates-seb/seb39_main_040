@@ -33,14 +33,13 @@ public class User {
     @Column(nullable = false, length = 50, name="reg_dt")
     private LocalDate registerDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="prf_pt")
+    @OneToOne(mappedBy = "user")
     private Image profilePhoto;
 
     @Transient
     private List<Wishlist> likes=new ArrayList<>();
 
-    @Transient
+    @OneToMany(mappedBy = "user")
     private List<Review> reviews=new ArrayList<>();
 
     public List<String> getRoleList(){
@@ -77,6 +76,14 @@ public class User {
     public void updateInformation(String userName, String mobile, Image profilePhoto){
         this.userName = userName;
         this.mobile=mobile;
-        this.profilePhoto=profilePhoto;
+        this.profilePhoto.setUser(null);
+        setProfilePhoto(profilePhoto);
+    }
+
+    public void setProfilePhoto(Image image){
+        this.profilePhoto = image;
+        if (image.getUser() != this){
+            image.setUser(this);
+        }
     }
 }

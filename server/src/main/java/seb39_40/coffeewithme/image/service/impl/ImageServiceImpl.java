@@ -3,10 +3,11 @@ package seb39_40.coffeewithme.image.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import seb39_40.coffeewithme.common.domain.Status;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.image.domain.Image;
+import seb39_40.coffeewithme.image.dto.ImageResponseDto;
+import seb39_40.coffeewithme.image.mapper.ImageMapper;
 import seb39_40.coffeewithme.image.repository.ImageRepository;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.image.service.S3UploaderService;
@@ -15,10 +16,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Primary
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
     private final S3UploaderService s3Service;
 
     public Long save(String url){
@@ -30,7 +31,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public void delete(Image img) {
-        s3Service.delete(img);
+        if (!img.getName().equals("basic-profile.jpg")) s3Service.delete(img);
         imageRepository.delete(img);
     }
 
@@ -38,9 +39,13 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
     }
 
+    public ImageResponseDto findImage(Long id){
+        return imageMapper.imageToImageResponseDto(findById(id));
+    }
+
     public List<Image> findTempImages() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tenDaysAgo = now.minusDays(10);
-        return imageRepository.findByCafeIdIsNullAndReviewIdIsNullAndUserIdIsNullAndLessThen(tenDaysAgo);
+
+//        LocalDateTime tenDaysAgo = now.minusDays(10);
+        return imageRepository.findByCafeIdIsNullAndReviewIdIsNullAndUserIdIsNull();
     }
 }

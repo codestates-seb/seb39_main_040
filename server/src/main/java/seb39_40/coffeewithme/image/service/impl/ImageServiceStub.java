@@ -7,6 +7,8 @@ import seb39_40.coffeewithme.common.domain.Status;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.image.domain.Image;
+import seb39_40.coffeewithme.image.dto.ImageResponseDto;
+import seb39_40.coffeewithme.image.mapper.ImageMapper;
 import seb39_40.coffeewithme.image.repository.ImageRepository;
 import seb39_40.coffeewithme.image.service.ImageService;
 
@@ -16,26 +18,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ImageServiceStub implements ImageService {
     private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
-    @Override
     public Long save(String url) {
-        System.out.println(url);
         return imageRepository.save(Image.builder()
-                .name(url)
-                .status(Status.TEMP).build()).getId();
+                .name(url).build()).getId();
     }
 
-    @Override
     public void delete(Image img) {
         imageRepository.delete(img);
     }
 
-    @Override
     public Image findById(Long id) {
         return imageRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
     }
 
-    @Override
+    public ImageResponseDto findImage(Long id){
+        return imageMapper.imageToImageResponseDto(findById(id));
+    }
+
     public List<Image> findTempImages() {
         return null;
     }

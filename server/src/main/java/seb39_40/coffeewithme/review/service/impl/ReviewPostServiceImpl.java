@@ -34,8 +34,6 @@ public class ReviewPostServiceImpl implements ReviewPostService {
     @Transactional
     public Long post(Long cafeId, ReviewRequestDto postDto){
         Review review = reviewMapper.reviewDtoToReview(postDto);
-        reviewService.save(review);
-        // 여기서 set하면 image 셋하고 -> image 측에서 리뷰를 세팅하는데
         review.setReviewImg(imageService.findById(postDto.getReviewImg()));
 
         Cafe cafe = cafeService.find(cafeId);
@@ -46,9 +44,7 @@ public class ReviewPostServiceImpl implements ReviewPostService {
         if (user.getRoles().equals("ROLE_ADMIN") && review.getScore() >= 4 && !cafe.getBadge())
             cafe.updateBadge(true);
         review.setUser(user);
-
         review.setReviewTags(tagService.createReviewTag(review, postDto.getTags()));
-        review.getReviewImg().saveImg();
         return review.getId();
     }
 
@@ -58,7 +54,7 @@ public class ReviewPostServiceImpl implements ReviewPostService {
         Review target = reviewMapper.reviewDtoToReview(patchDto);
 
         if (!Objects.equals(origin.getReviewImg().getId(), target.getReviewImg().getId()))
-            origin.getReviewImg().deleteImg();
+            origin.getReviewImg().setReview(null);
         reviewService.checkUser(getUserId(), origin.getUser().getEmail());
 
         tagService.deleteReviewTag(origin);
