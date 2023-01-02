@@ -13,10 +13,7 @@ import seb39_40.coffeewithme.tag.domain.Tag;
 import seb39_40.coffeewithme.tag.repository.ReviewTagRepository;
 import seb39_40.coffeewithme.tag.repository.TagRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,14 +79,28 @@ public class TagService {
     }
 
     @Transactional
-    public void deleteReviewTag(Review review){
+    public void updateReviewTag(Review review, List<String> tags){
        List<ReviewTag> reviewTags = reviewTagRepository.findByReviewId(review.getId());
-        System.out.println(reviewTags.size());
+
+       Set<String> tagSet = new HashSet<>(tags); // 빠른 조회를 위해 Set 변환
+       Set<String> existTag = new HashSet<>(); // 수정되지 않은(유지) 태그 보관을 위한 List
        for (ReviewTag reviewTag : reviewTags){
-           System.out.println("삭제");
-           System.out.println(reviewTag.getTag().getCategory());
+           if (tagSet.contains(reviewTag.getTag().getName())) {
+               existTag.add(reviewTag.getTag().getName());
+               continue;
+           }
+
            reviewTagRepository.delete(reviewTag);
        }
+
+       List<String> newTags = new ArrayList<>();
+       for (String tag: tags) {
+           if(existTag.contains(tag)) continue;
+           newTags.add(tag);
+        }
+
+        List<ReviewTag> result = createReviewTag(review, newTags);
+        review.setReviewTags(result);
     }
 
 

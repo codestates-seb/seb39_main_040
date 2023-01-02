@@ -76,7 +76,6 @@ public class Review extends BasicEntity {
     }
 
     public void update(Review review){
-        this.reviewImg = review.getReviewImg();
         this.description = review.getDescription();
         this.score = review.getScore();
     }
