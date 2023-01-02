@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ReviewCustomRepository {
 
-     LinkedHashMap<Review, List<Tag>> findByCafeId(Long id, PageInfo pageInfo);
+     List<Review> findByCafeId(Long id, PageInfo pageInfo);
      Long countByCafeId(Long id);
 }

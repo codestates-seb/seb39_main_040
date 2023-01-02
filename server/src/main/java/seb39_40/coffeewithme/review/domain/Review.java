@@ -29,7 +29,7 @@ public class Review extends BasicEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @OneToOne(mappedBy = "review") //여러장 -> 일대다로 변경
+    @OneToOne(mappedBy = "review")
     private Image reviewImg;
 
     @Column(nullable = false, columnDefinition = "TEXT", name = "review_dsrp")

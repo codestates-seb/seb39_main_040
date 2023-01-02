@@ -29,10 +29,10 @@ public interface ReviewMapper {
     ImageInfo reviewToReviewImageDto(Image image);
     List<ImageInfo> reviewsToReviewImageDtos(List<Image> images);
 
-    default List<ReviewInfo> reviewToReviewDtos(LinkedHashMap<Review, List<Tag>> map){
+    default List<ReviewInfo> reviewToReviewDtos(List<Review> reviews){
         List<ReviewInfo> reviewInfos = new ArrayList<>();
 
-        for (Review review : map.keySet()){
+        for (Review review : reviews){
             ReviewInfo reviewInfo = new ReviewResponseDto.ReviewInfo();
 
             SimpleUserInfo userInfo = new SimpleUserInfo();
@@ -44,7 +44,7 @@ public interface ReviewMapper {
             reviewInfo.setDescription( review.getDescription() );
             reviewInfo.setScore( review.getScore() );
 
-            String[] tags = map.get(review).stream().map(o -> o.getName()).toArray(String[]::new);
+            String[] tags = review.getReviewTags().stream().map(o -> o.getTag().getName()).toArray(String[]::new);
             reviewInfo.setTags(tags);
             reviewInfo.setReviewImg(review.getReviewImg().getName());
             reviewInfos.add(reviewInfo);
