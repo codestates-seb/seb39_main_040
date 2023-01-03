@@ -64,7 +64,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     }*/
                     jwtProvider.validationTheSameToken(email, jwt);
                     User user = userRepository.findByEmail(email).get();
-                    String new_at = jwtProvider.createAccessToken(user.getId(), email);
+                    String new_at = jwtProvider.createAccessToken(user.getId(), email, user.getRoles());
                     String new_rt = jwtProvider.createRefreshToken(email);
 
                     jwtProvider.saveRefreshToken(email, new_rt);

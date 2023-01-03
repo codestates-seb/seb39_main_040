@@ -10,31 +10,41 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
     private int ACCESS_EXPIRATION= 1000 * 60 * 10;
-    private String SECRET_KEY="cwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkey";
+    //private String SECRET_KEY="cwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkey";
+    private String SECRET_KEY="cwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkey";
     private final RedisRepository redisRepository;
 
-    public String createAccessToken(Long id,String email){
+    //role 추가
+    public String createAccessToken(Long id,String email, String role){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+        //SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
-                .signWith(key, SignatureAlgorithm.HS256)
+                //.signWith(key, SignatureAlgorithm.HS256)
+                .signWith(key)
+                .setHeaderParam("typ","JWT")
                 .setSubject("Access Token")
                 .claim("id",id)
                 .claim("email",email)
+                .claim("role",role)
                 .setExpiration(new Date(System.currentTimeMillis()+ACCESS_EXPIRATION))
                 .compact();
     }
+
     public String createRefreshToken(String email){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
+                .setHeaderParam("typ","JWT")
                 .setSubject("Refresh Token")
                 //.setExpiration(new Date(System.currentTimeMillis()+REFRESH_EXPIRATION))
                 .claim("email",email)

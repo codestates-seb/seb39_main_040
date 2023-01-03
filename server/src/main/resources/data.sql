@@ -6,10 +6,10 @@ insert into tag(tag_id, tag_nm, tag_ctg) values (5, '힙한', 'MOOD');
 insert into tag(tag_id, tag_nm, tag_ctg) values (6, '아늑한', 'MOOD');
 insert into tag(tag_id, tag_nm, tag_ctg) values (7, '깔끔한', 'MOOD');
 
-insert into image(image_id, path) values (1, "asdfzxcv");
-insert into image(image_id, path) values (2, "uuefzxcv");
-insert into image(image_id, path) values (3, "oiuekxcv");
-insert into image(image_id, path) values (4, "pqdkzxcv");
+insert into image(image_id, path, status) values (1, "asdfzxcv", 'SAVED');
+insert into image(image_id, path, status) values (2, "uuefzxcv", 'SAVED');
+insert into image(image_id, path, status) values (3, "oiuekxcv", 'SAVED');
+insert into image(image_id, path, status) values (4, "pqdkzxcv", 'SAVED');
 
 insert into user(user_id, user_pw, reg_dt, email, user_nm, mobile, roles, status, prf_pt) values (1, "$2a$10$lalW/DgJvZ69ywg/8BEW5OE36vj/UyOy0DtfjZ1xmB2W19VNKFgzC", now(), "test1@naver.com", "김코딩", "010-1234-1234", "ROLE_USER", "USER_SIGNUP", 2);
 insert into user(user_id, user_pw, reg_dt, email, user_nm, mobile, roles, status, prf_pt) values (2, "$2a$10$lalW/DgJvZ69ywg/8BEW5OE36vj/UyOy0DtfjZ1xmB2W19VNKFgzC", now(), "test2@naver.com", "이자바", "010-1234-1235", "ROLE_USER", "USER_SIGNUP", 1);
