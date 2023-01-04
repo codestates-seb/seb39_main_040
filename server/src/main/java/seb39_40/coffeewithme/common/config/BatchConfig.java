@@ -54,7 +54,7 @@ public class BatchConfig {
                     if (tempImages.size() > 0){
                         for (Image image : tempImages){
                             if (now.minusDays(1).compareTo(image.getModifiedAt()) < 0) continue;
-                            imageService.delete(image);
+                            imageService.delete(image.getId());
                         }
                     }
                     return RepeatStatus.FINISHED;

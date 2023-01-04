@@ -14,19 +14,23 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/images")
 public class ImageController {
-    private final S3UploaderService uploaderService;
     private final ImageService imageService;
 
     @PostMapping("/upload")
     public ResponseEntity uploadFile(@RequestParam("images") MultipartFile multipartFile) throws IOException {
-        Long id = imageService.save(uploaderService.upload(multipartFile));
-//        Long id = imageService.save("test.com");
-        return new ResponseEntity(imageService.findById(id), HttpStatus.CREATED);
+        Long id = imageService.save(multipartFile);
+        return new ResponseEntity(imageService.findImage(id), HttpStatus.CREATED);
     }
 
 
     @GetMapping("/{imageId}")
     public ResponseEntity getFile(@PathVariable Long imageId){
         return new ResponseEntity(imageService.findById(imageId).getName(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{imageId}")
+    public ResponseEntity deleteFile(@PathVariable Long imageId){
+        imageService.delete(imageId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
