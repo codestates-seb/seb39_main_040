@@ -38,7 +38,6 @@ public class Review extends BasicEntity {
     @Column(nullable = false)
     private Integer score;
 
-    // status 추가 필요
 
     @Builder
     public Review(Image reviewImg, String description, Integer score) {

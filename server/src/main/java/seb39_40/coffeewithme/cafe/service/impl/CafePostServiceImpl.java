@@ -11,8 +11,11 @@ import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.image.service.ImageService;
+import seb39_40.coffeewithme.review.domain.Review;
+import seb39_40.coffeewithme.review.service.ReviewService;
 import seb39_40.coffeewithme.tag.service.TagService;
 
+import java.util.List;
 import java.util.Objects;
 
 import static seb39_40.coffeewithme.cafe.dto.CafeRequestDto.*;
@@ -23,6 +26,7 @@ public class CafePostServiceImpl implements CafePostService {
     private final CafeService cafeService;
     private final TagService tagService;
     private final ImageService imageService;
+    private final ReviewService reviewService;
     private final CafeMapper cafeMapper;
 
 
@@ -42,6 +46,12 @@ public class CafePostServiceImpl implements CafePostService {
     public void delete(Long id){
         Cafe cafe = cafeService.find(id);
         for (Image image : cafe.getImages()) {image.setCafe(null);}
+        List<Review> reviews = cafe.getReviews();
         cafeService.delete(cafe);
+
+        for (Review review : reviews) {
+            review.getReviewImg().setReview(null);
+            reviewService.delete(review);
+        }
     }
 }

@@ -1,6 +1,8 @@
 package seb39_40.coffeewithme.cafe.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 
@@ -50,7 +52,7 @@ public class Cafe {
     @Column(name = "rvw_cnt")
     private Long reviewCount = 0L;
 
-    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cafe")
     private List<Review> reviews = new ArrayList<>();
 
     @Setter
