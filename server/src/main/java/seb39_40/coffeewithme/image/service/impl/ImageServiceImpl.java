@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
