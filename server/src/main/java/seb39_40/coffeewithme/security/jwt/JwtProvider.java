@@ -18,17 +18,13 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProvider {
     private int ACCESS_EXPIRATION= 1000 * 60 * 10;
-    //private String SECRET_KEY="cwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkey";
     private String SECRET_KEY="cwmsecretkeycwmsecretkeycwmsecretkeycwmsecretkey";
     private final RedisRepository redisRepository;
 
-    //role 추가
     public String createAccessToken(Long id,String email, String role){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
-        //SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
-                //.signWith(key, SignatureAlgorithm.HS256)
                 .signWith(key)
                 .setHeaderParam("typ","JWT")
                 .setSubject("Access Token")
@@ -53,6 +49,10 @@ public class JwtProvider {
 
     public void saveRefreshToken(String email,String token){
         redisRepository.save(token, email);
+    }
+
+    public void removeRefreshToken(String email){
+        redisRepository.remove(email);
     }
 
     public Claims parseToken(String jwt){
