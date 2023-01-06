@@ -29,7 +29,7 @@ public class WishlistService {
         }
         Wishlist like = Wishlist.builder()
                 .user(userService.findById(userId))
-                .cafe(cafeService.findById(cafeId))
+                .cafe(cafeService.find(cafeId))
                 .build();
         wishlistRepository.save(like);
     }
@@ -47,7 +47,7 @@ public class WishlistService {
             return new ArrayList<>();
         List<Wishlist> likes= wishlistRepository.findAllByUserId(userId);
         List<Cafe> cafes=likes.stream().map(like ->{
-            Cafe cafe = cafeService.findById(like.getCafe().getId());
+            Cafe cafe = cafeService.find(like.getCafe().getId());
             return cafe;
         }).collect(Collectors.toList());
         return cafes;

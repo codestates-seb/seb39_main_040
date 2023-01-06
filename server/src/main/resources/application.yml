@@ -7,6 +7,9 @@ logging:
 
 spring:
   jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
     hibernate:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
       ddl-auto: create

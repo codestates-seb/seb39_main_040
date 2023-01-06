@@ -41,7 +41,7 @@ public interface UserMapper {
             UserReviewResponseDto.ReviewSimpleDto rsd=new UserReviewResponseDto.ReviewSimpleDto();
             rsd.setId(r.getId());
             rsd.setDescription(r.getDescription());
-            rsd.setReviewImg(r.getReviewImg().getPath());
+            rsd.setReviewImg(r.getReviewImg().getName());
             rsd.setReviewTags(r.getReviewTags());
             rsd.setScore(r.getScore());
             rsd.setCafe(new UserReviewResponseDto.ReviewSimpleCafeDto(r.getCafe().getId(),r.getCafe().getName()));

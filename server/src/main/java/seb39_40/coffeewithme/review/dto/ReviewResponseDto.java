@@ -16,16 +16,12 @@ public class ReviewResponseDto {
     @Data @NoArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReviewInfo{
-        List<String> tags;
+        String[] tags;
         UserResponseDto.SimpleUserInfo user;
         Long id;
         String description;
         Integer score;
         String reviewImg;
-
-        public void setReviewTags(List<ReviewTag> reviewTags){
-            this.tags = reviewTags.stream().map(reviewTag -> reviewTag.getTag().getName()).collect(Collectors.toList());
-        }
     }
 
     @Data @NoArgsConstructor

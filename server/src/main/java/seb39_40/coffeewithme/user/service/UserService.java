@@ -27,6 +27,7 @@ public class UserService {
 
     public void createUser(User user) {
         verifyEmail(user.getEmail());
+        Long profilePhotoId = imageService.saveDefaultImage();
         User result = User.builder()
                 .userName(user.getUserName())
                 .mobile(user.getMobile())
@@ -35,14 +36,15 @@ public class UserService {
                 .roles("ROLE_USER")
                 .status(User.UserStatus.USER_SIGNUP)
                 .registerDate(LocalDate.now())
-                .profilePhoto(imageService.findById(Long.valueOf(1)))
                 .build();
+        result.setProfilePhoto(imageService.findById(profilePhotoId));
         userRepository.save(result);
     }
 
     public void withdrawUser(String email){
         User user = findByEmail(email);
         user.updateStatus(User.UserStatus.USER_WITHDRAW);
+        user.getProfilePhoto().setUser(null);
         userRepository.save(user);
     }
 

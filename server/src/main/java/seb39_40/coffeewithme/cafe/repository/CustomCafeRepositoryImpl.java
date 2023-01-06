@@ -7,19 +7,31 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
-import seb39_40.coffeewithme.cafe.repository.CustomCafeRepository;
 import seb39_40.coffeewithme.tag.domain.Tag;
 
 import java.util.List;
 
 import static seb39_40.coffeewithme.cafe.domain.QCafe.cafe;
 import static seb39_40.coffeewithme.cafe.domain.QCafeTag.cafeTag;
+import static seb39_40.coffeewithme.image.domain.QImage.image;
 import static seb39_40.coffeewithme.tag.domain.QTag.tag;
 
 @Repository
 @RequiredArgsConstructor
 public class CustomCafeRepositoryImpl implements CustomCafeRepository {
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public Page<Cafe> findAllCafe(Pageable pageable){
+        List<Cafe> result = jpaQueryFactory.selectFrom(cafe)
+                .leftJoin(cafe.images, image).fetchJoin()
+                .offset(pageable.getOffset())
+                .limit(10)
+                .fetch();
+
+        return new PageImpl<>(result, pageable, pageable.getOffset());
+    }
+
 
     @Override
     public Page<Cafe> findByCategory(String category, Pageable pageable) {
