@@ -5,7 +5,6 @@ const useCafeDetailImageStore = create((set) => ({
   cafeImages: [],
   fetch: async (url) => {
     const res = await axios.get(url);
-    console.log("res", res);
     set({ cafeImages: await res.data });
   },
 }));

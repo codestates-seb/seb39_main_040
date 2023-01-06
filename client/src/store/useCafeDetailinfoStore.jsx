@@ -5,7 +5,6 @@ const useCafeDetailinfoStore = create((set) => ({
   cafeIdInfo: [],
   fetch: async (url) => {
     const res = await axios.get(url);
-    console.log("res", res);
     set({ cafeIdInfo: await res.data });
   },
 }));
