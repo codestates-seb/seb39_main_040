@@ -2,10 +2,10 @@ import CafePhotoCard from "./CafePhotoCard";
 import React from "react";
 import styled from "styled-components";
 
-const CafePhotoCards = ({ cafeIdInfo, cafeImages }) => {
+const CafePhotoCards = () => {
   return (
     <CafePhotoContainer>
-      <CafePhotoCard cafeIdInfo={cafeIdInfo} cafeImages={cafeImages} />
+      <CafePhotoCard />
     </CafePhotoContainer>
   );
 };
