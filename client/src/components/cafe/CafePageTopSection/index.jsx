@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import Tag from "../../common/Tag";
@@ -17,9 +17,20 @@ import {
 import { faSquareInstagram } from "@fortawesome/free-brands-svg-icons";
 import ManagerBadge from "../../../assets/badge.svg";
 
-const CafePageTopSection = ({ cafeIdInfo, tags }) => {
+import useCafeDetailinfoStore from "../../../store/useCafeDetailinfoStore";
+
+const CafePageTopSection = () => {
+  const cafeIdInfo = useCafeDetailinfoStore((state) => state.cafeIdInfo);
+  const fetch = useCafeDetailinfoStore((state) => state.fetch);
   const navigate = useNavigate();
   const isLogin = localStorage.getItem("isLogin");
+  const { id } = useParams();
+
+  // 카페 디테일 데이터 불러오기
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API}/cafe/${id}`);
+    console.log(cafeIdInfo);
+  }, []);
 
   const addWishHandler = () => {
     if (!localStorage.getItem("access_token")) {
@@ -110,7 +121,10 @@ const CafePageTopSection = ({ cafeIdInfo, tags }) => {
               </Badge>
             </TitleBox>
             <Tagbox>
-              {tags && tags.map((el) => <Tag className="tag-item">#{el}</Tag>)}
+              {cafeIdInfo.tags &&
+                cafeIdInfo.tags.map((el) => (
+                  <Tag className="tag-item">#{el}</Tag>
+                ))}
             </Tagbox>
             <CafeInfoBox>
               <div>

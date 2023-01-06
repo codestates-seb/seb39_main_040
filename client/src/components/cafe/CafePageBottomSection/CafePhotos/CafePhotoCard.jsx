@@ -5,8 +5,19 @@ import ImageListItem from "@mui/material/ImageListItem";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import useCafeDetailImageStore from "../../../../store/useCafeDetailImageStore";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const CafePhotoCard = ({ cafeImages }) => {
+const CafePhotoCard = () => {
+  const cafeImages = useCafeDetailImageStore((state) => state.cafeImages);
+  const fetch = useCafeDetailImageStore((state) => state.fetch);
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API}/cafe/${id}/reviews/images`);
+  }, []);
+
   return (
     <CafePhotoWrapper>
       <TextBox>

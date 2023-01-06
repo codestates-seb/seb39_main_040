@@ -105,7 +105,6 @@ const ReviewForm = ({ cafeId, reviewId, cafe_name, originReview }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setImg(res.data.id);
         Swal.fire({
           title: "사진이 추가되었습니다.",

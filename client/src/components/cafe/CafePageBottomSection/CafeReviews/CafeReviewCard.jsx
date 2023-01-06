@@ -3,14 +3,23 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
-import React from "react";
+import React, { useState } from "react";
+import ImageModal from "../../../common/ImageModal";
 
 const CafeReviewCard = ({ text, tag, user, image, star }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+
   return (
     <MainWrapper>
       <ImgBox>
-        <img src={`${image}`} alt="리뷰이미지" />
+        <img src={`${image}`} alt="리뷰이미지" onClick={showModal} />
       </ImgBox>
+      <ModalBox>
+        {modalOpen && <ImageModal setModalOpen={setModalOpen} image={image} />}
+      </ModalBox>
       <ContentBox>
         <p>{text}</p>
         <TagBox>
@@ -61,7 +70,16 @@ const ImgBox = styled.div`
   img {
     width: 130px;
     height: 130px;
+    cursor: pointer;
   }
+`;
+
+const ModalBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const ContentBox = styled.div`

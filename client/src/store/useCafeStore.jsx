@@ -1,7 +1,7 @@
 import create from "zustand";
 import axios from "axios";
 
-const useCafe = create((set) => ({
+const useCafeStore = create((set) => ({
   totalPage: "",
   fetch: async () => {
     const res = await axios.get(`${process.env.REACT_APP_API}/cafe`);
@@ -9,4 +9,4 @@ const useCafe = create((set) => ({
   },
 }));
 
-export default useCafe;
+export default useCafeStore;
