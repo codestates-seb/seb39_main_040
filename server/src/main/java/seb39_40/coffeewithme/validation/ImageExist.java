@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {ImageExistDuplicationValidator.class})
 public @interface ImageExist {
-    String message() default "이미지가 등록되지 않았습니다.";
+    String message() default "사용할 수 없는 이미지입니다.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

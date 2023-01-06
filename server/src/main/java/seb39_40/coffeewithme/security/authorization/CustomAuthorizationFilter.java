@@ -54,23 +54,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 String email = jwtProvider.getEmailToClaims(claims);
 
                 if(path.equals("/users/token")){
-                    /*if (!jwtProvider.validationTheSameToken(email, jwt)){
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.setContentType(APPLICATION_JSON_VALUE);
-                        response.setCharacterEncoding("utf-8");
-                        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED,"RefreshToken이 일치하지 않습니다.");
-                        log.error("** JwtException in Authorization : RefreshToken이 일치하지 않습니다.");
-                        new ObjectMapper().writeValue(response.getWriter(), errorResponse);
-                    }*/
                     jwtProvider.validationTheSameToken(email, jwt);
                     User user = userRepository.findByEmail(email).get();
-                    String new_at = jwtProvider.createAccessToken(user.getId(), email);
+                    String new_at = jwtProvider.createAccessToken(user.getId(), email, user.getRoles());
                     String new_rt = jwtProvider.createRefreshToken(email);
 
                     jwtProvider.saveRefreshToken(email, new_rt);
                     response.setHeader("AccessToken", TYPE + new_at);
                     response.setHeader("RefreshToken", TYPE + new_rt);
-                    //filterChain.doFilter(request, response);
                 }
                     User userEntity = userRepository.findByEmail(email).get();
 

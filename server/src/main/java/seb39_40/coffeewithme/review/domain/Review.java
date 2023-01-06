@@ -17,20 +17,19 @@ public class Review extends BasicEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
     @Setter
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    @OneToOne //여러장 -> 일대다로 변경
-    @JoinColumn(name = "image_id")
+    @OneToOne(mappedBy = "review")
     private Image reviewImg;
 
     @Column(nullable = false, columnDefinition = "TEXT", name = "review_dsrp")
@@ -38,6 +37,7 @@ public class Review extends BasicEntity {
 
     @Column(nullable = false)
     private Integer score;
+
 
     @Builder
     public Review(Image reviewImg, String description, Integer score) {
@@ -60,6 +60,13 @@ public class Review extends BasicEntity {
         }
     }
 
+    public void setReviewImg(Image image){
+       this.reviewImg = image;
+       if (image.getReview() != this){
+           image.setReview(this);
+       }
+    }
+
     public void addReviewTags(ReviewTag reviewTag) {
         this.reviewTags.add(reviewTag);
         if (reviewTag.getReview() != this){
@@ -68,7 +75,6 @@ public class Review extends BasicEntity {
     }
 
     public void update(Review review){
-        this.reviewImg = review.getReviewImg();
         this.description = review.getDescription();
         this.score = review.getScore();
     }

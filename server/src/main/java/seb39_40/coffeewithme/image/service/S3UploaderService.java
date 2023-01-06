@@ -28,11 +28,11 @@ public class S3UploaderService {
 
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
 
-        return amazonS3.getUrl(bucket, s3FileName).toString();
+        return amazonS3.getUrl(bucket, s3FileName).toString(); //image 버킷 url 반환
     }
 
 
     public void delete(Image img) {
-        amazonS3.deleteObject(bucket, img.getPath().substring(img.getPath().lastIndexOf("/")+1));
+        amazonS3.deleteObject(bucket, img.getName().substring(img.getName().lastIndexOf("/")+1));
     }
 }

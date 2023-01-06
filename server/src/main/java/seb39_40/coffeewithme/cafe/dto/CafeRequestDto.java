@@ -17,7 +17,10 @@ public class CafeRequestDto {
         @Size(max = 20, message = "카페 이름은 20자 이내여야 합니다.")
         String name;
 
-        List<Long> tags;
+        @NotNull(message = "태그는 비어있을 수 없습니다.")
+        @Size(min = 1, message = "태그는 하나 이상 선택되어야 합니다.")
+        List<String> tags;
+
         String address;
         String description;
 

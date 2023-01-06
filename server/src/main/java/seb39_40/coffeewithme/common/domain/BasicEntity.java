@@ -19,6 +19,6 @@ public abstract class BasicEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(updatable = false, name = "mdf_dt")
+    @Column(updatable = true, name = "mdf_dt")
     private LocalDateTime modifiedAt;
 }

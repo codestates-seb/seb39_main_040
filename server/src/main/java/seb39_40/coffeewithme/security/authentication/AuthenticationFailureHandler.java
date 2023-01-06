@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 //import seb39_40.coffeewithme.common.exeption.ErrorResponse;
 import seb39_40.coffeewithme.exception.ErrorResponse;
@@ -37,6 +38,14 @@ public class AuthenticationFailureHandler implements org.springframework.securit
             response.setCharacterEncoding("utf-8");
             ErrorResponse e = ErrorResponse.of(HttpStatus.BAD_REQUEST,"존재하지 않는 회원입니다.");
             log.error("** DisabledException in Login : 존재하지 않는 회원입니다.");
+            new ObjectMapper().writeValue(response.getWriter(), e);
+        }
+        else if(exception instanceof UsernameNotFoundException){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType(APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("utf-8");
+            ErrorResponse e = ErrorResponse.of(HttpStatus.BAD_REQUEST,"존재하지 않는 회원입니다.");
+            log.error("** UsernameNotFoundException in Login : 존재하지 않는 회원입니다.");
             new ObjectMapper().writeValue(response.getWriter(), e);
         }
     }

@@ -15,13 +15,14 @@ import javax.validation.Valid;
 @RequestMapping("/admin")
 public class CafeAdminController {
     private final CafePostService cafePostService;
-    private final CafeMapper cafeMapper;
 
     @PostMapping("/cafe")
     public ResponseEntity postCafe(@RequestBody @Valid CafeRequestDto.Post postDto){
-        Long id = cafePostService.register(cafeMapper.cafeDtoToCafe(postDto));
+        Long id = cafePostService.register(postDto);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
+
+    // 수정기능 만들기
 
     @DeleteMapping("/cafe/{cafeId}")
     public ResponseEntity deleteCafe(@PathVariable Long cafeId){
