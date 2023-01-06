@@ -35,3 +35,11 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### yml 파일 ###
+*.yml
+!application.yml
+!application-prod.yml
+!appspec.yml
+
+
