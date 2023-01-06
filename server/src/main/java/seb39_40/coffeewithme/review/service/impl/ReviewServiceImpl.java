@@ -15,6 +15,7 @@ import seb39_40.coffeewithme.review.mapper.ReviewMapper;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
 import seb39_40.coffeewithme.review.service.ReviewService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +56,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     public List<ReviewInfo> findByCafeId(Long cafeId, PageInfo pageInfo) {
-        if (pageInfo.getTotalPage() == 0) return null;
+        if (pageInfo.getTotalPage() == 0) return new ArrayList<>();
 
         List<ReviewInfo> reviews = reviewMapper.reviewToReviewDtos(reviewRepository.findByCafeId(cafeId, pageInfo));
         return reviews;

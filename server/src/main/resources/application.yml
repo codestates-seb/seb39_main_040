@@ -12,19 +12,19 @@ spring:
         default_batch_fetch_size: 1000
     hibernate:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     defer-datasource-initialization: true
   redis:
     host: localhost
     port: 6379
-  sql:
-   init:
-    mode: always
+#  sql:
+#   init:
+#    mode: always
 
   batch:
-    jdbc:
-      initialize-schema: always
+#    jdbc:
+#      initialize-schema: always
     job:
       enabled: false
 

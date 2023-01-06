@@ -6,18 +6,14 @@ import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.dto.ReviewRequestDto;
 import seb39_40.coffeewithme.review.dto.ReviewResponseDto;
-import seb39_40.coffeewithme.tag.domain.Tag;
-import seb39_40.coffeewithme.user.mapper.UserMapper;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static seb39_40.coffeewithme.review.dto.ReviewResponseDto.*;
 import static seb39_40.coffeewithme.user.dto.UserResponseDto.*;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, Collections.class})
+@Mapper(componentModel = "spring")
 public interface ReviewMapper {
     @Mapping(target = "reviewImg", ignore = true)
     Review reviewDtoToReview(ReviewRequestDto postDto);
@@ -26,6 +22,7 @@ public interface ReviewMapper {
     @Mapping(target = "tags", expression = "java(review.getReviewTags().stream().map(o -> o.getTag().getName()).toArray(String[]::new))")
     ReviewInfo reviewToReviewDto(Review review);
 
+    @Mapping(target = "path", source = "name")
     ImageInfo reviewToReviewImageDto(Image image);
     List<ImageInfo> reviewsToReviewImageDtos(List<Image> images);
 

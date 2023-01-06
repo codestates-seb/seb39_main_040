@@ -1,5 +1,6 @@
 package seb39_40.coffeewithme.image.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,14 +27,17 @@ public class Image extends BasicEntity {
     @Column(name = "image_nm",nullable = false, columnDefinition = "TEXT")
     private String name;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id")
     private Review review;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
