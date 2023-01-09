@@ -53,9 +53,10 @@ public class ReviewPostServiceImpl implements ReviewPostService {
         Review origin = reviewService.find(id);
         Review target = reviewMapper.reviewDtoToReview(patchDto);
 
-        if (!Objects.equals(origin.getReviewImg().getId(), patchDto.getReviewImg()))
+        if (!Objects.equals(origin.getReviewImg().getId(), patchDto.getReviewImg())) {
             origin.getReviewImg().setReview(null);
             origin.setReviewImg(imageService.findById(patchDto.getReviewImg()));
+        }
         reviewService.checkUser(getUserId(), origin.getUser().getEmail()); //작성자인지 확인
 
         tagService.updateReviewTag(origin, tags);

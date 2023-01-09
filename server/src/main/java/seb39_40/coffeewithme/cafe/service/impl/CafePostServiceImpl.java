@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
+import seb39_40.coffeewithme.cafe.dto.CafeRequestDto.Patch;
 import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
 import seb39_40.coffeewithme.cafe.service.CafePostService;
 import seb39_40.coffeewithme.cafe.service.CafeService;
@@ -53,5 +54,26 @@ public class CafePostServiceImpl implements CafePostService {
             review.getReviewImg().setReview(null);
             reviewService.delete(review);
         }
+    }
+
+    @Override
+    public void repost(Long id, Patch patchDto) {
+        // 권한 확인 추가 예정
+
+        Cafe origin = cafeService.find(id);
+        Cafe target = cafeMapper.cafeDtoToCafe(patchDto);
+        origin.updateInformation(target);   // 기본 정보 수정
+
+        List<Image> images = origin.getImages();    // 이미지 수정
+        for (int i = 0; i < 2; i++) {
+            if (!Objects.equals(images.get(i).getId(), patchDto.getMainImg())){
+                images.get(i).setCafe(null);
+                Image image = (i == 0? imageService.findById(patchDto.getMainImg()) : imageService.findById(patchDto.getMenuImg()));
+                origin.getImages().set(i, image);
+                image.setCafe(origin);
+            }
+        }
+
+        tagService.updateCafeTag(origin, patchDto.getTags());   // 태그 수정
     }
 }

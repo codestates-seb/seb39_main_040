@@ -36,16 +36,11 @@ public class Cafe {
     @Column(nullable = false, name="cafe_bdg")
     private Boolean badge = false;
 
-    // 오픈시간 임베디드 타입 고려
     @Column(nullable = false, name = "open_tm")
     private String openTime = "00:00";
 
     @Column(nullable = false, name = "close_tm")
     private String closeTime = "00:00";
-    
-    @OneToMany(mappedBy = "cafe")
-    private List<Image> images = new ArrayList<>();
-
 
     @Column(name = "like_cnt")
     private Long likeCount = 0L;
@@ -53,11 +48,15 @@ public class Cafe {
     private Long reviewCount = 0L;
 
     @OneToMany(mappedBy = "cafe")
+    private List<Image> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cafe")
     private List<Review> reviews = new ArrayList<>();
 
     @Setter
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<CafeTag> cafeTags = new ArrayList<>();
+
 
     @Builder
     public Cafe(String name, String address, String phone, String homepage, String description, String openTime, String closeTime) {
@@ -99,5 +98,15 @@ public class Cafe {
 
     public void updateBadge(Boolean badge){
         this.badge = badge;
+    }
+
+    public void updateInformation(Cafe cafe){
+        this.name = cafe.name;
+        this.phone = cafe.phone;
+        this.description = cafe.description;
+        this.homepage = cafe.homepage;
+        this.openTime = cafe.openTime;
+        this.closeTime = cafe.closeTime;
+        this.address = cafe.address;
     }
 }

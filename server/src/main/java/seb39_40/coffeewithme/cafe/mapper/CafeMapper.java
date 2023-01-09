@@ -4,6 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Value;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
+import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
+import seb39_40.coffeewithme.cafe.dto.CafeRequestDto.Patch;
 
 import java.util.List;
 
@@ -22,4 +24,5 @@ public interface CafeMapper {
 
     Cafe cafeDtoToCafeInfo(Post post);
     Cafe cafeDtoToCafe(Post post);
+    Cafe cafeDtoToCafe(Patch patchDto);
 }
