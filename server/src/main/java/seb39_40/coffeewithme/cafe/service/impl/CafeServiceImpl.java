@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb39_40.coffeewithme.cafe.domain.Cafe;
@@ -41,7 +42,7 @@ public class CafeServiceImpl implements CafeService {
     @Transactional(readOnly = true)
     public MultiResponseDto<SimpleCafeInfo> findCafe(String category, Integer page, String sort) {
         Page<Cafe> result;
-        if (!isCategory(category)) throw new BusinessLogicException(ExceptionCode.INVALID_INPUT_VALUE);
+        if (!isCategory(category)) throw new BusinessLogicException(HttpStatus.CONFLICT, "적절하지 않은 카테고리입니다.");
         else if (category.equals("all")) result = findAll(page, sort);
         else result = findByCtg(category, page, sort);
 

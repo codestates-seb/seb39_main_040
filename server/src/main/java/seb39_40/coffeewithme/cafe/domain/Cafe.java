@@ -1,10 +1,12 @@
 package seb39_40.coffeewithme.cafe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import seb39_40.coffeewithme.image.domain.Image;
 import seb39_40.coffeewithme.review.domain.Review;
+import seb39_40.coffeewithme.user.domain.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -57,6 +59,9 @@ public class Cafe {
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<CafeTag> cafeTags = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
     public Cafe(String name, String address, String phone, String homepage, String description, String openTime, String closeTime) {
@@ -108,5 +113,9 @@ public class Cafe {
         this.openTime = cafe.openTime;
         this.closeTime = cafe.closeTime;
         this.address = cafe.address;
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }

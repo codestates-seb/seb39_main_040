@@ -102,7 +102,9 @@ public class TagService {
         }
 
         List<ReviewTag> result = createReviewTag(review, newTags);
-        review.setReviewTags(result);
+        for (ReviewTag reviewTag : result) {
+            review.addReviewTags(reviewTag);
+        }
     }
 
     @Transactional
@@ -127,7 +129,9 @@ public class TagService {
         }
 
         List<CafeTag> result = createCafeTag(cafe, newTags);
-        cafe.setCafeTags(result);
+        for (CafeTag cafeTag : result) {
+            cafe.addCafeTags(cafeTag);
+        }
     }
 
 }

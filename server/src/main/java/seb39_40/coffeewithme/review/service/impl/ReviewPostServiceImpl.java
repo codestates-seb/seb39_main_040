@@ -21,6 +21,8 @@ import seb39_40.coffeewithme.user.service.UserService;
 import java.util.List;
 import java.util.Objects;
 
+import static seb39_40.coffeewithme.common.service.GetUserInfo.getUserId;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewPostServiceImpl implements ReviewPostService {
@@ -74,9 +76,5 @@ public class ReviewPostServiceImpl implements ReviewPostService {
         cafe.updateReviewCount(-1);
         cafeService.save(cafe);
         reviewService.delete(review);
-    }
-
-    public String getUserId(){
-        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
