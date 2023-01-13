@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import seb39_40.coffeewithme.image.domain.Image;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -27,6 +28,11 @@ public class S3UploaderService {
 
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
 
-        return amazonS3.getUrl(bucket, s3FileName).toString();
+        return amazonS3.getUrl(bucket, s3FileName).toString(); //image 버킷 url 반환
+    }
+
+
+    public void delete(Image img) {
+        amazonS3.deleteObject(bucket, img.getName().substring(img.getName().lastIndexOf("/")+1));
     }
 }

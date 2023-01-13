@@ -1,23 +1,19 @@
 package seb39_40.coffeewithme.image.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import seb39_40.coffeewithme.exception.BusinessLogicException;
-import seb39_40.coffeewithme.exception.ExceptionCode;
+import org.springframework.web.multipart.MultipartFile;
 import seb39_40.coffeewithme.image.domain.Image;
-import seb39_40.coffeewithme.image.repository.ImageRepository;
+import seb39_40.coffeewithme.image.dto.ImageResponseDto;
 
-@Service
-@RequiredArgsConstructor
-public class ImageService {
-    private final ImageRepository imageRepository;
+import java.io.IOException;
+import java.util.List;
 
-    public Long save(String url){
-        Image image = imageRepository.save(Image.builder().path(url).build());
-        return image.getId();
-    }
+public interface ImageService {
+    Long save(MultipartFile file) throws IOException;
+    void delete(Long id);
 
-    public Image findById(Long id){
-        return imageRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
-    }
+    Image findById(Long id);
+    ImageResponseDto findImage(Long id);
+    List<Image> findTempImages();
+
+    Long saveDefaultImage();
 }

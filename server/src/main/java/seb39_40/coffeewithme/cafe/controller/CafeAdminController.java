@@ -4,27 +4,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import seb39_40.coffeewithme.cafe.domain.Cafe;
 import seb39_40.coffeewithme.cafe.dto.CafeRequestDto;
 import seb39_40.coffeewithme.cafe.mapper.CafeMapper;
-import seb39_40.coffeewithme.cafe.service.CafeService;
+import seb39_40.coffeewithme.cafe.service.CafePostService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class CafeAdminController {
-    private final CafeService cafeService;
-    private final CafeMapper cafeMapper;
+    private final CafePostService cafePostService;
 
     @PostMapping("/cafe")
-    public ResponseEntity postCafe(@RequestBody CafeRequestDto.Post postDto){
-        Long id = cafeService.save(cafeMapper.cafeDtoToCafe(postDto));
+    public ResponseEntity postCafe(@RequestBody @Valid CafeRequestDto.Post postDto){
+        Long id = cafePostService.register(postDto);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
+    // 수정기능 만들기
+
     @DeleteMapping("/cafe/{cafeId}")
     public ResponseEntity deleteCafe(@PathVariable Long cafeId){
-        cafeService.delete(cafeId);
+        cafePostService.delete(cafeId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

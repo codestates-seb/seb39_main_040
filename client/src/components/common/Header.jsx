@@ -36,6 +36,7 @@ const Header = () => {
             });
             navigate("/");
             setIsLogin();
+            localStorage.clear();
           })
           .catch(() =>
             Swal.fire({
@@ -98,7 +99,7 @@ const Header = () => {
           <Link to="/login">
             <NavItem>로그인</NavItem>
           </Link>
-          <Link to="/signup">
+          <Link to="/useroption">
             <NavItem>회원가입</NavItem>
           </Link>
         </NavList>

@@ -13,14 +13,21 @@ import java.util.stream.Collectors;
 @Data @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ReviewResponseDto {
-    List<String> tags;
-    UserResponseDto.SimpleUserInfo user;
-    Long id;
-    String description;
-    Integer score;
-    String reviewImg;
-
-    public void setReviewTags(List<ReviewTag> reviewTags){
-        this.tags = reviewTags.stream().map(reviewTag -> reviewTag.getTag().getName()).collect(Collectors.toList());
+    @Data @NoArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class ReviewInfo{
+        String[] tags;
+        UserResponseDto.SimpleUserInfo user;
+        Long id;
+        String description;
+        Integer score;
+        String reviewImg;
     }
+
+    @Data @NoArgsConstructor
+    public static class ImageInfo{
+        Long id;
+        String path;
+    }
+
 }
