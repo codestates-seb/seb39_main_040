@@ -10,6 +10,7 @@ import seb39_40.coffeewithme.exception.ExceptionCode;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 import seb39_40.coffeewithme.tag.domain.Tag;
+import seb39_40.coffeewithme.tag.repository.CafeTagRepository;
 import seb39_40.coffeewithme.tag.repository.ReviewTagRepository;
 import seb39_40.coffeewithme.tag.repository.TagRepository;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class TagService {
     private final TagRepository tagRepository;
     private final ReviewTagRepository reviewTagRepository;
+    private final CafeTagRepository cafeTagRepository;
 
     public Long save(Tag tag){
         return tagRepository.save(tag).getId();
@@ -100,8 +102,36 @@ public class TagService {
         }
 
         List<ReviewTag> result = createReviewTag(review, newTags);
-        review.setReviewTags(result);
+        for (ReviewTag reviewTag : result) {
+            review.addReviewTags(reviewTag);
+        }
     }
 
+    @Transactional
+    public void updateCafeTag(Cafe cafe, List<String> tags){
+        List<CafeTag> reviewTags = cafeTagRepository.findByCafeId(cafe.getId());
+
+        Set<String> tagSet = new HashSet<>(tags); 
+        Set<String> existTag = new HashSet<>(); 
+        for (CafeTag cafeTag : reviewTags){
+            if (tagSet.contains(cafeTag.getTag().getName())) {
+                existTag.add(cafeTag.getTag().getName());
+                continue;
+            }
+
+            cafeTagRepository.delete(cafeTag);
+        }
+
+        List<String> newTags = new ArrayList<>();
+        for (String tag: tags) {
+            if(existTag.contains(tag)) continue;
+            newTags.add(tag);
+        }
+
+        List<CafeTag> result = createCafeTag(cafe, newTags);
+        for (CafeTag cafeTag : result) {
+            cafe.addCafeTags(cafeTag);
+        }
+    }
 
 }

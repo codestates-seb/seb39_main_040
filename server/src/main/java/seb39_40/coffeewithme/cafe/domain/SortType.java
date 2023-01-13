@@ -1,9 +1,9 @@
 package seb39_40.coffeewithme.cafe.domain;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 
-import static seb39_40.coffeewithme.exception.ExceptionCode.INVALID_INPUT_VALUE;
 
 public enum SortType {
     N("newest", false, "id"),
@@ -35,6 +35,6 @@ public enum SortType {
             if (sortType.category == category && sortType.text.equals(text)) {
                 return sortType.type;
             }
-        throw new BusinessLogicException(INVALID_INPUT_VALUE);
+        throw new BusinessLogicException(HttpStatus.CONFLICT, "존재하지 않는 카테고리입니다.");
     }
 }

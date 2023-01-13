@@ -16,6 +16,7 @@ import seb39_40.coffeewithme.image.service.ImageService;
 import java.util.List;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class ImageServiceStub implements ImageService {
     private final ImageRepository imageRepository;

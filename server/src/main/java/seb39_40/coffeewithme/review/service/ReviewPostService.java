@@ -8,6 +8,5 @@ public interface ReviewPostService {
     Long post(Long cafeId, ReviewRequestDto reviewRequestDto);
     Long repost(Long id, ReviewRequestDto patchDto, List<String> tags);
     void delete(Long cafeId, Long reviewId);
-    String getUserId();
 }
 

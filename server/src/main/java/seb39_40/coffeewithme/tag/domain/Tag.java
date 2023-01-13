@@ -3,16 +3,14 @@ package seb39_40.coffeewithme.tag.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 import seb39_40.coffeewithme.cafe.domain.CafeTag;
-import seb39_40.coffeewithme.cafe.domain.SortType;
 import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.review.domain.ReviewTag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static seb39_40.coffeewithme.exception.ExceptionCode.INVALID_INPUT_VALUE;
 
 @Entity @Getter @Setter
 @NoArgsConstructor
@@ -69,6 +67,6 @@ public class Tag {
             if (category.text.equals(text)) {
                 return category;
             }
-        throw new BusinessLogicException(INVALID_INPUT_VALUE);
+        throw new BusinessLogicException(HttpStatus.CONFLICT, "적절하지 않은 카테고리 입니다.");
     }
 }

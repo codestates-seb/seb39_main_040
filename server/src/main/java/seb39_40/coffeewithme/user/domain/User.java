@@ -76,8 +76,10 @@ public class User {
     public void updateInformation(String userName, String mobile, Image profilePhoto){
         this.userName = userName;
         this.mobile=mobile;
-        this.profilePhoto.setUser(null);
-        setProfilePhoto(profilePhoto);
+        if (this.profilePhoto != profilePhoto){
+            this.profilePhoto.setUser(null);
+            setProfilePhoto(profilePhoto);
+        }
     }
 
     public void setProfilePhoto(Image image){
