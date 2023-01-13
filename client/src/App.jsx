@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CafeDetailPage from "./pages/CafeDetail/CafeDetailPage";
 import MainPage from "./pages/MainPage";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/User/auth/LoginPage";
+import SignUpPage from "./pages/User/auth/SignUpPage";
 import NewReviewPage from "./pages/Review/NewReviewPage";
 import EditReviewPage from "./pages/Review/EditReviewPage";
 import UserInfoPage from "./pages/User/UserInfoPage";
@@ -12,6 +12,7 @@ import UserReviewPage from "./pages/User/UserReviewPage";
 import UserWishPage from "./pages/User/UserWishPage";
 import ScrollToTop from "./components/common/ScrollToTop";
 import NotFoundPage from "./pages/NotFoundPage";
+import UserOption from "./pages/UserOption";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/cafe/:id" element={<CafeDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/useroption" element={<UserOption />} />
           <Route path="/cafe/:id/reviews" element={<NewReviewPage />} />
           <Route
             path="/cafe/:id/reviews/:reviewid"

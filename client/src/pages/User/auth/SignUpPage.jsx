@@ -11,7 +11,7 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 
-import Header from "../components/common/Header";
+import Header from "../../../components/common/Header";
 import Swal from "sweetalert2";
 
 const SignUpPage = () => {
