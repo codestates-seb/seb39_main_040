@@ -27,7 +27,8 @@ public class User {
     private String email;
     @Column(length = 13)
     private String mobile;
-    private String roles;
+    @Enumerated(value=EnumType.STRING)
+    private UserRoleType roles;
     @Enumerated(value=EnumType.STRING)
     private UserStatus status;
     @Column(nullable = false, length = 50, name="reg_dt")
@@ -36,17 +37,36 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Image profilePhoto;
 
+    @OneToOne
+    @JoinColumn(name="blc_id")
+    private BusinessLicenseCode licenseCode;
+
     @Transient
     private List<Wishlist> likes=new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Review> reviews=new ArrayList<>();
 
-    public List<String> getRoleList(){
-        if(this.roles.length() > 0){
-            return Arrays.asList(this.roles.split(","));
+//    public List<String> getRoleList(){
+//        if(this.roles.length() > 0){
+//            return Arrays.asList(this.roles.split(","));
+//        }
+//        return new ArrayList<>();
+//    }
+    public String getRoleList(){
+        return this.roles.name();
+    }
+
+    public enum UserRoleType {
+        ROLE_MEMBER("일반 회원님"),
+        ROLE_OWNER("카페 사장님");
+
+        @Getter
+        private String status;
+
+        UserRoleType(String status) {
+            this.status = status;
         }
-        return new ArrayList<>();
     }
 
     public enum UserStatus {

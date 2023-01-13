@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 public interface UserMapper {
     User userJoinToUser(UserRequestDto.UserJoin userJoin);
 
+    User ownerJoinToUser(UserRequestDto.OwnerJoin ownerJoin);
+
     UserResponseDto.UserInfo userToUserInfo(User user);
 
     default User userUpdateDtoToUser(UserRequestDto.UserUpdate update){

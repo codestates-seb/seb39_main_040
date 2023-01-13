@@ -39,7 +39,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         String token;
 
-        if (path.equals("/users/login") || path.equals("/users/signup")
+        if (path.equals("/users/login") || path.equals("/users/signup") || path.equals("/users/signup/owner")
                 || (request.getRequestURI().startsWith("/cafe") && request.getMethod().equals("GET"))) {
             filterChain.doFilter(request, response);
         }else {
@@ -56,7 +56,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 if(path.equals("/users/token")){
                     jwtProvider.validationTheSameToken(email, jwt);
                     User user = userRepository.findByEmail(email).get();
-                    String new_at = jwtProvider.createAccessToken(user.getId(), email, user.getRoles());
+                    String new_at = jwtProvider.createAccessToken(user.getId(), email, user.getRoles().name());
                     String new_rt = jwtProvider.createRefreshToken(email);
 
                     jwtProvider.saveRefreshToken(email, new_rt);
