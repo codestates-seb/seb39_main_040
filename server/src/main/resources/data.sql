@@ -91,3 +91,6 @@ insert into image(image_id, reg_dt, mdf_dt, image_nm, cafe_id) values (18, now()
 insert into image(image_id, reg_dt, mdf_dt, image_nm, cafe_id) values (19, now(), now(), 'fix/LOWIDE-menu.jpg', 9);
 insert into cafe_tag(cafetag_id, cafe_id, tag_id) values (20, 9, 4);
 insert into cafe_tag(cafetag_id, cafe_id, tag_id) values (21, 9, 12);
+
+-- 사업자 번호
+insert into business_license_code(blc_id, code, registration) values (1, "a147586910cd",false);

@@ -8,7 +8,9 @@ import seb39_40.coffeewithme.exception.BusinessLogicException;
 import seb39_40.coffeewithme.image.service.ImageService;
 import seb39_40.coffeewithme.review.domain.Review;
 import seb39_40.coffeewithme.review.repository.ReviewRepository;
+import seb39_40.coffeewithme.user.domain.BusinessLicenseCode;
 import seb39_40.coffeewithme.user.domain.User;
+import seb39_40.coffeewithme.user.repository.BusinessLicenseCodeRepository;
 import seb39_40.coffeewithme.user.repository.UserRepository;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ReviewRepository reviewRepository;
+    private final BusinessLicenseCodeRepository licenseCodeRepository;
     private final ImageService imageService;
 
     public void createUser(User user) {
@@ -33,13 +36,31 @@ public class UserService {
                 .mobile(user.getMobile())
                 .email(user.getEmail())
                 .password(bCryptPasswordEncoder.encode(user.getPassword()))
-                .roles("ROLE_USER")
+                .roles(User.UserRoleType.ROLE_MEMBER)
                 .status(User.UserStatus.USER_SIGNUP)
                 .registerDate(LocalDate.now())
                 .build();
         result.setProfilePhoto(imageService.findById(profilePhotoId));
         userRepository.save(result);
     }
+    public void createOwner(User user,String licenseCode) {
+        verifyEmail(user.getEmail());
+        BusinessLicenseCode blcToUse = verifyBusinessLicenseCode(licenseCode);
+        Long profilePhotoId = imageService.saveDefaultImage();
+        User result = User.builder()
+                .userName(user.getUserName())
+                .email(user.getEmail())
+                .password(bCryptPasswordEncoder.encode(user.getPassword()))
+                .roles(User.UserRoleType.ROLE_OWNER)
+                .licenseCode(blcToUse)
+                .status(User.UserStatus.USER_SIGNUP)
+                .registerDate(LocalDate.now())
+                .build();
+        result.setProfilePhoto(imageService.findById(profilePhotoId));
+        userRepository.save(result);
+        updateBusinessLicenseCode(blcToUse);
+    }
+
 
     public void withdrawUser(String email){
         User user = findByEmail(email);
@@ -80,6 +101,19 @@ public class UserService {
         if(user.isPresent()) {
             throw new BusinessLogicException(HttpStatus.CONFLICT, "이미 사용중인 이메일 입니다.");
         }
+    }
+
+    private BusinessLicenseCode verifyBusinessLicenseCode(String businessLicenseCode) {
+        BusinessLicenseCode blc = licenseCodeRepository.findByCode(businessLicenseCode).orElseThrow(() ->{
+            throw new BusinessLogicException(HttpStatus.NOT_FOUND, "존재하지 않는 사업자 번호입니다.");
+        });
+        if(blc.getRegistration().equals(true))
+            throw new BusinessLogicException(HttpStatus.CONFLICT,"등록된 사업자 번호입니다.");
+        return blc;
+    }
+    private void updateBusinessLicenseCode(BusinessLicenseCode blc){
+        blc.setRegistration(true);
+        licenseCodeRepository.save(blc);
     }
 
     public User findById(Long userId) {

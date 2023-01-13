@@ -13,6 +13,7 @@ import seb39_40.coffeewithme.user.dto.UserRequestDto;
 import seb39_40.coffeewithme.user.mapper.UserMapper;
 import seb39_40.coffeewithme.user.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -28,7 +29,15 @@ public class UserController {
     public ResponseEntity joinUser(@RequestBody UserRequestDto.UserJoin join){
         User user = userMapper.userJoinToUser(join);
         userService.createUser(user);
-        log.info("** Success Signup [{}]",user.getEmail());
+        log.info("** Success Signup : User [{}]",user.getEmail());
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/signup/owner")
+    public ResponseEntity joinUserOwner(@RequestBody @Valid UserRequestDto.OwnerJoin join){
+        User user = userMapper.ownerJoinToUser(join);
+        userService.createOwner(user,join.getBusinessLicenseCode());
+        log.info("** Success Signup : Owner [{}]",user.getEmail());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

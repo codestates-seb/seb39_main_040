@@ -25,7 +25,7 @@ public class AuthenticationSuccessHandler implements org.springframework.securit
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         //권한도 넘겨줌 (여기서 user 자체를 넘겨주는 게 좋을지... 아님 각각 주는게 좋을지 거시기 허네)
         //근데 User에 접근해서 get으로 이렇게 가져와도 되나?
-        String at = jwtProvider.createAccessToken(user.getUser().getId(), user.getUser().getEmail(),user.getUser().getRoles()); //원래에 role 추가해봄
+        String at = jwtProvider.createAccessToken(user.getUser().getId(), user.getUser().getEmail(),user.getUser().getRoles().name()); //원래에 role 추가해봄
         String rt = jwtProvider.createRefreshToken(user.getUser().getEmail());
 
         jwtProvider.saveRefreshToken(user.getUser().getEmail(),rt);

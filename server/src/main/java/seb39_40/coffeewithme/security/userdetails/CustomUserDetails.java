@@ -20,9 +20,10 @@ public class CustomUserDetails implements UserDetails {
     @Override //User의 권한을 반환합니다
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        user.getRoleList().forEach(n -> {
-            authorities.add(() -> n);
-        });
+//        user.getRoleList().forEach(n -> {
+//            authorities.add(() -> n);
+//        });
+        authorities.add(() -> user.getRoleList());
         return authorities;
     }
 
